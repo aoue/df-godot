@@ -1,0 +1,33 @@
+*Art Policy
+When introduction a new system, draw at least some passable placeholder art for it.
+(This includes colouring)
+This will help you stay in love and avoid becoming overwhelmed with a backlog later.
+
+======= TODO:
+
+PUSH TO GIT
+	let's do it!
+
+PLAYER SCENE
+	create player unit that moves
+	*create art of character
+	-attacking animation (frames 1 and 2)
+	implement movement and attacking (pose only though)
+	connect movement to animations
+	connect attacking animation to 
+
+
+ENCOUNTER
+	background instance with map picture/tileset?
+	obstacle instances
+	player instance
+
+OBSTACLE SCENE
+	stands there and blocks player movement
+
+
+	
+
+
+
+

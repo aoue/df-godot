@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://bo03cmr87rq2u"]
+
+[ext_resource type="Texture2D" uid="uid://ci537efsbrm7f" path="res://animation/friday/friday combat horizontal frame 1.png" id="1_ijjmy"]
+[ext_resource type="Texture2D" uid="uid://cimnym7o78m2l" path="res://animation/friday/friday combat horizontal frame 2.png" id="2_dqqmw"]
+[ext_resource type="Texture2D" uid="uid://c2k4p1fxkmre3" path="res://animation/friday/friday combat still frame 1.png" id="3_r87ls"]
+[ext_resource type="Texture2D" uid="uid://bj8wqts3s8s4h" path="res://animation/friday/friday combat still frame 2.png" id="4_snkrj"]
+[ext_resource type="Texture2D" uid="uid://c8ciewrc0og4v" path="res://animation/friday/friday combat vertical frame 1.png" id="5_5fn5p"]
+[ext_resource type="Texture2D" uid="uid://barc6knam2ggp" path="res://animation/friday/friday combat vertical frame 2.png" id="6_3fqqn"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l6tt4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ijjmy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_dqqmw")
+}],
+"loop": true,
+"name": &"horizontal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_r87ls")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_snkrj")
+}],
+"loop": true,
+"name": &"still",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_5fn5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_3fqqn")
+}],
+"loop": true,
+"name": &"vertical",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+
+[node name="animator" type="AnimatedSprite2D" parent="."]
+position = Vector2(538, 277)
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_l6tt4")
+animation = &"vertical"
