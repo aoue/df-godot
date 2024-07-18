@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ci537efsbrm7f"
-path="res://.godot/imported/friday combat horizontal frame 1.png-a610a9ca29d7ea423824ce51673a03e4.ctex"
+uid="uid://bv6avnrieykm8"
+path="res://.godot/imported/friday vertical f2.png-ee153d51bbb8b8ace747314f090f1c67.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://animation/friday/friday combat horizontal frame 1.png"
-dest_files=["res://.godot/imported/friday combat horizontal frame 1.png-a610a9ca29d7ea423824ce51673a03e4.ctex"]
+source_file="res://animation/friday/friday vertical f2.png"
+dest_files=["res://.godot/imported/friday vertical f2.png-ee153d51bbb8b8ace747314f090f1c67.ctex"]
 
 [params]
 

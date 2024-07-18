@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2k4p1fxkmre3"
-path="res://.godot/imported/friday combat still frame 1.png-97453e5c842be1101f16482bf9aebfcd.ctex"
+uid="uid://bbbouvrydlnhl"
+path="res://.godot/imported/friday still f1.png-43e1c6458bc6f2de6abc2c3c4b08207d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://animation/friday/friday combat still frame 1.png"
-dest_files=["res://.godot/imported/friday combat still frame 1.png-97453e5c842be1101f16482bf9aebfcd.ctex"]
+source_file="res://animation/friday/friday still f1.png"
+dest_files=["res://.godot/imported/friday still f1.png-43e1c6458bc6f2de6abc2c3c4b08207d.ctex"]
 
 [params]
 
