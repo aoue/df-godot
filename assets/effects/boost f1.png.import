@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfbr7vsv8diid"
-path="res://.godot/imported/friday still f2.png-559348f1547611f7e1cfe0864459f955.ctex"
+uid="uid://bxftyv0tuwfcf"
+path="res://.godot/imported/boost f1.png-687c86020408020e4cf0b943c8cf2cc7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://animation/friday/friday still f2.png"
-dest_files=["res://.godot/imported/friday still f2.png-559348f1547611f7e1cfe0864459f955.ctex"]
+source_file="res://assets/effects/boost f1.png"
+dest_files=["res://.godot/imported/boost f1.png-687c86020408020e4cf0b943c8cf2cc7.ctex"]
 
 [params]
 

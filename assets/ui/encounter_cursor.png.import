@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cv8x06jwp5x2q"
-path="res://.godot/imported/friday right f2.png-a351388671ec2a0780cdade1f84674b2.ctex"
+uid="uid://ftw51jn7m7ou"
+path="res://.godot/imported/encounter_cursor.png-32c850c6cfaf036c52de7cacf60d4ecb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://animation/friday/friday right f2.png"
-dest_files=["res://.godot/imported/friday right f2.png-a351388671ec2a0780cdade1f84674b2.ctex"]
+source_file="res://assets/ui/encounter_cursor.png"
+dest_files=["res://.godot/imported/encounter_cursor.png-32c850c6cfaf036c52de7cacf60d4ecb.ctex"]
 
 [params]
 

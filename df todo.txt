@@ -1,28 +1,12 @@
 commit notes:
--implemented boost movement system
+-added target icon
+-added weapon animation and rotation
 
 ======= TODO:
 
 finish watching that brackeys video, there will probably be a lot of useful and well-presented information
 
 PLAYER SCENE
-	*target icon
-	-icon that moves along with the mouse
-	-should we have firing arc visuals that rotates along with it?
-	(this might be really easy to do; just replace mouse pointer with target icon)
-	(and then for get position, there is a baked in function)
-
-	*add attacking mode:
-	-when unit is attacking, only play attacking animation
-	-also, slow speed down
-	-connect attacking animation
-	For weapon animation:
-	-the character's weapon should be its own animationsprite2d
-	-it should move on a circle around the character to follow the mouse around
-	-it will change animation when the character is attacking
-	(for Friday here, the still animation will just be twitching back and forth)
-	(the attacking animation will be spinning it around in a circle, how cool!)
-
 	*add use projectile:
 	(in attacking mode)
 	-takes a projectile scene

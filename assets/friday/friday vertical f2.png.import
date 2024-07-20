@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvs7oc8qs2aj3"
-path="res://.godot/imported/friday left f1.png-3818722acb4cf307d6e7660d4227d650.ctex"
+uid="uid://cotxuoalhraga"
+path="res://.godot/imported/friday vertical f2.png-529334e195a13c923278d21c0b398347.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://animation/friday/friday left f1.png"
-dest_files=["res://.godot/imported/friday left f1.png-3818722acb4cf307d6e7660d4227d650.ctex"]
+source_file="res://assets/friday/friday vertical f2.png"
+dest_files=["res://.godot/imported/friday vertical f2.png-529334e195a13c923278d21c0b398347.ctex"]
 
 [params]
 
