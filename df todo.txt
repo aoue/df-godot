@@ -1,34 +1,67 @@
-*Art Policy
-When introduction a new system, draw at least some passable placeholder art for it.
-(This includes colouring)
-This will help you stay in love and avoid becoming overwhelmed with a backlog later.
-
 commit notes:
--added player movement
--added movement animations
+-implemented boost movement system
 
 ======= TODO:
 
+finish watching that brackeys video, there will probably be a lot of useful and well-presented information
+
 PLAYER SCENE
-	create player unit that moves
-	
-	connect movement to animations
-	connect attacking animation to
-	
 	*target icon
 	-icon that moves along with the mouse
-	-should we have a firing arc that rotates along with it?
+	-should we have firing arc visuals that rotates along with it?
+	(this might be really easy to do; just replace mouse pointer with target icon)
+	(and then for get position, there is a baked in function)
 
+	*add attacking mode:
+	-when unit is attacking, only play attacking animation
+	-also, slow speed down
+	-connect attacking animation
+	For weapon animation:
+	-the character's weapon should be its own animationsprite2d
+	-it should move on a circle around the character to follow the mouse around
+	-it will change animation when the character is attacking
+	(for Friday here, the still animation will just be twitching back and forth)
+	(the attacking animation will be spinning it around in a circle, how cool!)
 
-ENCOUNTER
-	background instance with map picture/tileset?
-	probably build the levels using a tileset, yeah. Makes the most sense. (see brackeys video)
-	map borders
-	obstacle instances
-	player instance
+	*add use projectile:
+	(in attacking mode)
+	-takes a projectile scene
+	-spawns it and directs it in target icon direction
 
+UNIT SCENE
+	the PLAYER, ENEMY, and ALLY scenes will all hold a reference to an object of the UNIT scene
+	-this holds and manages stats and stuff, etc
+	-also the loadouts and the moves in them
 
-	
+PROJECTILE SCENE
+	all projectiles share this, just have different properties. Such as
+	(i wrote some of this out already, so see notes)
+	-collision area/shape
+	-speed modifier
+	-acceleration
+	-dmg (and types)
+
+CAMERA SCENE
+	(if the camera is a child of the player it will follow the player)
+	how should the camera work? It shouldn't just follow the player blindly
+	I was looking at baldr sky gameplay to get an idea of this, and it seems like it
+	tries to stay between the player and the target, keeping them both in frame
+	it adjusts position and zoom to do this?
+
+ENCOUNTER SCENE
+	has information for
+	-victory conditions, etc
+	-player, allies, enemies and timings, etc
+	-a reference to an ARENA scene. By swapping this out, you change the map
+
+ARENA SCENE
+	contains a tilemap with obstacles, etc
+	when we actually have our tileset made, watch this again and implement it
+	*it has all the tools we want, i know because i saw them there
+	(see brackeys video section: worldbuilding)
+
+REMEMBER
+	-on unit defeat, debris
 
 
 

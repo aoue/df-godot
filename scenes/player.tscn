@@ -1,0 +1,98 @@
+[gd_scene load_steps=15 format=3 uid="uid://bo03cmr87rq2u"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_tycp3"]
+[ext_resource type="Texture2D" uid="uid://dvs7oc8qs2aj3" path="res://animation/friday/friday left f1.png" id="4_6hkrq"]
+[ext_resource type="Texture2D" uid="uid://mb2ra46otcl4" path="res://animation/friday/friday left f2.png" id="5_f5n4k"]
+[ext_resource type="Texture2D" uid="uid://8ok28mr3iyqs" path="res://animation/friday/friday right f1.png" id="6_plevt"]
+[ext_resource type="Texture2D" uid="uid://cv8x06jwp5x2q" path="res://animation/friday/friday right f2.png" id="7_iw1gr"]
+[ext_resource type="Texture2D" uid="uid://ckawpemg25kjb" path="res://animation/friday/friday still f1.png" id="8_nldsm"]
+[ext_resource type="Texture2D" uid="uid://dfbr7vsv8diid" path="res://animation/friday/friday still f2.png" id="9_rrjsl"]
+[ext_resource type="Texture2D" uid="uid://dvkn7bvglstu5" path="res://animation/friday/friday vertical f1.png" id="10_l5peh"]
+[ext_resource type="Texture2D" uid="uid://cotxuoalhraga" path="res://animation/friday/friday vertical f2.png" id="11_2nfpt"]
+[ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://animation/effects/boost f1.png" id="12_8tyku"]
+[ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://animation/effects/boost f2.png" id="13_gsgsx"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l6tt4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_6hkrq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f5n4k")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_plevt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_iw1gr")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_nldsm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_rrjsl")
+}],
+"loop": true,
+"name": &"still",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_l5peh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_2nfpt")
+}],
+"loop": true,
+"name": &"vertical",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_at22p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_8tyku")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_gsgsx")
+}],
+"loop": true,
+"name": &"boost",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10txa"]
+radius = 61.0
+height = 306.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_tycp3")
+
+[node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+sprite_frames = SubResource("SpriteFrames_l6tt4")
+animation = &"still"
+
+[node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim"]
+scale = Vector2(2.5, 2.631)
+sprite_frames = SubResource("SpriteFrames_at22p")
+animation = &"boost"
+frame_progress = 0.000921859
+
+[node name="WeaponAnim" type="AnimatedSprite2D" parent="CharacterAnim"]
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("CapsuleShape2D_10txa")

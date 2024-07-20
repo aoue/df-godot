@@ -1,0 +1,13 @@
+*Art Policy
+When introduction a new system, draw at least some passable placeholder art for it.
+(This includes colouring)
+This will help you stay in love and avoid becoming overwhelmed with a backlog later.
+
+Art Notes
+
+Character animation suite:
+-still
+-left
+-right
+-vertical
+-attacking
