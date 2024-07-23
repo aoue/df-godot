@@ -1,36 +1,48 @@
 commit notes:
--added target icon
--added weapon animation and rotation
+-added in projectile spawning
 
 ======= TODO:
 
 finish watching that brackeys video, there will probably be a lot of useful and well-presented information
 
-PLAYER SCENE
-	*add use projectile:
-	(in attacking mode)
-	-takes a projectile scene
-	-spawns it and directs it in target icon direction
 
+PLAYER SCENE
+	*can fire off projectiles:	
+	-has a link to the UNIT SCENE
+	-using any of the attack buttons calls the corresponding move in the unit scene
+	
 UNIT SCENE
-	the PLAYER, ENEMY, and ALLY scenes will all hold a reference to an object of the UNIT scene
-	-this holds and manages stats and stuff, etc
-	-also the loadouts and the moves in them
+	-add loadout scene child (to manage between multiple loadouts)
+	-take damage, consume pw, etc, etc
+
+MOVE SCENE
+	holds information about:
+	-stats information for the attack
+	-projectile information
+	-a spawning function that creates projectiles with certain timing
 
 PROJECTILE SCENE
-	all projectiles share this, just have different properties. Such as
-	(i wrote some of this out already, so see notes)
-	-collision area/shape
-	-speed modifier
-	-acceleration
-	-dmg (and types)
+	don't use code to check who the target is, instead put things on physics layers (see brackeys ~30)
+	-player, allies, and enemy projectiles share a layer
+	-enemies and player/ally projectiles share a layer
+	-walls are on both layers
+
+ENEMY SCENE
+	*for now, can just be a target dummy. make sure you can hit them with the projectile
+
+ARENA SCENE
+	contains a tilemap with obstacles, etc
+	when we actually have our tileset made, watch this again and implement it
+	*it has all the tools we want, i know because i saw them there
+	(see brackeys video section: worldbuilding)
+
+
 
 CAMERA SCENE
-	(if the camera is a child of the player it will follow the player)
-	how should the camera work? It shouldn't just follow the player blindly
+	It shouldn't just follow the player blindly
 	I was looking at baldr sky gameplay to get an idea of this, and it seems like it
 	tries to stay between the player and the target, keeping them both in frame
-	it adjusts position and zoom to do this?
+	Let's try to mimic that
 
 ENCOUNTER SCENE
 	has information for
@@ -38,11 +50,7 @@ ENCOUNTER SCENE
 	-player, allies, enemies and timings, etc
 	-a reference to an ARENA scene. By swapping this out, you change the map
 
-ARENA SCENE
-	contains a tilemap with obstacles, etc
-	when we actually have our tileset made, watch this again and implement it
-	*it has all the tools we want, i know because i saw them there
-	(see brackeys video section: worldbuilding)
+
 
 REMEMBER
 	-on unit defeat, debris

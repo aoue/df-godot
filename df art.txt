@@ -3,11 +3,18 @@ When introduction a new system, draw at least some passable placeholder art for 
 (This includes colouring)
 This will help you stay in love and avoid becoming overwhelmed with a backlog later.
 
-Art Notes
+=== Art Notes
 
-Character animation suite:
--still
--left
--right
--vertical
--attacking
+Character animation suite: [still, left, right, vertical, attacking]
+
+=== To-do
+
+make tiles in 256x256? sure why not
+
+create ruined city tile set:
+	-snow
+	-rough snow
+	-wall
+	-cracked wall
+	-ice
+	-rough ice

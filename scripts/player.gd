@@ -5,8 +5,9 @@ extends CharacterBody2D
 @export var weapon_pivot : Node
 @export var weapon_anim : AnimatedSprite2D
 @export var boost_anim : AnimatedSprite2D
+@export var unit : Node
 
-# Speed variable
+# Speed variables
 var speed : int = 500
 var friction : float = 0.1
 var acceleration : float = 0.4
@@ -15,7 +16,6 @@ var acceleration : float = 0.4
 var boost_vector : Vector2
 var boost_duration : float = 0.0
 var boost_cooldown : float = 0.0
-
 var boost_speed_mod : int = 4
 var boost_turning_mod : float = 1.0
 var boost_full_duration : float = 0.75
@@ -71,13 +71,14 @@ func set_animation(direction : Vector2, mouse_pos : Vector2, isAttacking : bool,
 		boost_anim.hide()
 	
 	# Control WeaponAnim
+	weapon_pivot.look_at(mouse_pos)
 	if isAttacking:
 		weapon_anim.stop()
 		weapon_anim.rotation_degrees += 30
 	else:
 		weapon_anim.rotation_degrees = -45
-		weapon_pivot.look_at(mouse_pos)
 		weapon_anim.play("idle")
+	
 		
 # Running
 func _physics_process(delta : float) -> void:
@@ -87,6 +88,9 @@ func _physics_process(delta : float) -> void:
 	var is_boosting : bool = get_boost_input(direction)
 	
 	# attack direction = mouse_pos - player pos (<-- need function for global player pos)
+	if is_attacking:
+		#unit.use_move1(position, mouse_pos.normalized())
+		unit.use_move1(position, mouse_pos)
 	
 	# Set anim
 	set_animation(direction, mouse_pos, is_attacking, is_boosting)

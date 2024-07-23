@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bo03cmr87rq2u"]
+[gd_scene load_steps=19 format=3 uid="uid://bo03cmr87rq2u"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_tycp3"]
 [ext_resource type="Texture2D" uid="uid://dvs7oc8qs2aj3" path="res://assets/friday/friday left f1.png" id="2_llwh5"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="10_qik32"]
 [ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://assets/effects/boost f2.png" id="11_6sg8e"]
 [ext_resource type="Texture2D" uid="uid://co88511simgbs" path="res://assets/weapons/hammer/hammer f2.png" id="13_l4a2v"]
+[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="14_0nblu"]
 [ext_resource type="Texture2D" uid="uid://bfvby6nbnjv65" path="res://assets/weapons/hammer/hammer f3.png" id="14_huj5d"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_l6tt4"]
@@ -94,19 +95,19 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_10txa"]
-radius = 61.0
-height = 306.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2frbq"]
+size = Vector2(412, 792)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("character_anim", "weapon_pivot", "weapon_anim", "boost_anim")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("character_anim", "weapon_pivot", "weapon_anim", "boost_anim", "unit")]
+scale = Vector2(0.25, 0.25)
 script = ExtResource("1_tycp3")
 character_anim = NodePath("CharacterAnim")
 weapon_pivot = NodePath("CharacterAnim/WeaponPivot")
 weapon_anim = NodePath("CharacterAnim/WeaponPivot/WeaponAnim")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
+unit = NodePath("Unit")
 
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_l6tt4")
 animation = &"still"
 
@@ -126,5 +127,11 @@ animation = &"boost"
 frame_progress = 0.000921859
 
 [node name="Collider" type="CollisionShape2D" parent="."]
-position = Vector2(0, -3)
-shape = SubResource("CapsuleShape2D_10txa")
+visible = false
+position = Vector2(0, -220)
+shape = SubResource("RectangleShape2D_2frbq")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-32, 20, -276, 584, -368, 592, -376, 384, -204, 72, -144, -656, 164, -668, 228, 80, 436, 588, 292, 644)
+
+[node name="Unit" parent="." instance=ExtResource("14_0nblu")]
