@@ -4,17 +4,39 @@
 [ext_resource type="Texture2D" uid="uid://bti2kgvcise35" path="res://assets/projectile/projectile.png" id="1_l8k1w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o61th"]
-size = Vector2(63, 99)
+size = Vector2(90, 80)
 
-[node name="Projectile" type="Area2D"]
-scale = Vector2(0.25, 0.25)
+[node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider", "damage_label")]
+scale = Vector2(0.2, 0.2)
 script = ExtResource("1_4dsvs")
+projectile_sprite = NodePath("Projectile Sprite")
+projectile_collider = NodePath("Projectile Collider")
+damage_label = NodePath("Damage Text")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Projectile Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("1_l8k1w")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, -2.5)
+[node name="Projectile Collider" type="CollisionShape2D" parent="."]
+position = Vector2(5, -5)
+scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_o61th")
+
+[node name="Damage Text" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -116.5
+offset_top = -136.5
+offset_right = 116.5
+offset_bottom = 136.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.750892, 0.133051, 0.175534, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 160
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

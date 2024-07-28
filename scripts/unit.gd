@@ -29,6 +29,16 @@ func refresh():
 	HP_cur = HP_max
 	PW_cur = PW_max
 
+# Being Attacked
+func take_hit(damage : int) -> void:
+	HP_cur = clamp(HP_cur - damage, 0, HP_max)
+
+func is_defeated() -> bool:
+	if HP_cur <= 0:
+		return true
+	return false
+
+# Attacking
 func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
 	# hard-coded for now
 	if can_attack == false:

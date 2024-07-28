@@ -1,42 +1,52 @@
 commit notes:
--added in projectile spawning
+-added player taking damage from projectiles
+-added damage number popup from projectiles
+-added hp bar update animation
 
 ======= TODO:
 
-finish watching that brackeys video, there will probably be a lot of useful and well-presented information
+keep watching that brackeys video, there will probably be a lot of useful and well-presented information
 
-
-PLAYER SCENE
-	*can fire off projectiles:	
-	-has a link to the UNIT SCENE
-	-using any of the attack buttons calls the corresponding move in the unit scene
-	
 UNIT SCENE
-	-add loadout scene child (to manage between multiple loadouts)
-	-take damage, consume pw, etc, etc
+	*add more move spawning patterns for projectiles
+	-close limited range move
+	-multi bullet move
+	-AoE move (in front of you; at mouse location)
+	-idk, there are probably some other things we should test too
+	(the way you will create more projectile patterns is: create new proj scene)
+	(change the collider of the area2d shape to the new shape)
+	(change the function that spawns it to move it differently or whatever)
+	(tada, should be everything)
+
+ENEMY SCENE
+	*for now, can just be a target dummy. make sure you can hit them with the projectile
+	next steps would be:
+	*have it use pathfinding2d to navigate the map and move straight towards the player
+	before getting too far, look at some other top-down games and see how their ai is:
+	-like baldr sky, etc
+	how does their enemy ai actually behave?
+
+PROJECTILE SCENE
+	once you have ally and enemy:
+	-two different layers for projectiles (brackeys vid, ~30m)
+	-player, allies, and enemy projectiles share a layer
+	-enemies and player/ally projectiles share a layer
+	-walls are on both layers
+	this will let you shoot through your teammates
+	we also want to make sure that they don't hit and annihilate each other
+	bullets of any type should be able to pass through each other with no problem
 
 MOVE SCENE
 	holds information about:
 	-stats information for the attack
-	-projectile information
+	-projectile child (and the collision shape will be set for it here)
 	-a spawning function that creates projectiles with certain timing
-
-PROJECTILE SCENE
-	don't use code to check who the target is, instead put things on physics layers (see brackeys ~30)
-	-player, allies, and enemy projectiles share a layer
-	-enemies and player/ally projectiles share a layer
-	-walls are on both layers
-
-ENEMY SCENE
-	*for now, can just be a target dummy. make sure you can hit them with the projectile
 
 ARENA SCENE
 	contains a tilemap with obstacles, etc
 	when we actually have our tileset made, watch this again and implement it
 	*it has all the tools we want, i know because i saw them there
 	(see brackeys video section: worldbuilding)
-
-
 
 CAMERA SCENE
 	It shouldn't just follow the player blindly
@@ -50,10 +60,14 @@ ENCOUNTER SCENE
 	-player, allies, enemies and timings, etc
 	-a reference to an ARENA scene. By swapping this out, you change the map
 
-
+OBSTACLE SCENE
+	when you hit a wall you should bounce off it
+	*has a vector.reflection thing that can help with this
+	oh, also the characterbody2d.bounce() function hehe
 
 REMEMBER
-	-on unit defeat, debris
+	*on unit defeat, debris
+	*heal projectiles (can still work, they should just be like slow-moving floaty bubbles and the idea would be that you have to go run into them. good idea. love ya nai.
 
 
 
