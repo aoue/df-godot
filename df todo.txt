@@ -1,30 +1,53 @@
 commit notes:
--added player taking damage from projectiles
--added damage number popup from projectiles
--added hp bar update animation
+-fixed issue were proj would not look in proper direction if it spawned past mouse pos
+-
 
 ======= TODO:
 
 keep watching that brackeys video, there will probably be a lot of useful and well-presented information
+
+
+REFACTOR
+	*player scene into new 'core' scene
+	-the current 'player' scene has code for movement, anims, and updating healthbars, etc
+	-this is code that should be common for all units, since it's stuff they will all have to do
+	-the input interpretation code will be held in a 'controller' scene above it, which is the root scene
+	-the controller will get input for player, or do ai stuff for allies/enemies
+	-and then it will pass all those signals down into the 'core' scene
+	*the first step will be to refactor the player scene into this now and make sure it all still works
+
+ENEMY SCENE
+	*what can be shared between player, ally, and enemy?
+	-the unit class. can call use_move() all the same. update hp, etc, the same.
+	-player gets inputs, but ally/enemy need an ai class, 'brain' (generic)
+	*how does enemy 1 differ from enemy 2?
+	-moveset and ai variables
+	-anim set (but not poses)
+	-collider shape
+
+
+	*for now, can just be a target dummy
+	-needs at least an idle anim
+	-needs hp bar
+	-we need to be able to hit it with a projectile
+	next steps would be:
+	*have it use pathfinding2d to navigate the map and move straight towards the player
+	before getting too far, look at some other top-down games and see how their ai is:
+	-like baldr sky, etc
+	how does their enemy ai actually behave?
 
 UNIT SCENE
 	*add more move spawning patterns for projectiles
 	-close limited range move
 	-multi bullet move
 	-AoE move (in front of you; at mouse location)
+	*add move that controls your movement
+	-spawn proj at start, end, or throughout
 	-idk, there are probably some other things we should test too
 	(the way you will create more projectile patterns is: create new proj scene)
 	(change the collider of the area2d shape to the new shape)
 	(change the function that spawns it to move it differently or whatever)
 	(tada, should be everything)
-
-ENEMY SCENE
-	*for now, can just be a target dummy. make sure you can hit them with the projectile
-	next steps would be:
-	*have it use pathfinding2d to navigate the map and move straight towards the player
-	before getting too far, look at some other top-down games and see how their ai is:
-	-like baldr sky, etc
-	how does their enemy ai actually behave?
 
 PROJECTILE SCENE
 	once you have ally and enemy:
@@ -69,6 +92,8 @@ REMEMBER
 	*on unit defeat, debris
 	*heal projectiles (can still work, they should just be like slow-moving floaty bubbles and the idea would be that you have to go run into them. good idea. love ya nai.
 
-
+BUG BACKLOG
+	in encounter, we used to set the mouse icon to be the red circle
+	-this causes the projectile to shoot out misaligned. because the center of the red circle does not line up with the pointer's click location.
 
 

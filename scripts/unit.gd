@@ -54,7 +54,7 @@ func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
 	var proj_spawn_loc : Vector2 = unit_pos + (mouse_direction * 300)
 	
 	# fill in its values
-	proj.setup(proj_spawn_loc, mouse_direction, mouse_pos, 1500, 50)
+	proj.setup(proj_spawn_loc, mouse_direction, 1500, 50)
 	
 	# instantiate it into the scene
 	add_child(proj)

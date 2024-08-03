@@ -14,11 +14,12 @@ var hit_something : bool = false
 var expire_delay : float = 1.0
 
 # Collisions
-func setup(arg_position : Vector2, arg_direction : Vector2, look_direction : Vector2, arg_speed : int, arg_damage : int) -> void:
+func setup(arg_position : Vector2, arg_direction : Vector2, arg_speed : int, arg_damage : int) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
-	look_at(look_direction)
+	look_at(arg_position + arg_direction)
+	
 	speed = arg_speed
 
 	# Record stats information

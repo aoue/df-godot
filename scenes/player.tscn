@@ -117,7 +117,6 @@ animation = &"still"
 
 [node name="WeaponAnim" type="AnimatedSprite2D" parent="CharacterAnim/WeaponPivot"]
 position = Vector2(400, 0)
-rotation = -0.785398
 scale = Vector2(0.625, 0.625)
 sprite_frames = SubResource("SpriteFrames_e0ilk")
 animation = &"idle"

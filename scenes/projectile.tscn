@@ -18,7 +18,6 @@ texture = ExtResource("1_l8k1w")
 
 [node name="Projectile Collider" type="CollisionShape2D" parent="."]
 position = Vector2(5, -5)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_o61th")
 
 [node name="Damage Text" type="Label" parent="."]
