@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://dk3veiqccd2ah"]
 
-[ext_resource type="PackedScene" uid="uid://bo03cmr87rq2u" path="res://scenes/player.tscn" id="1_fwtn2"]
-[ext_resource type="Script" path="res://scenes/encounter.gd" id="1_kqml8"]
+[ext_resource type="Script" path="res://encounter.gd" id="1_kqml8"]
+[ext_resource type="PackedScene" uid="uid://drc5ol6pflygx" path="res://scenes/Player.tscn" id="2_rhaad"]
 [ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectile.tscn" id="3_edybt"]
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_kqml8")
 
-[node name="Player" parent="." instance=ExtResource("1_fwtn2")]
+[node name="Player" parent="." instance=ExtResource("2_rhaad")]
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position_smoothing_enabled = true

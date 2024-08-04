@@ -1,0 +1,193 @@
+[gd_scene load_steps=20 format=3 uid="uid://drc5ol6pflygx"]
+
+[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="1_lsa74"]
+[ext_resource type="Texture2D" uid="uid://dvs7oc8qs2aj3" path="res://assets/friday/friday left f1.png" id="2_2ospw"]
+[ext_resource type="Texture2D" uid="uid://mb2ra46otcl4" path="res://assets/friday/friday left f2.png" id="3_2fgao"]
+[ext_resource type="Texture2D" uid="uid://8ok28mr3iyqs" path="res://assets/friday/friday right f1.png" id="4_fn85f"]
+[ext_resource type="Texture2D" uid="uid://cv8x06jwp5x2q" path="res://assets/friday/friday right f2.png" id="5_uvse6"]
+[ext_resource type="Texture2D" uid="uid://ckawpemg25kjb" path="res://assets/friday/friday still f1.png" id="6_aiih8"]
+[ext_resource type="Texture2D" uid="uid://dfbr7vsv8diid" path="res://assets/friday/friday still f2.png" id="7_cjw4d"]
+[ext_resource type="Texture2D" uid="uid://dvkn7bvglstu5" path="res://assets/friday/friday vertical f1.png" id="8_y86k6"]
+[ext_resource type="Texture2D" uid="uid://cotxuoalhraga" path="res://assets/friday/friday vertical f2.png" id="9_lynco"]
+[ext_resource type="Texture2D" uid="uid://co88511simgbs" path="res://assets/weapons/hammer/hammer f2.png" id="10_mumcc"]
+[ext_resource type="Texture2D" uid="uid://bfvby6nbnjv65" path="res://assets/weapons/hammer/hammer f3.png" id="11_qplbo"]
+[ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="12_n2k53"]
+[ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://assets/effects/boost f2.png" id="13_648xx"]
+[ext_resource type="Texture2D" uid="uid://bxk2020tvwb88" path="res://assets/ui/hp bar bg.png" id="14_vjsh2"]
+[ext_resource type="Texture2D" uid="uid://ct068dv45xwi0" path="res://assets/ui/hp bar fill.png" id="15_qunfd"]
+
+[sub_resource type="GDScript" id="GDScript_5hcc8"]
+script/source = "extends Node
+
+# Input Functions
+func get_direction_input() -> Vector2:
+	var input = Vector2()
+	if Input.is_action_pressed('right'):
+		input.x += 1
+	if Input.is_action_pressed('left'):
+		input.x -= 1
+	if Input.is_action_pressed('down'):
+		input.y += 1
+	if Input.is_action_pressed('up'):
+		input.y -= 1
+	return input.normalized()
+func get_boost_input(direction : Vector2) -> bool:
+	# testo
+	if boost_duration > 0.0:
+		return true
+	if boost_cooldown <= 0.0 and boost_duration <= 0.0 and direction.length() > 0 and Input.is_action_pressed('boost'):
+		# Save current direction for our boost
+		boost_vector = direction
+		boost_duration = boost_full_duration
+		boost_cooldown = boost_full_cooldown + boost_full_duration  # presets cooldown
+		return true
+	return false
+func get_attack_input() -> bool:
+	if Input.is_action_pressed('attack0') or Input.is_action_pressed('attack1') or Input.is_action_pressed('attack2'):
+		return true
+	return false
+func get_mouse() -> Vector2:
+	# Returns the vector between the player location and the mouse location
+	return get_global_mouse_position()
+func get_direction_for_boost(direction : Vector2) -> Vector2:
+	# Takes in direction (from input) and returns a mix of direction and boost_vector
+	return (boost_vector * boost_speed_mod) + (direction * boost_turning_mod)
+
+#^^ so all these functions go into player controller
+# and player controller's func _physics_process() calls a function in here
+# and passes in all the arguments it needs
+# or maybe the body can just get info from there.
+# but if everyone can share the same state managing functions, that's great.
+# so new scene 'player controller' -> 'body'
+
+func _physics_process(delta : float) -> void:
+	# calls presence function that does everything
+	presence.go(delta)
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l6tt4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2ospw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_2fgao")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_fn85f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_uvse6")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_aiih8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_cjw4d")
+}],
+"loop": true,
+"name": &"still",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_y86k6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_lynco")
+}],
+"loop": true,
+"name": &"vertical",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e0ilk"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_mumcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_qplbo")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_at22p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_n2k53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_648xx")
+}],
+"loop": true,
+"name": &"boost",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+scale = Vector2(0.25, 0.25)
+script = SubResource("GDScript_5hcc8")
+
+[node name="Unit" parent="." instance=ExtResource("1_lsa74")]
+
+[node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_l6tt4")
+animation = &"still"
+
+[node name="WeaponPivot" type="Node2D" parent="CharacterAnim"]
+
+[node name="WeaponAnim" type="AnimatedSprite2D" parent="CharacterAnim/WeaponPivot"]
+position = Vector2(400, 0)
+rotation = -0.785398
+scale = Vector2(0.625, 0.625)
+sprite_frames = SubResource("SpriteFrames_e0ilk")
+animation = &"idle"
+
+[node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim"]
+scale = Vector2(2.5, 2.631)
+sprite_frames = SubResource("SpriteFrames_at22p")
+animation = &"boost"
+frame_progress = 0.000921859
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-32, 20, -276, 584, -368, 592, -376, 384, -204, 72, -144, -656, 164, -668, 228, 80, 436, 588, 292, 644)
+
+[node name="hp_bar" type="TextureProgressBar" parent="."]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -210.0
+offset_right = -164.0
+offset_bottom = 295.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 1000.0
+value = 1000.0
+rounded = true
+fill_mode = 3
+texture_under = ExtResource("14_vjsh2")
+texture_progress = ExtResource("15_qunfd")

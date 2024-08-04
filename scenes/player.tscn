@@ -1,30 +1,30 @@
-[gd_scene load_steps=20 format=3 uid="uid://bo03cmr87rq2u"]
+[gd_scene load_steps=21 format=3 uid="uid://drc5ol6pflygx"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_tycp3"]
-[ext_resource type="Texture2D" uid="uid://dvs7oc8qs2aj3" path="res://assets/friday/friday left f1.png" id="2_llwh5"]
-[ext_resource type="Texture2D" uid="uid://mb2ra46otcl4" path="res://assets/friday/friday left f2.png" id="3_quo7k"]
-[ext_resource type="Texture2D" uid="uid://8ok28mr3iyqs" path="res://assets/friday/friday right f1.png" id="4_eft7q"]
-[ext_resource type="Texture2D" uid="uid://cv8x06jwp5x2q" path="res://assets/friday/friday right f2.png" id="5_lgxjy"]
-[ext_resource type="Texture2D" uid="uid://ckawpemg25kjb" path="res://assets/friday/friday still f1.png" id="6_rr5p4"]
-[ext_resource type="Texture2D" uid="uid://dfbr7vsv8diid" path="res://assets/friday/friday still f2.png" id="7_46y01"]
-[ext_resource type="Texture2D" uid="uid://dvkn7bvglstu5" path="res://assets/friday/friday vertical f1.png" id="8_bpwpp"]
-[ext_resource type="Texture2D" uid="uid://cotxuoalhraga" path="res://assets/friday/friday vertical f2.png" id="9_yxn8v"]
-[ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="10_qik32"]
-[ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://assets/effects/boost f2.png" id="11_6sg8e"]
-[ext_resource type="Texture2D" uid="uid://co88511simgbs" path="res://assets/weapons/hammer/hammer f2.png" id="13_l4a2v"]
-[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="14_0nblu"]
-[ext_resource type="Texture2D" uid="uid://bfvby6nbnjv65" path="res://assets/weapons/hammer/hammer f3.png" id="14_huj5d"]
-[ext_resource type="Texture2D" uid="uid://bxk2020tvwb88" path="res://assets/ui/hp bar bg.png" id="15_pswve"]
-[ext_resource type="Texture2D" uid="uid://ct068dv45xwi0" path="res://assets/ui/hp bar fill.png" id="16_xp1p7"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_qwkhf"]
+[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="2_m5kt8"]
+[ext_resource type="Texture2D" uid="uid://dvs7oc8qs2aj3" path="res://assets/friday/friday left f1.png" id="3_i40vu"]
+[ext_resource type="Texture2D" uid="uid://mb2ra46otcl4" path="res://assets/friday/friday left f2.png" id="4_v7mv7"]
+[ext_resource type="Texture2D" uid="uid://8ok28mr3iyqs" path="res://assets/friday/friday right f1.png" id="5_t835h"]
+[ext_resource type="Texture2D" uid="uid://cv8x06jwp5x2q" path="res://assets/friday/friday right f2.png" id="6_exwxd"]
+[ext_resource type="Texture2D" uid="uid://ckawpemg25kjb" path="res://assets/friday/friday still f1.png" id="7_e2ax1"]
+[ext_resource type="Texture2D" uid="uid://dfbr7vsv8diid" path="res://assets/friday/friday still f2.png" id="8_ms5du"]
+[ext_resource type="Texture2D" uid="uid://dvkn7bvglstu5" path="res://assets/friday/friday vertical f1.png" id="9_55x4t"]
+[ext_resource type="Texture2D" uid="uid://cotxuoalhraga" path="res://assets/friday/friday vertical f2.png" id="10_l2att"]
+[ext_resource type="Texture2D" uid="uid://co88511simgbs" path="res://assets/weapons/hammer/hammer f2.png" id="11_6t5ka"]
+[ext_resource type="Texture2D" uid="uid://bfvby6nbnjv65" path="res://assets/weapons/hammer/hammer f3.png" id="12_pg47d"]
+[ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="13_tuvxy"]
+[ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://assets/effects/boost f2.png" id="14_imstd"]
+[ext_resource type="Texture2D" uid="uid://bxk2020tvwb88" path="res://assets/ui/hp bar bg.png" id="15_phkhl"]
+[ext_resource type="Texture2D" uid="uid://ct068dv45xwi0" path="res://assets/ui/hp bar fill.png" id="16_ucnvi"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_l6tt4"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_llwh5")
+"texture": ExtResource("3_i40vu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_quo7k")
+"texture": ExtResource("4_v7mv7")
 }],
 "loop": true,
 "name": &"left",
@@ -32,10 +32,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_eft7q")
+"texture": ExtResource("5_t835h")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_lgxjy")
+"texture": ExtResource("6_exwxd")
 }],
 "loop": true,
 "name": &"right",
@@ -43,10 +43,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_rr5p4")
+"texture": ExtResource("7_e2ax1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_46y01")
+"texture": ExtResource("8_ms5du")
 }],
 "loop": true,
 "name": &"still",
@@ -54,10 +54,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("8_bpwpp")
+"texture": ExtResource("9_55x4t")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_yxn8v")
+"texture": ExtResource("10_l2att")
 }],
 "loop": true,
 "name": &"vertical",
@@ -73,10 +73,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("13_l4a2v")
+"texture": ExtResource("11_6t5ka")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_huj5d")
+"texture": ExtResource("12_pg47d")
 }],
 "loop": true,
 "name": &"idle",
@@ -87,19 +87,23 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("10_qik32")
+"texture": ExtResource("13_tuvxy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_6sg8e")
+"texture": ExtResource("14_imstd")
 }],
 "loop": true,
 "name": &"boost",
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xmbo8"]
+radius = 224.0
+height = 1232.0
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("character_anim", "weapon_pivot", "weapon_anim", "boost_anim", "unit", "hp_bar")]
 scale = Vector2(0.25, 0.25)
-script = ExtResource("1_tycp3")
+script = ExtResource("1_qwkhf")
 character_anim = NodePath("CharacterAnim")
 weapon_pivot = NodePath("CharacterAnim/WeaponPivot")
 weapon_anim = NodePath("CharacterAnim/WeaponPivot/WeaponAnim")
@@ -107,7 +111,7 @@ boost_anim = NodePath("CharacterAnim/BoostAnim")
 unit = NodePath("Unit")
 hp_bar = NodePath("hp_bar")
 
-[node name="Unit" parent="." instance=ExtResource("14_0nblu")]
+[node name="Unit" parent="." instance=ExtResource("2_m5kt8")]
 
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_l6tt4")
@@ -117,6 +121,7 @@ animation = &"still"
 
 [node name="WeaponAnim" type="AnimatedSprite2D" parent="CharacterAnim/WeaponPivot"]
 position = Vector2(400, 0)
+rotation = -0.785398
 scale = Vector2(0.625, 0.625)
 sprite_frames = SubResource("SpriteFrames_e0ilk")
 animation = &"idle"
@@ -127,8 +132,9 @@ sprite_frames = SubResource("SpriteFrames_at22p")
 animation = &"boost"
 frame_progress = 0.000921859
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-32, 20, -276, 584, -368, 592, -376, 384, -204, 72, -144, -656, 164, -668, 228, 80, 436, 588, 292, 644)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_xmbo8")
+one_way_collision_margin = 0.0
 
 [node name="hp_bar" type="TextureProgressBar" parent="."]
 anchors_preset = 6
@@ -146,5 +152,5 @@ max_value = 1000.0
 value = 1000.0
 rounded = true
 fill_mode = 3
-texture_under = ExtResource("15_pswve")
-texture_progress = ExtResource("16_xp1p7")
+texture_under = ExtResource("15_phkhl")
+texture_progress = ExtResource("16_ucnvi")

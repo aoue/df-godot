@@ -1,20 +1,9 @@
 commit notes:
--fixed issue were proj would not look in proper direction if it spawned past mouse pos
--
+-refactored player input into new brain scene
+-refactored player a little bit
 
 ======= TODO:
 
-keep watching that brackeys video, there will probably be a lot of useful and well-presented information
-
-
-REFACTOR
-	*player scene into new 'core' scene
-	-the current 'player' scene has code for movement, anims, and updating healthbars, etc
-	-this is code that should be common for all units, since it's stuff they will all have to do
-	-the input interpretation code will be held in a 'controller' scene above it, which is the root scene
-	-the controller will get input for player, or do ai stuff for allies/enemies
-	-and then it will pass all those signals down into the 'core' scene
-	*the first step will be to refactor the player scene into this now and make sure it all still works
 
 ENEMY SCENE
 	*what can be shared between player, ally, and enemy?
@@ -22,8 +11,8 @@ ENEMY SCENE
 	-player gets inputs, but ally/enemy need an ai class, 'brain' (generic)
 	*how does enemy 1 differ from enemy 2?
 	-moveset and ai variables
-	-anim set (but not poses)
-	-collider shape
+	-anim set (but not anim names)
+	-collider shape and size
 
 
 	*for now, can just be a target dummy
@@ -52,12 +41,14 @@ UNIT SCENE
 PROJECTILE SCENE
 	once you have ally and enemy:
 	-two different layers for projectiles (brackeys vid, ~30m)
-	-player, allies, and enemy projectiles share a layer
-	-enemies and player/ally projectiles share a layer
-	-walls are on both layers
+	-allies cant hit each other with projectiles
+	-enemies cant hit each other with projectiles
+	-everyone can hit walls
 	this will let you shoot through your teammates
 	we also want to make sure that they don't hit and annihilate each other
 	bullets of any type should be able to pass through each other with no problem
+	LAYERS
+	
 
 MOVE SCENE
 	holds information about:
