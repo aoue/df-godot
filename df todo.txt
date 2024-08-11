@@ -1,9 +1,16 @@
 commit notes:
--refactored player input into new brain scene
--refactored player a little bit
+-redid player anims to use spritesheet
+-added adelie spritesheet
 
 ======= TODO:
 
+SPEEDS, DAMAGE, ETC, ETC
+	*should all be normalized according to a global constant.
+	-then the actual values will be a float which is multiplied by the constant
+	scalable :)
+
+ENEMY ART
+	*working on art for the adelie (and name too)
 
 ENEMY SCENE
 	*what can be shared between player, ally, and enemy?
@@ -39,7 +46,7 @@ UNIT SCENE
 	(tada, should be everything)
 
 PROJECTILE SCENE
-	once you have ally and enemy:
+	*once you have ally and enemy:
 	-two different layers for projectiles (brackeys vid, ~30m)
 	-allies cant hit each other with projectiles
 	-enemies cant hit each other with projectiles
@@ -47,7 +54,9 @@ PROJECTILE SCENE
 	this will let you shoot through your teammates
 	we also want to make sure that they don't hit and annihilate each other
 	bullets of any type should be able to pass through each other with no problem
-	LAYERS
+	*stun and knockback
+	-damaging a unit should stun it probably, making them unable to act
+	-hitting a unit with a move applies a knockback to them
 	
 
 MOVE SCENE
@@ -75,16 +84,25 @@ ENCOUNTER SCENE
 	-a reference to an ARENA scene. By swapping this out, you change the map
 
 OBSTACLE SCENE
-	when you hit a wall you should bounce off it
+	when you hit a wall should you bounce off it? i think thats cool
 	*has a vector.reflection thing that can help with this
-	oh, also the characterbody2d.bounce() function hehe
+	oh, also the characterbody2d.bounce() function? how nice
 
 REMEMBER
 	*on unit defeat, debris
 	*heal projectiles (can still work, they should just be like slow-moving floaty bubbles and the idea would be that you have to go run into them. good idea. love ya nai.
 
+AI DESIGN
+	the bastion roll has no invincibility frames, neat.
+	attacks have a clear tell and buildup before execution
+	every attack should have 3 phases:
+	-pre delay (also has a speed mod, can be fast or slow)
+	-execution (actually doing the attack, has another speed mod, usually very slow)
+	-post delay (which can be skipped by starting another attack?, another speed mod too)
+	
+
 BUG BACKLOG
-	in encounter, we used to set the mouse icon to be the red circle
+	*mouse pointer: in encounter, we used to set the mouse icon to be the red circle
 	-this causes the projectile to shoot out misaligned. because the center of the red circle does not line up with the pointer's click location.
 
 

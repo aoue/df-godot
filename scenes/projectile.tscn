@@ -7,7 +7,6 @@
 size = Vector2(90, 80)
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider", "damage_label")]
-scale = Vector2(0.2, 0.2)
 script = ExtResource("1_4dsvs")
 projectile_sprite = NodePath("Projectile Sprite")
 projectile_collider = NodePath("Projectile Collider")

@@ -8,8 +8,10 @@
 script = ExtResource("1_kqml8")
 
 [node name="Player" parent="." instance=ExtResource("2_rhaad")]
+position = Vector2(778, 43)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(0.25, 0.25)
 position_smoothing_enabled = true
 
 [node name="Projectile" parent="." instance=ExtResource("3_edybt")]
