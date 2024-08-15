@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Dear Friday"
-run/main_scene="res://scenes/encounter.tscn"
+run/main_scene="res://scenes/Encounter.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+
+[autoload]
+
+Coeff="*res://scenes/Coeff.tscn"
 
 [display]
 

@@ -1,17 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://dk3veiqccd2ah"]
+[gd_scene load_steps=5 format=3 uid="uid://dk3veiqccd2ah"]
 
 [ext_resource type="Script" path="res://encounter.gd" id="1_kqml8"]
+[ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/Adelie.tscn" id="2_cth0n"]
 [ext_resource type="PackedScene" uid="uid://drc5ol6pflygx" path="res://scenes/Player.tscn" id="2_rhaad"]
-[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectile.tscn" id="3_edybt"]
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/Projectile.tscn" id="3_edybt"]
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_kqml8")
+
+[node name="Adelie" parent="." instance=ExtResource("2_cth0n")]
+position = Vector2(1815, 40)
 
 [node name="Player" parent="." instance=ExtResource("2_rhaad")]
 position = Vector2(778, 43)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(0.25, 0.25)
+zoom = Vector2(0.2, 0.2)
 position_smoothing_enabled = true
 
 [node name="Projectile" parent="." instance=ExtResource("3_edybt")]

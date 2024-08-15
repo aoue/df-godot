@@ -1,49 +1,46 @@
 commit notes:
--redid player anims to use spritesheet
--added adelie spritesheet
+-created coeff singleton scene to hold all the stat coefficients, allowing for easy balancing tweaks i hope
 
-======= TODO:
-
-SPEEDS, DAMAGE, ETC, ETC
-	*should all be normalized according to a global constant.
-	-then the actual values will be a float which is multiplied by the constant
-	scalable :)
-
-ENEMY ART
-	*working on art for the adelie (and name too)
-
-ENEMY SCENE
-	*what can be shared between player, ally, and enemy?
-	-the unit class. can call use_move() all the same. update hp, etc, the same.
-	-player gets inputs, but ally/enemy need an ai class, 'brain' (generic)
-	*how does enemy 1 differ from enemy 2?
-	-moveset and ai variables
-	-anim set (but not anim names)
-	-collider shape and size
+======= TODO: working on the combat feel 
 
 
-	*for now, can just be a target dummy
-	-needs at least an idle anim
-	-needs hp bar
-	-we need to be able to hit it with a projectile
-	next steps would be:
-	*have it use pathfinding2d to navigate the map and move straight towards the player
-	before getting too far, look at some other top-down games and see how their ai is:
-	-like baldr sky, etc
-	how does their enemy ai actually behave?
+ENEMY UNIT
+	*exists like a target dummy for the player to smack
+	-plays its animations
+	-can be hit, can be damaged, updates its hp bar
 
-UNIT SCENE
-	*add more move spawning patterns for projectiles
-	-close limited range move
-	-multi bullet move
-	-AoE move (in front of you; at mouse location)
-	*add move that controls your movement
-	-spawn proj at start, end, or throughout
-	-idk, there are probably some other things we should test too
-	(the way you will create more projectile patterns is: create new proj scene)
-	(change the collider of the area2d shape to the new shape)
-	(change the function that spawns it to move it differently or whatever)
-	(tada, should be everything)
+MOVE SCENE
+	*has parameters for everything: dmg, break dmg, knockback, cost, pre/exec/post delay and speed mod
+	-then each individual move inherits this, but has a unique shape set in its actual scene
+
+DAMAGE AND BREAK
+	*add in the break bar
+	-take break damage from moves
+	-display break on unit somehow?
+	-when unit breaks, switch anim to 'stunned' and disable unit for stun delay
+	-when unit is broken, show 'Breakdown!' in yellow
+	*add in knockback
+	-every projectile applies some knockback
+	-bodies also get moved by this vector during their physics update
+
+BODY COLLIDERS
+	the body colliders could probably be wayy bigger than they are now.
+	we dont want the character images to overlap. A nice big circle or capsule shape is fine
+	as long as the bullets are moving fast, it's fine
+
+ART
+	maybe... maybe i should try pixel art.
+	i really like depersonalization's art style...
+	but no agh!!! i dont want to use pixel art, man...
+	actually, it looks kind of okay :)
+	dont judge it before it's in the world with the tilesets
+
+
+
+THIS WILL BE DONE WHEN
+	the player can hit the enemy unit with a combo of several different attacks
+
+--- beyond the scope of the current task ---
 
 PROJECTILE SCENE
 	*once you have ally and enemy:

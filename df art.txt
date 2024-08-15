@@ -7,6 +7,12 @@ This will help you stay in love and avoid becoming overwhelmed with a backlog la
 
 Character animation suite: [still, left, right, vertical, attacking]
 
+=== Sprite Sheets
+
+Yes, use these.
+each box is 1500x1500
+place each frame in the bottom left, then center the frames as a group.
+
 === To-do
 
 make tiles in 256x256? sure why not

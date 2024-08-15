@@ -8,23 +8,24 @@ extends CharacterBody2D
 @export var unit : Node
 @export var hp_bar : TextureProgressBar
 
-# Speed variables
-var speed : int = 500
-var friction : float = 0.1
-var acceleration : float = 0.4
+# Basic movement variables
+var speed : float = 1.0 * Coeff.speed
+var acceleration : float = 1.0 * Coeff.acceleration
 
 # Boost variables
 var boost_vector : Vector2
 var boost_duration : float = 0.0
 var boost_cooldown : float = 0.0
-var boost_speed_mod : float = 3.0
-var boost_acceleration_mod : float = 2.0
-var boost_turning_mod : float = 0.75
-var boost_full_duration : float = 0.35
+var boost_acceleration : float = 1.0 * Coeff.acceleration
+var boost_speed_mod : float = 2.5
+var boost_full_duration : float = 0.2
 var boost_full_cooldown : float = 1.5
 
 # Input Functions
 func get_direction_input() -> Vector2:
+	if boost_duration > 0.0:
+		return boost_vector
+		
 	var input = Vector2()
 	if Input.is_action_pressed('right'):
 		input.x += 1
@@ -58,7 +59,7 @@ func get_mouse() -> Vector2:
 	return get_global_mouse_position()
 
 
-# Manage State
+# Change State
 func set_animation(direction : Vector2, mouse_pos : Vector2, isAttacking : bool, isBoosting : bool) -> void:
 	# Control CharacterAnim
 	if direction.x > 0:
@@ -110,7 +111,27 @@ func update_hp_bar(new_value : int, delta : float) -> void:
 	elif hp_bar.value > new_value:
 		hp_bar.value -= new_value * delta
 
-# Running
+# Execute State
+func go_anim(delta : float, direction_input : Vector2, mouse_input: Vector2, attack_input: bool, boost_input: bool) -> void:
+	#character_anim.sprite_frames
+	set_animation(direction_input, mouse_input, attack_input, boost_input)
+	update_hp_bar(unit.HP_cur, delta)
+	
+func go_attack(delta : float, attack_input: bool, mouse_input: Vector2) -> void:
+	if attack_input:
+		unit.use_move1(position, mouse_input)	
+		
+func go_move(delta: float, direction_input: Vector2, speed_input: int, acceleration: float) -> void:
+	if direction_input.length() > 0:
+		velocity = velocity.lerp(direction_input * speed_input, acceleration)
+	else:
+		velocity = velocity.lerp(Vector2.ZERO, acceleration)
+	move_and_slide()
+
+func pass_duration(delta : float) -> void:
+	boost_duration -= delta
+	boost_cooldown -= delta
+
 func _physics_process(delta: float) -> void:
 	# calls entity's process function
 	var direction: Vector2 = get_direction_input()
@@ -118,32 +139,20 @@ func _physics_process(delta: float) -> void:
 	var is_attacking: bool = get_attack_input()
 	var is_boosting: bool = get_boost_input(direction)
 	
-	boost_duration -= delta
-	boost_cooldown -= delta
-	var modded_accel: float = acceleration
-	if boost_duration > 0.0:
-		direction = (boost_vector * boost_speed_mod) + (direction * boost_turning_mod)
-		modded_accel = acceleration * boost_acceleration_mod
+	var acceleration_value = acceleration
+	var speed_value = speed
+	if is_boosting:
+		acceleration_value = boost_acceleration
+		speed_value = speed * boost_speed_mod
 	
-	go_move(delta, direction, speed, modded_accel, friction)
+	go_move(delta, direction, speed_value, acceleration_value)
 	go_attack(delta, is_attacking, mouse_pos)
 	go_anim(delta, direction, mouse_pos, is_attacking, is_boosting)
+	
+	pass_duration(delta)
 
-func go_move(delta: float, direction_input: Vector2, speed_input: int, accel_input: float, friction_input: float) -> void:
-	if direction_input.length() > 0:
-		velocity = velocity.lerp(direction_input * speed_input, accel_input)
-	else:
-		velocity = velocity.lerp(Vector2.ZERO, friction_input)	
-	move_and_slide()
 
-func go_attack(delta : float, attack_input: bool, mouse_input: Vector2) -> void:
-	if attack_input:
-		unit.use_move1(position, mouse_input)
 
-func go_anim(delta : float, direction_input : Vector2, mouse_input: Vector2, attack_input: bool, boost_input: bool) -> void:
-	#character_anim.sprite_frames
-	set_animation(direction_input, mouse_input, attack_input, boost_input)
-	update_hp_bar(unit.HP_cur, delta)
 
 
 

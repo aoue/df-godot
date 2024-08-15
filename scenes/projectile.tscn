@@ -1,19 +1,19 @@
 [gd_scene load_steps=4 format=3 uid="uid://w2mpitayui1x"]
 
-[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_4dsvs"]
-[ext_resource type="Texture2D" uid="uid://bti2kgvcise35" path="res://assets/projectile/projectile.png" id="1_l8k1w"]
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_w2wu8"]
+[ext_resource type="Texture2D" uid="uid://bti2kgvcise35" path="res://assets/projectile/projectile.png" id="2_2hyk5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o61th"]
 size = Vector2(90, 80)
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider", "damage_label")]
-script = ExtResource("1_4dsvs")
+script = ExtResource("1_w2wu8")
 projectile_sprite = NodePath("Projectile Sprite")
 projectile_collider = NodePath("Projectile Collider")
 damage_label = NodePath("Damage Text")
 
 [node name="Projectile Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("1_l8k1w")
+texture = ExtResource("2_2hyk5")
 
 [node name="Projectile Collider" type="CollisionShape2D" parent="."]
 position = Vector2(5, -5)

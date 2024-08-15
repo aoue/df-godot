@@ -6,9 +6,11 @@ extends Node
 # But not movement-related things.
 
 # Basic statistics
-@export var HP_max : int
+@export var HP_max_coeff : float
+var HP_max : int
 var HP_cur : int
-@export var PW_max : int
+@export var PW_max_coeff : float
+var PW_max : int
 var PW_cur : int
 
 # Attack variables
@@ -26,7 +28,9 @@ func _ready():
 
 func refresh():
 	# sets the unit's stats to their initial state
+	HP_max = HP_max_coeff * Coeff.hp
 	HP_cur = HP_max
+	PW_max = PW_max_coeff * Coeff.hp
 	PW_cur = PW_max
 
 # Being Attacked
@@ -51,10 +55,12 @@ func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
 	
 	# find its spawn location (between player and mouse), offset
 	var mouse_direction : Vector2 = (mouse_pos - unit_pos).normalized()
-	var proj_spawn_loc : Vector2 = unit_pos + (mouse_direction * 175)
+	var proj_spawn_loc : Vector2 = unit_pos + (mouse_direction * 175 * 4)
 	
 	# fill in its values
-	proj.setup(proj_spawn_loc, mouse_direction, 2000, 50)
+	var dmg_temp: float = 0.1
+	var speed_temp: float = 2.5
+	proj.setup(proj_spawn_loc, mouse_direction, speed_temp, dmg_temp)
 	
 	# instantiate it into the scene
 	add_child(proj)

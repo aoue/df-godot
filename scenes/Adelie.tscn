@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://8f6wd8hvqtfp"]
 
-[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="1_nye7s"]
+[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
 [ext_resource type="Texture2D" uid="uid://dfk86dm08rs0r" path="res://assets/anims/adelie spritesheet.png" id="2_0odim"]
 [ext_resource type="Texture2D" uid="uid://bxk2020tvwb88" path="res://assets/ui/hp bar bg.png" id="2_r1v5x"]
 [ext_resource type="Texture2D" uid="uid://ct068dv45xwi0" path="res://assets/ui/hp bar fill.png" id="3_44yiu"]
@@ -89,12 +89,16 @@ radius = 202.0
 height = 820.0
 
 [node name="Adelie" type="CharacterBody2D"]
+scale = Vector2(0.75, 0.75)
 
 [node name="Unit" parent="." instance=ExtResource("1_nye7s")]
 
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_kvqv2")
-animation = &"vertical"
+animation = &"left"
+autoplay = "left"
+frame = 1
+frame_progress = 0.257095
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-55, 190)
