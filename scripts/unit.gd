@@ -6,10 +6,8 @@ extends Node
 # But not movement-related things.
 
 # Basic statistics
-@export var HP_max_coeff : float
 var HP_max : int
 var HP_cur : int
-@export var PW_max_coeff : float
 var PW_max : int
 var PW_cur : int
 
@@ -23,10 +21,7 @@ var can_attack_cooldown : float = 0.0
 # - a function that specifies the usage and spawning of projectiles)
 @export var proj_scene : PackedScene
 
-func _ready():
-	refresh()
-
-func refresh():
+func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	# sets the unit's stats to their initial state
 	HP_max = HP_max_coeff * Coeff.hp
 	HP_cur = HP_max
@@ -38,13 +33,13 @@ func take_hit(damage : int) -> void:
 	HP_cur = clamp(HP_cur - damage, 0, HP_max)
 
 func is_defeated() -> bool:
-	if HP_cur <= 0:
+	if HP_cur == 0:
 		return true
 	return false
 
 # Attacking
 func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
-	# hard-coded for now
+	# hard-coded for now; will eventually use the move in the slot
 	if can_attack == false:
 		return
 	can_attack = false

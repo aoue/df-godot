@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://coamrfgnw731y"]
+
+[ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_gvuie"]
+[ext_resource type="Script" path="res://scripts/adelie.gd" id="2_opqaw"]
+
+[node name="Adelie" instance=ExtResource("1_gvuie")]
+script = ExtResource("2_opqaw")
+
+[node name="CollisionShape2D" parent="." index="2"]
+position = Vector2(-72, 262.667)
+
+[node name="hp_bar" parent="." index="3"]
+offset_left = -528.0
+offset_top = 160.0
+offset_right = -272.0
+offset_bottom = 665.0

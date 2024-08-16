@@ -1,8 +1,16 @@
 commit notes:
--created coeff singleton scene to hold all the stat coefficients, allowing for easy balancing tweaks i hope
+-created unitbody base class for units
+-the adelie unit can stand there and take it like a good little puppy
+-fixed graphical bug where hp bar stopped decreasing once HP_cur was 0
+-fixed movement bug where player became unable to move, was related to initialization
 
 ======= TODO: working on the combat feel 
 
+BUG WITH PLAYER UNIT
+	*the player unit does not move at all
+	-this happened after i moved the location of the player in the file system
+	-it said there was some kind of error. I tried moving it back, but that didn't fix it
+	ummm
 
 ENEMY UNIT
 	*exists like a target dummy for the player to smack
@@ -12,6 +20,33 @@ ENEMY UNIT
 MOVE SCENE
 	*has parameters for everything: dmg, break dmg, knockback, cost, pre/exec/post delay and speed mod
 	-then each individual move inherits this, but has a unique shape set in its actual scene
+	*the projectile is an animation
+	-it can be. for instance, a box flash should have an animation, you know
+
+
+ANIMATION
+	*do characters need 4 new animation frames? I think so
+	-preparing to use move (multi-frame)
+	-using move (multi-frame probably?)
+	-recovering from move (multi-frame)
+	-being hit (could this be one frame? should it? test it and see)
+
+	i think only anse should have the floating box sprite, to remind the player where they are aiming
+	all other characters can keep their weapons in their in their regular portraits
+
+	some ai units will have the boostanim slot, because they will be able to boost
+
+
+
+CREATING MOVES
+	*create a few different moves
+	-ranged move that shoots like 5 bullets in a row
+	-ranged move that shoots like 5 bullets all at once
+	-melee move that does a one-two hit
+	-melee move that drops a big hammer attack after a long delay
+	-move that hits area around player, always
+
+
 
 DAMAGE AND BREAK
 	*add in the break bar
@@ -42,6 +77,22 @@ THIS WILL BE DONE WHEN
 
 --- beyond the scope of the current task ---
 
+AI BRAIN
+	*how will units know where the other units are?
+	-they will have to ask the encounter through coeff
+
+	*how does it decide what to do?
+	-if already doing something; keep doing it (attack, dodge, travel)
+	-check location of units
+	-choose thing to do based on location of units (attack, dodge, travel)
+	-execute plan (use move, boost, or move somewhere/towards something)
+
+UNIT SCENE
+	*the unit scene doesn't think, it only executes
+	-it doesn't have any exported variables; nothing is stored there
+	-it just manages access to moves and what's useable and stuff like that
+	at least that's the plan for now still
+
 PROJECTILE SCENE
 	*once you have ally and enemy:
 	-two different layers for projectiles (brackeys vid, ~30m)
@@ -55,7 +106,6 @@ PROJECTILE SCENE
 	-damaging a unit should stun it probably, making them unable to act
 	-hitting a unit with a move applies a knockback to them
 	
-
 MOVE SCENE
 	holds information about:
 	-stats information for the attack
@@ -100,6 +150,6 @@ AI DESIGN
 
 BUG BACKLOG
 	*mouse pointer: in encounter, we used to set the mouse icon to be the red circle
-	-this causes the projectile to shoot out misaligned. because the center of the red circle does not line up with the pointer's click location.
+	-this causes the projectile to shoot out misaligned. because the center of the red circle does not line up with the pointer's click location. Can we just add an offset? worth a shot
 
 

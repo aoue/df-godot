@@ -5,6 +5,4 @@
 
 [node name="Unit" type="Node"]
 script = ExtResource("1_bxpvv")
-HP_max = 1000
-PW_max = 100
 proj_scene = ExtResource("2_6wum6")

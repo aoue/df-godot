@@ -30,7 +30,7 @@ func _on_body_entered(_body) -> void:
 	# Then, having no more reason to exist, it destroys itself.
 	var overlapping_bodies = get_overlapping_bodies() 
 	for hit_body in overlapping_bodies:
-		print(hit_body)
+		#print(hit_body)
 		hit_body.being_attacked(damage)
 	
 	# Hide bullet and collider
@@ -40,7 +40,7 @@ func _on_body_entered(_body) -> void:
 	# Show damage number
 	hit_something = true
 	damage_label.text = "-" + str(damage)
-	direction = random_on_unit_sphere()
+	#direction = random_on_unit_sphere()
 
 # Helpers
 func random_on_unit_sphere() -> Vector2:
@@ -56,7 +56,7 @@ func _process(delta : float) -> void:
 	damage_label.rotation = -rotation  # hehe
 	if hit_something:
 		# the damage number continues moving for a bit in the same direction, but slower
-		position = position + (speed / 100 * direction * delta)  
+		position = position + (speed * Coeff.damage_text_slowdown * direction * delta)
 		expire_delay -= delta
 		if expire_delay <= 0.0:
 			queue_free()

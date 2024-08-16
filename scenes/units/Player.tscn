@@ -122,22 +122,24 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xmbo8"]
-radius = 158.0
-height = 1106.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b1cfp"]
+radius = 432.0
+height = 1412.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("character_anim", "weapon_pivot", "weapon_anim", "boost_anim", "unit", "hp_bar")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "weapon_pivot", "weapon_anim", "boost_anim", "hp_bar")]
 script = ExtResource("1_qwkhf")
+unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
 weapon_pivot = NodePath("CharacterAnim/WeaponPivot")
 weapon_anim = NodePath("CharacterAnim/WeaponPivot/WeaponAnim")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
-unit = NodePath("Unit")
 hp_bar = NodePath("hp_bar")
-
-[node name="Unit" parent="." instance=ExtResource("2_m5kt8")]
 HP_max_coeff = 1.0
 PW_max_coeff = 1.0
+speed_coeff = 1.0
+acceleration_coeff = 1.0
+
+[node name="Unit" parent="." instance=ExtResource("2_m5kt8")]
 
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_l6tt4")
@@ -160,8 +162,8 @@ animation = &"boost"
 frame_progress = 0.000921859
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-25, 50)
-shape = SubResource("CapsuleShape2D_xmbo8")
+position = Vector2(-25, 166)
+shape = SubResource("CapsuleShape2D_b1cfp")
 one_way_collision_margin = 0.0
 
 [node name="hp_bar" type="TextureProgressBar" parent="."]
@@ -170,14 +172,12 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -210.0
-offset_right = -164.0
-offset_bottom = 295.0
+offset_left = -538.0
+offset_top = 45.0
+offset_right = -282.0
+offset_bottom = 550.0
 grow_horizontal = 0
 grow_vertical = 2
-max_value = 1000.0
-value = 1000.0
 rounded = true
 fill_mode = 3
 texture_under = ExtResource("15_phkhl")
