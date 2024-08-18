@@ -5,7 +5,13 @@ This will help you stay in love and avoid becoming overwhelmed with a backlog la
 
 === Art Notes
 
-Character animation suite: [still, left, right, vertical, attacking]
+Character animation suite: [still, left, right, vertical, 
+
+pre delay?
+attacking?
+post delay?
+being hit?
+]
 
 === Sprite Sheets
 

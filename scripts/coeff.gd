@@ -18,6 +18,7 @@ var speed: int = 5000
 var acceleration: float = 0.08
 var hp: int = 1000
 var damage: int = 1000
+var knockback: float = 200
 var damage_text_slowdown: float = 0.01
 var hp_bar_update_speed: int = 500
 

@@ -29,7 +29,7 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	PW_cur = PW_max
 
 # Being Attacked
-func take_hit(damage : int) -> void:
+func take_damage(damage : int) -> void:
 	HP_cur = clamp(HP_cur - damage, 0, HP_max)
 
 func is_defeated() -> bool:
@@ -55,7 +55,9 @@ func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
 	# fill in its values
 	var dmg_temp: float = 0.1
 	var speed_temp: float = 2.5
-	proj.setup(proj_spawn_loc, mouse_direction, speed_temp, dmg_temp)
+	var knockback_temp: float = 1
+	
+	proj.setup(proj_spawn_loc, mouse_direction, speed_temp, dmg_temp, knockback_temp)
 	
 	# instantiate it into the scene
 	add_child(proj)

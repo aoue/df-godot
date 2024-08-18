@@ -85,19 +85,17 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b0m4x"]
-radius = 409.333
-height = 1085.33
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
+size = Vector2(686, 1026)
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar")]
-scale = Vector2(0.75, 0.75)
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
 hp_bar = NodePath("hp_bar")
-HP_max_coeff = 0.25
+HP_max_coeff = 1.0
 PW_max_coeff = 1.0
-speed_coeff = 0.75
+speed_coeff = 1.0
 acceleration_coeff = 1.0
 
 [node name="Unit" parent="." instance=ExtResource("1_nye7s")]
@@ -108,8 +106,8 @@ animation = &"still"
 autoplay = "still"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-38.6667, 261.333)
-shape = SubResource("CapsuleShape2D_b0m4x")
+position = Vector2(-32, 233)
+shape = SubResource("RectangleShape2D_4brxe")
 
 [node name="hp_bar" type="TextureProgressBar" parent="."]
 anchors_preset = 6

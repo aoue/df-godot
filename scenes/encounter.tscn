@@ -1,18 +1,20 @@
 [gd_scene load_steps=4 format=3 uid="uid://dk3veiqccd2ah"]
 
 [ext_resource type="Script" path="res://encounter.gd" id="1_kqml8"]
-[ext_resource type="PackedScene" uid="uid://drc5ol6pflygx" path="res://scenes/units/Player.tscn" id="2_rhaad"]
-[ext_resource type="PackedScene" uid="uid://coamrfgnw731y" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
+[ext_resource type="PackedScene" uid="uid://bheobjlecy41s" path="res://scenes/units/Anse.tscn" id="2_aaoje"]
+[ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_kqml8")
 
-[node name="Player" parent="." instance=ExtResource("2_rhaad")]
+[node name="Adelie" parent="." instance=ExtResource("4_4r8bx")]
+position = Vector2(1507, 183)
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2(778, 43)
+[node name="Anse" parent="." instance=ExtResource("2_aaoje")]
+position = Vector2(-325, -38)
+
+[node name="Camera2D" type="Camera2D" parent="Anse"]
+position = Vector2(1009.33, -132.667)
+scale = Vector2(1.33333, 1.33333)
 zoom = Vector2(0.2, 0.2)
 position_smoothing_enabled = true
-
-[node name="Adelie" parent="." instance=ExtResource("4_4r8bx")]
-position = Vector2(2589, -45)

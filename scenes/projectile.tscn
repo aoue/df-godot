@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bti2kgvcise35" path="res://assets/projectile/projectile.png" id="2_2hyk5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o61th"]
-size = Vector2(90, 80)
+size = Vector2(98, 73)
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider", "damage_label")]
 script = ExtResource("1_w2wu8")
@@ -16,7 +16,7 @@ damage_label = NodePath("Damage Text")
 texture = ExtResource("2_2hyk5")
 
 [node name="Projectile Collider" type="CollisionShape2D" parent="."]
-position = Vector2(5, -5)
+position = Vector2(0, -7.5)
 shape = SubResource("RectangleShape2D_o61th")
 
 [node name="Damage Text" type="Label" parent="."]
@@ -25,10 +25,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -116.5
-offset_top = -136.5
-offset_right = 116.5
-offset_bottom = 136.5
+offset_left = -128.0
+offset_top = -140.0
+offset_right = 105.0
+offset_bottom = 133.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.750892, 0.133051, 0.175534, 1)

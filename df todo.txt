@@ -1,28 +1,28 @@
 commit notes:
--created unitbody base class for units
--the adelie unit can stand there and take it like a good little puppy
--fixed graphical bug where hp bar stopped decreasing once HP_cur was 0
--fixed movement bug where player became unable to move, was related to initialization
+-refactored player unit to use UnitBody class too
+-replaced player scene with anse scene, which inherits from unitbody scene
+-added knockback to unitbody
 
-======= TODO: working on the combat feel 
+======= TODO: combat feeling
 
-BUG WITH PLAYER UNIT
-	*the player unit does not move at all
-	-this happened after i moved the location of the player in the file system
-	-it said there was some kind of error. I tried moving it back, but that didn't fix it
-	ummm
 
 ENEMY UNIT
-	*exists like a target dummy for the player to smack
-	-plays its animations
-	-can be hit, can be damaged, updates its hp bar
+	-add an animation for being hit
 
 MOVE SCENE
 	*has parameters for everything: dmg, break dmg, knockback, cost, pre/exec/post delay and speed mod
+	(will also use a structure similar to enemy units, where there is a base move and then actual moves are inherited scenes)
 	-then each individual move inherits this, but has a unique shape set in its actual scene
 	*the projectile is an animation
 	-it can be. for instance, a box flash should have an animation, you know
+	note: the negative speed mod applied from using a move should also reduce incoming knockback
 
+
+PLAYER UNIT ART
+	*should we replace Friday with anse? yea! we love anse.
+	-replace anims, and do better (coat has to move with him)
+	-draw every body part separate into layers for easy readjustment
+	-replace hammer with box please
 
 ANIMATION
 	*do characters need 4 new animation frames? I think so
@@ -36,8 +36,6 @@ ANIMATION
 
 	some ai units will have the boostanim slot, because they will be able to boost
 
-
-
 CREATING MOVES
 	*create a few different moves
 	-ranged move that shoots like 5 bullets in a row
@@ -45,8 +43,6 @@ CREATING MOVES
 	-melee move that does a one-two hit
 	-melee move that drops a big hammer attack after a long delay
 	-move that hits area around player, always
-
-
 
 DAMAGE AND BREAK
 	*add in the break bar
@@ -70,7 +66,8 @@ ART
 	actually, it looks kind of okay :)
 	dont judge it before it's in the world with the tilesets
 
-
+BUG
+	*units become stuck to each other, and then move together, hmm...
 
 THIS WILL BE DONE WHEN
 	the player can hit the enemy unit with a combo of several different attacks
@@ -87,11 +84,14 @@ AI BRAIN
 	-choose thing to do based on location of units (attack, dodge, travel)
 	-execute plan (use move, boost, or move somewhere/towards something)
 
-UNIT SCENE
-	*the unit scene doesn't think, it only executes
-	-it doesn't have any exported variables; nothing is stored there
-	-it just manages access to moves and what's useable and stuff like that
-	at least that's the plan for now still
+PROJECTILE DEALING DAMAGE
+	*it's boring if all the damage numbers are the same
+	-add some randomness? make the damage related to projectile speed?
+
+MOVEMENT
+	*you know, it would be neat if you pushed unit bodies that you collided with
+	-that would be kind of interesting, don't you think?
+	-like, boost into an enemy to send them flying away
 
 PROJECTILE SCENE
 	*once you have ally and enemy:
@@ -111,7 +111,7 @@ MOVE SCENE
 	-stats information for the attack
 	-projectile child (and the collision shape will be set for it here)
 	-a spawning function that creates projectiles with certain timing
-
+	
 ARENA SCENE
 	contains a tilemap with obstacles, etc
 	when we actually have our tileset made, watch this again and implement it
