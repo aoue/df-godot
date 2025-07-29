@@ -3,30 +3,23 @@ When introduction a new system, draw at least some passable placeholder art for 
 (This includes colouring)
 This will help you stay in love and avoid becoming overwhelmed with a backlog later.
 
-=== Art Notes
+spritesheets are 4500x4500 by default
+we will go with 5x5, each sprite slot being 900x900
 
-Character animation suite: [still, left, right, vertical, 
 
-pre delay?
-attacking?
-post delay?
-being hit?
-]
+== sprite breakdown ==
+in the combat scene, a unit has the following sprites:
+left: at rest, moving1, moving2, moving3, moving4 	(5)
+right: (reflected from left)
+up: rest, moving1, moving2, moving3, moving4 		(10)
+down: rest, moving1, moving2, moving3, moving4		(15)
+melee: melee1, melee2, melee3				(18)
+ranged: ranged1, ranged2, ranged3			(21)
+special: special1, special2, special3			(24)
 
-=== Sprite Sheets
+remember, the attack's effect will distinguish it from other ones, so it's okay to use the same unit animation, depending on type. The animation will just show the character drawing and holding the weapon.
+E.g. 
+anse: melee will always just show the snaphammer, ranged the submachine gun, special the box.
+Friday: melee also uses snaphammer, ranged also uses smg, special will be her forms.
+the special is the unit's  unique stuff.
 
-Yes, use these.
-each box is 1500x1500
-place each frame in the bottom left, then center the frames as a group.
-
-=== To-do
-
-make tiles in 256x256? sure why not
-
-create ruined city tile set:
-	-snow
-	-rough snow
-	-wall
-	-cracked wall
-	-ice
-	-rough ice

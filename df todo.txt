@@ -1,155 +1,45 @@
 commit notes:
--refactored player unit to use UnitBody class too
--replaced player scene with anse scene, which inherits from unitbody scene
--added knockback to unitbody
+-
 
 ======= TODO: combat feeling
 
+- draw anse unit sprites
+	-left/right set
+	-up set
+	-down set
 
-ENEMY UNIT
-	-add an animation for being hit
+- create a unit that can move in the four basic directions
 
-MOVE SCENE
-	*has parameters for everything: dmg, break dmg, knockback, cost, pre/exec/post delay and speed mod
-	(will also use a structure similar to enemy units, where there is a base move and then actual moves are inherited scenes)
-	-then each individual move inherits this, but has a unique shape set in its actual scene
-	*the projectile is an animation
-	-it can be. for instance, a box flash should have an animation, you know
-	note: the negative speed mod applied from using a move should also reduce incoming knockback
+- create the ring around the unit that moves with them
+	-the anneau system? is it the O.S.? a method to help the FS manage its abilities safely.
 
+- create a projectile that can be created. Simply uses:
+	-collision
+	-an image (a solid color box is fine for now)
+	-an effect when it hits the target (read: damage)
 
-PLAYER UNIT ART
-	*should we replace Friday with anse? yea! we love anse.
-	-replace anims, and do better (coat has to move with him)
-	-draw every body part separate into layers for easy readjustment
-	-replace hammer with box please
+- draw target dummy; two animation cycle is fine
 
-ANIMATION
-	*do characters need 4 new animation frames? I think so
-	-preparing to use move (multi-frame)
-	-using move (multi-frame probably?)
-	-recovering from move (multi-frame)
-	-being hit (could this be one frame? should it? test it and see)
+- create a target dummy that can be hit by projectiles
+	-no need to worry about hp or anything like that just yet
+	-if it just reacts when hit in any way, that's good enough
 
-	i think only anse should have the floating box sprite, to remind the player where they are aiming
-	all other characters can keep their weapons in their in their regular portraits
+- draw anse unit sprites
+	- melee
+	- ranged
+	- special
 
-	some ai units will have the boostanim slot, because they will be able to boost
+- create one attack of each type:
+	-immediate release from the ring in the cursor direction
+	-placement on the ring in the cursor direction without firing
+	-placement on the ring followed by firing on the next click
+	the attacks use the generic projectile class to hit the target dummy
 
-CREATING MOVES
-	*create a few different moves
-	-ranged move that shoots like 5 bullets in a row
-	-ranged move that shoots like 5 bullets all at once
-	-melee move that does a one-two hit
-	-melee move that drops a big hammer attack after a long delay
-	-move that hits area around player, always
+- the unit must be able to use the moves and hit the target dummy
 
-DAMAGE AND BREAK
-	*add in the break bar
-	-take break damage from moves
-	-display break on unit somehow?
-	-when unit breaks, switch anim to 'stunned' and disable unit for stun delay
-	-when unit is broken, show 'Breakdown!' in yellow
-	*add in knockback
-	-every projectile applies some knockback
-	-bodies also get moved by this vector during their physics update
-
-BODY COLLIDERS
-	the body colliders could probably be wayy bigger than they are now.
-	we dont want the character images to overlap. A nice big circle or capsule shape is fine
-	as long as the bullets are moving fast, it's fine
-
-ART
-	maybe... maybe i should try pixel art.
-	i really like depersonalization's art style...
-	but no agh!!! i dont want to use pixel art, man...
-	actually, it looks kind of okay :)
-	dont judge it before it's in the world with the tilesets
-
-BUG
-	*units become stuck to each other, and then move together, hmm...
-
-THIS WILL BE DONE WHEN
-	the player can hit the enemy unit with a combo of several different attacks
-
---- beyond the scope of the current task ---
-
-AI BRAIN
-	*how will units know where the other units are?
-	-they will have to ask the encounter through coeff
-
-	*how does it decide what to do?
-	-if already doing something; keep doing it (attack, dodge, travel)
-	-check location of units
-	-choose thing to do based on location of units (attack, dodge, travel)
-	-execute plan (use move, boost, or move somewhere/towards something)
-
-PROJECTILE DEALING DAMAGE
-	*it's boring if all the damage numbers are the same
-	-add some randomness? make the damage related to projectile speed?
-
-MOVEMENT
-	*you know, it would be neat if you pushed unit bodies that you collided with
-	-that would be kind of interesting, don't you think?
-	-like, boost into an enemy to send them flying away
-
-PROJECTILE SCENE
-	*once you have ally and enemy:
-	-two different layers for projectiles (brackeys vid, ~30m)
-	-allies cant hit each other with projectiles
-	-enemies cant hit each other with projectiles
-	-everyone can hit walls
-	this will let you shoot through your teammates
-	we also want to make sure that they don't hit and annihilate each other
-	bullets of any type should be able to pass through each other with no problem
-	*stun and knockback
-	-damaging a unit should stun it probably, making them unable to act
-	-hitting a unit with a move applies a knockback to them
+- create a UI mockup. We need to somehow show:
+	-player health
+	-currently equipped moves and their status
+	-enemy health
 	
-MOVE SCENE
-	holds information about:
-	-stats information for the attack
-	-projectile child (and the collision shape will be set for it here)
-	-a spawning function that creates projectiles with certain timing
-	
-ARENA SCENE
-	contains a tilemap with obstacles, etc
-	when we actually have our tileset made, watch this again and implement it
-	*it has all the tools we want, i know because i saw them there
-	(see brackeys video section: worldbuilding)
-
-CAMERA SCENE
-	It shouldn't just follow the player blindly
-	I was looking at baldr sky gameplay to get an idea of this, and it seems like it
-	tries to stay between the player and the target, keeping them both in frame
-	Let's try to mimic that
-
-ENCOUNTER SCENE
-	has information for
-	-victory conditions, etc
-	-player, allies, enemies and timings, etc
-	-a reference to an ARENA scene. By swapping this out, you change the map
-
-OBSTACLE SCENE
-	when you hit a wall should you bounce off it? i think thats cool
-	*has a vector.reflection thing that can help with this
-	oh, also the characterbody2d.bounce() function? how nice
-
-REMEMBER
-	*on unit defeat, debris
-	*heal projectiles (can still work, they should just be like slow-moving floaty bubbles and the idea would be that you have to go run into them. good idea. love ya nai.
-
-AI DESIGN
-	the bastion roll has no invincibility frames, neat.
-	attacks have a clear tell and buildup before execution
-	every attack should have 3 phases:
-	-pre delay (also has a speed mod, can be fast or slow)
-	-execution (actually doing the attack, has another speed mod, usually very slow)
-	-post delay (which can be skipped by starting another attack?, another speed mod too)
-	
-
-BUG BACKLOG
-	*mouse pointer: in encounter, we used to set the mouse icon to be the red circle
-	-this causes the projectile to shoot out misaligned. because the center of the red circle does not line up with the pointer's click location. Can we just add an offset? worth a shot
-
 

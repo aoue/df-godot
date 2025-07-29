@@ -22,6 +22,10 @@ func get_direction_input() -> Vector2:
 	if Input.is_action_pressed('up'):
 		input.y -= 1
 	return input.normalized()
+
+func get_target_direction() -> Vector2:
+	# Returns the vector that the unitBody wants to move towards
+	return get_mouse()
 	
 func get_attack_input() -> bool:
 	if Input.is_action_pressed('attack0') or Input.is_action_pressed('attack1') or Input.is_action_pressed('attack2'):

@@ -12,7 +12,10 @@ script = ExtResource("2_opqaw")
 HP_max_coeff = 0.25
 speed_coeff = 0.75
 
+[node name="CharacterAnim" parent="." index="1"]
+animation = &"side_rest"
+autoplay = ""
+
 [node name="CollisionShape2D" parent="." index="2"]
 position = Vector2(-34.2857, 254.286)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_8d6h6")

@@ -54,6 +54,10 @@ func get_boost_input(direction: Vector2) -> bool:
 	
 func get_attack_input() -> bool:
 	return false
+
+func get_target_direction() -> Vector2:
+	# Returns the vector that the unitBody wants to move towards
+	return Vector2.ZERO
 	
 func get_mouse() -> Vector2:
 	# Returns the vector between the player location and the mouse location
@@ -83,13 +87,40 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	if direction.x > 0:
-		character_anim.play("right")
+		character_anim.play("side_mov")
+		character_anim.flip_h = false
 	elif direction.x < 0:
-		character_anim.play("left")
-	elif direction.y != 0:
-		character_anim.play("vertical")
+		character_anim.play("side_mov")
+		character_anim.flip_h = true
+	elif direction.y > 0:
+		character_anim.play("front_mov")
+		character_anim.flip_h = false		
+	elif direction.y < 0:
+		character_anim.play("back_mov")
+		character_anim.flip_h = false
 	else:
-		character_anim.play("still")
+		# Set the rest animation corresponding to the vector between yourself and the target location.
+		# if x component is greater, then look to the side
+		# if y component is greater, then look up/down
+		var look_dir: Vector2
+		var x_power: float
+		var y_power: float
+		look_dir = (get_target_direction() - global_position).normalized()
+		x_power = look_dir.x
+		y_power = look_dir.y
+		if abs(x_power) >= abs(y_power):
+			character_anim.play("side_rest")
+			if x_power >= 0:
+				character_anim.flip_h = false
+			else:
+				character_anim.flip_h = true
+		else:
+			if y_power >= 0:
+				character_anim.play("front_rest")
+				character_anim.flip_h = false
+			else:
+				character_anim.play("back_rest")
+				character_anim.flip_h = false
 
 func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
 	pass

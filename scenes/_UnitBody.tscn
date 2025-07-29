@@ -70,7 +70,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_5sitm")
 }],
 "loop": true,
-"name": &"still",
+"name": &"side_rest",
 "speed": 5.0
 }, {
 "frames": [{
