@@ -45,13 +45,13 @@ func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> v
 		boost_anim.hide()
 	
 	# Control WeaponAnim
-	weapon_pivot.look_at(mouse_pos)
-	if isAttacking:
-		weapon_anim.stop()
-		weapon_anim.rotation_degrees += 30
-	else:
-		weapon_anim.rotation_degrees = -45
-		weapon_anim.play("idle")
+	#weapon_pivot.look_at(mouse_pos)
+	#if isAttacking:
+		#weapon_anim.stop()
+		#weapon_anim.rotation_degrees += 30
+	#else:
+		#weapon_anim.rotation_degrees = -45
+		#weapon_anim.play("idle")
 
 func go_attack(attack_input: bool, mouse_input: Vector2) -> void:
 	if attack_input:

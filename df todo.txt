@@ -3,26 +3,13 @@ commit notes:
 
 ======= TODO: combat feeling
 
-- draw anse unit sprites
-	-left/right set
-	-up set
-	-down set
+- redraw adelie penguin
+	-just a two frame still animation
+	-a 'being hit' animation
 
-- create a unit that can move in the four basic directions
-
-- create the ring around the unit that moves with them
-	-the anneau system? is it the O.S.? a method to help the FS manage its abilities safely.
-
-- create a projectile that can be created. Simply uses:
-	-collision
-	-an image (a solid color box is fine for now)
-	-an effect when it hits the target (read: damage)
-
-- draw target dummy; two animation cycle is fine
-
-- create a target dummy that can be hit by projectiles
+- create adelie penguin target that can be hit by projectiles
 	-no need to worry about hp or anything like that just yet
-	-if it just reacts when hit in any way, that's good enough
+	-simply switch it to 'being hit' animation is enough
 
 - draw anse unit sprites
 	- melee
@@ -42,4 +29,4 @@ commit notes:
 	-currently equipped moves and their status
 	-enemy health
 	
-
+zoom and move camera so that it can capture everything we want in frame at the same time
