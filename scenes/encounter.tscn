@@ -8,7 +8,8 @@
 script = ExtResource("1_kqml8")
 
 [node name="Adelie" parent="." instance=ExtResource("4_4r8bx")]
-position = Vector2(1474, 105)
+position = Vector2(1302, 33)
+scale = Vector2(1, 1)
 
 [node name="Anse" parent="." instance=ExtResource("2_aaoje")]
 

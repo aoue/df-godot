@@ -52,12 +52,14 @@ func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
 	var mouse_direction : Vector2 = (mouse_pos - unit_pos).normalized()
 	var proj_spawn_loc : Vector2 = unit_pos + (mouse_direction * 175 * 4)
 	
-	# fill in its values
+	# fill in its values 
+	# (these are all relative to values set in coeff.gd, making large balance changes simple to do)
 	var dmg_temp: float = 0.1
 	var speed_temp: float = 2.5
 	var knockback_temp: float = 1
+	var stun_temp: float = 0.5
 	
-	proj.setup(proj_spawn_loc, mouse_direction, speed_temp, dmg_temp, knockback_temp)
+	proj.setup(proj_spawn_loc, mouse_direction, speed_temp, dmg_temp, knockback_temp, stun_temp)
 	
 	# instantiate it into the scene
 	add_child(proj)

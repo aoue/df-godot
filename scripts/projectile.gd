@@ -9,13 +9,14 @@ var direction: Vector2 = Vector2.ZERO
 var speed: int = 0
 var damage: int = 0
 var knockback: Vector2 = Vector2.ZERO
+var stun: float = 0
 
 # State Variables
 var hit_something : bool = false
 var expire_delay : float = 1.0
 
 # Collisions
-func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_knockback: float) -> void:
+func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_knockback: float, arg_stun: float) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
@@ -25,13 +26,16 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	speed = arg_speed * Coeff.speed
 	damage = arg_damage * Coeff.damage
 	knockback = arg_direction * arg_knockback * Coeff.knockback
+	stun = arg_stun * Coeff.hit_stun_duration
 	
 func _on_body_entered(_body) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
+	
+	# Let the target know they've been hit (we trust them to handle this on their end.)
 	var overlapping_bodies = get_overlapping_bodies() 
 	for hit_body in overlapping_bodies:
-		hit_body.being_attacked(damage, knockback)
+		hit_body.being_hit(damage, knockback, stun)
 	
 	# Hide bullet and collider
 	projectile_collider.hide()
@@ -40,16 +44,8 @@ func _on_body_entered(_body) -> void:
 	# Show damage number
 	hit_something = true
 	damage_label.text = "-" + str(damage)
-	#direction = random_on_unit_sphere()
-
-# Helpers
-func random_on_unit_sphere() -> Vector2:
-	return Vector2(randfn(0, 1), randfn(0, 1)).normalized()
-#func _ready() -> void:
-	## temp function to setup testing in encounter scene
-	##return
-	#var dummy_direction = Vector2(1.0, 0.0)
-	#setup(position, dummy_direction, get_global_mouse_position(), 1500, 200)
+	
+	
 
 func _process(delta: float) -> void:
 	# Control movement

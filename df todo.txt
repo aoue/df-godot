@@ -3,30 +3,53 @@ commit notes:
 
 ======= TODO: combat feeling
 
-- redraw adelie penguin
-	-just a two frame still animation
-	-a 'being hit' animation
-
-- create adelie penguin target that can be hit by projectiles
-	-no need to worry about hp or anything like that just yet
-	-simply switch it to 'being hit' animation is enough
-
-- draw anse unit sprites
-	- melee
-	- ranged
-	- special
+- draw anse unit sprite animations
+	- melee (swinging hammer overhead)
+	- ranged (leveling rifle)
+	- special (holding box out)
+	- being hit (a bit crumpled, 2 frames)
 
 - create one attack of each type:
-	-immediate release from the ring in the cursor direction
-	-placement on the ring in the cursor direction without firing
-	-placement on the ring followed by firing on the next click
-	the attacks use the generic projectile class to hit the target dummy
+	-(ranged) immediate release from the ring in the cursor direction
+	-(melee) placement on the ring in the cursor direction without firing
+	-(summon) placement on the ring followed by firing on the next click
+	have them use different projectile shapes and sizes each
 
-- the unit must be able to use the moves and hit the target dummy
+- ensure that:
+	-anse can use each of the three different moves
+	-the moves appear on the ring for a moment before being sent outwards
+
+- stunning (visual): when a unit is stunned
+	-display the stun meter above their head showing how much time is left on it
 
 - create a UI mockup. We need to somehow show:
 	-player health
-	-currently equipped moves and their status
+	-currently equipped moves and their status, near the player icon?
+	-next move to use very near to the player
 	-enemy health
-	
-zoom and move camera so that it can capture everything we want in frame at the same time
+
+camera manager:
+	-zoom and move camera so that it can capture everything we want in frame at the same time
+	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
+
+-- active enemies
+
+basic enemy ai:
+	(every second or 1/2 second or so)
+	-enemy looks at all player units and decides who to attack based on:
+		-proximity preference (melee likes close, ranged likes far, some are flexible)
+		-how many other units are targeting it (stored by encounter manager)
+	-enemy decides which move to use:
+		-could be ranged, could be melee, could decide to simply approach instead
+	-when the decision has been reached (target + move):
+		-the enemy executes it until completion (hit occurs) or timeout (giving up)
+	and repeat
+		
+
+encounter ai:
+	-there is an encounter manager which helps with:
+		-coordination, so they don't all attack the same target
+		-spawning reinforcements, etc
+
+
+

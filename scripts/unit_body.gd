@@ -24,6 +24,10 @@ var boost_vector: Vector2
 var boost_duration: float = 0.0
 var boost_cooldown: float = 0.0
 
+# Being hit variables
+var hit_stun_duration: float = 0.0  # remaining stun duration on unit, depending on the move that hit them.
+var hit_stun_shield: float = 0.0  # time after being stunned before you can be stunned again (to avoid stunlocking.)
+
 # Moveset
 #@export var move1: move
 
@@ -64,9 +68,18 @@ func get_mouse() -> Vector2:
 	return get_global_mouse_position()
 
 """ Reacting """
-func being_attacked(proj_damage: int, proj_knockback: Vector2) -> void:
-	knockback = proj_knockback
+func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
+	
+	# Do damage and cause knockback
 	unit.take_damage(proj_damage)
+	knockback = proj_knockback
+	
+	# Affect sprite
+	if stun > 0 and hit_stun_shield == 0:
+		hit_stun_duration = stun
+		hit_stun_shield = stun + Coeff.stun_shield_duration
+		character_anim.play("being_hit")
+	
 	if unit.is_defeated():
 		start_being_defeated()
 
@@ -86,6 +99,15 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 """ Running """
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
+	
+	#print("in set_anim(), hit_stun_duration = " + str(hit_stun_duration))
+	
+	# Stunned?
+	if hit_stun_duration > 0.0:
+		character_anim.play("being_hit")
+		return
+	
+	# React to movement input
 	if direction.x > 0:
 		character_anim.play("side_mov")
 		character_anim.flip_h = false
@@ -123,6 +145,7 @@ func set_anim(direction: Vector2) -> void:
 				character_anim.flip_h = false
 
 func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
+	# To set animations supporting the unit, but not the character animations themselves.
 	pass
 
 func go_anim(delta: float, direction_input: Vector2, mouse_input: Vector2, attack_input: bool, boost_input: bool) -> void:
@@ -142,8 +165,11 @@ func go_attack(attack_input: bool, mouse_input: Vector2) -> void:
 	pass
 
 func pass_duration(delta : float) -> void:
-	boost_duration -= delta
-	boost_cooldown -= delta
+	boost_duration = max(0, boost_duration - delta)
+	boost_cooldown = max(0, boost_cooldown - delta)
+	hit_stun_duration = max(0, hit_stun_duration - delta)
+	hit_stun_shield = max(0, hit_stun_shield - delta)
+	
 	knockback = lerp(knockback, Vector2.ZERO, 0.1)
 
 func _physics_process(delta: float) -> void:

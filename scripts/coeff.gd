@@ -6,19 +6,21 @@ Holds the coefficients for things like:
 	damage
 	knockback
 	hp
-	pw
-	pw cost
 and etc
 
 The actual value is set here, and all stats are proportional to the coefficient value set out here.
 """
 
-"""Already in use"""
+"""Combat Balance"""
 var speed: int = 5000
 var acceleration: float = 0.08
 var hp: int = 1000
 var damage: int = 1000
 var knockback: float = 200
+var hit_stun_duration: float = 1.0
+var stun_shield_duration: float = 1.0
+
+"""Purely Visual"""
 var damage_text_slowdown: float = 0.01
 var hp_bar_update_speed: int = 500
 

@@ -1,8 +1,6 @@
 extends UnitBody
 
 # References
-@export var weapon_pivot : Node
-@export var weapon_anim : AnimatedSprite2D
 @export var boost_anim : AnimatedSprite2D
 
 """ Setup """
@@ -11,6 +9,10 @@ extends UnitBody
 func get_direction_input() -> Vector2:
 	if boost_duration > 0.0:
 		return boost_vector
+	
+	# Cannot move if stunned
+	if hit_stun_duration > 0.0:
+		return Vector2.ZERO
 		
 	var input = Vector2()
 	if Input.is_action_pressed('right'):
