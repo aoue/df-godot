@@ -12,14 +12,18 @@ var PW_max : int
 var PW_cur : int
 
 # Attack variables
+var attacking_duration_left : float = 0.0
+var projectile_counter : int
 var can_attack : bool = true
 var can_attack_cooldown : float = 0.0
+var set_attack_anim : bool = false
 
 # Loadouts and moves
 # (will have a link to a move, which has both:
 # - a link to its projectile type 
 # - a function that specifies the usage and spawning of projectiles)
-@export var proj_scene : PackedScene
+@export var move1 : PackedScene
+var active_move : Object
 
 func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	# sets the unit's stats to their initial state
@@ -38,34 +42,45 @@ func is_defeated() -> bool:
 	return false
 
 # Attacking
-func use_move1(unit_pos : Vector2, mouse_pos : Vector2):
-	# hard-coded for now; will eventually use the move in the slot
+func use_active_move(unit_pos : Vector2, mouse_pos : Vector2):
+	# If we are not attacking but are eligible too, then we switch the active move and start it.
+	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
+	if attacking_duration_left > 0.0:
+		# check against active move's fire times
+		if projectile_counter < len(active_move.fire_table) and attacking_duration_left < active_move.fire_table[projectile_counter]:
+			projectile_counter += 1
+			fire(unit_pos, mouse_pos)
+		return
 	if can_attack == false:
 		return
+	
+	# enter move state
+	active_move = move1.instantiate()  # will map depending on which move was selected
+	set_attack_anim = true
+	attacking_duration_left = active_move.move_duration
+	projectile_counter = 0
 	can_attack = false
-	can_attack_cooldown = 1.0
-	
-	# create instance of projectile
-	var proj : Object = proj_scene.instantiate()
-	
+	can_attack_cooldown = attacking_duration_left + 1.0
+
+func fire(unit_pos : Vector2, mouse_pos : Vector2):
 	# find its spawn location (between player and mouse), offset
 	var mouse_direction : Vector2 = (mouse_pos - unit_pos).normalized()
 	var proj_spawn_loc : Vector2 = unit_pos + (mouse_direction * 175 * 4)
 	
-	# fill in its values 
-	# (these are all relative to values set in coeff.gd, making large balance changes simple to do)
-	var dmg_temp: float = 0.1
-	var speed_temp: float = 2.5
-	var knockback_temp: float = 1
-	var stun_temp: float = 0.5
-	
-	proj.setup(proj_spawn_loc, mouse_direction, speed_temp, dmg_temp, knockback_temp, stun_temp)
-	
-	# instantiate it into the scene
+	# instantiate projectile into the scene
+	var proj : Object = active_move.spawn_projectiles(mouse_direction, proj_spawn_loc)
 	add_child(proj)
+
 
 func _process(delta):
 	# manage attack cooldown
-	can_attack_cooldown -= delta
-	if can_attack_cooldown < 0.0:
-		can_attack = true
+	if attacking_duration_left > 0.0:
+		attacking_duration_left = max(0, attacking_duration_left - delta)
+		# check attack times in active_move and fire from there
+		
+		
+	else:
+		can_attack_cooldown = max(0, can_attack_cooldown - delta)
+		if can_attack_cooldown == 0.0:
+			can_attack = true
+

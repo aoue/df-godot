@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg324cc2cyi5h"]
+
+[ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_u7uo8"]
+
+[node name="Move (Rifle)" instance=ExtResource("1_u7uo8")]
+fire_table = Array[float]([1.0, 0.75, 0.5])
+slow_mod = 0.1
+move_duration = 1.5
+animation_type = 1
+proj_speed = 2.5
+proj_damage = 0.1
+proj_knockback = 1.0
+proj_stun = 1.0

@@ -24,6 +24,10 @@ var stun_shield_duration: float = 1.0
 var damage_text_slowdown: float = 0.01
 var hp_bar_update_speed: int = 500
 
+"""Move Animation Helper"""
+enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
+enum Move_Spawn_Type {FIRED, ON_RING, SUMMON}
+
 """Not yet in use"""
 var delay : int = 1
 # var spawn_distance (to make sure to clear the unit's own hitbox...?? 

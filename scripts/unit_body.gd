@@ -78,7 +78,6 @@ func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	if stun > 0 and hit_stun_shield == 0:
 		hit_stun_duration = stun
 		hit_stun_shield = stun + Coeff.stun_shield_duration
-		character_anim.play("being_hit")
 	
 	if unit.is_defeated():
 		start_being_defeated()
@@ -104,7 +103,22 @@ func set_anim(direction: Vector2) -> void:
 	if hit_stun_duration > 0.0:
 		character_anim.play("9_being_hit")
 		return
-	# if death delay passed: play("9b_defeated")
+	# if dead and death delay passed: play("9b_defeated")
+	
+	# Attacking?
+	if unit.set_attack_anim:
+		# Play the corresponding animation
+		unit.set_attack_anim = false
+		if unit.active_move.animation_type == 0:
+			character_anim.play("6_melee")
+		elif unit.active_move.animation_type == 1:
+			character_anim.play("7_ranged")
+		else:
+			character_anim.play("8_special")
+		return
+	elif unit.attacking_duration_left > 0.0:
+		# Don't play any other animation while ongoing
+		return
 	
 	# React to movement input
 	if direction.x > 0:
@@ -160,8 +174,9 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	velocity += knockback
 	move_and_slide()
 
-func go_attack(attack_input: bool, mouse_input: Vector2) -> void:
-	pass
+func go_attack(is_attacking: bool, unit_pos: Vector2, mouse_input: Vector2) -> void:
+	if is_attacking or unit.attacking_duration_left > 0.0:
+		unit.use_active_move(unit_pos, mouse_input)
 
 func pass_duration(delta : float) -> void:
 	boost_duration = max(0, boost_duration - delta)
@@ -181,10 +196,12 @@ func _physics_process(delta: float) -> void:
 	var speed_value = speed
 	if is_boosting:
 		acceleration_value = boost_acceleration
-		speed_value = speed * boost_speed_mod
+		speed_value *= boost_speed_mod
+	if unit.attacking_duration_left > 0.0:
+		speed_value *= unit.active_move.slow_mod
 	
 	go_move(direction, speed_value, acceleration_value)
-	go_attack(is_attacking, mouse_pos)
+	go_attack(is_attacking, position, mouse_pos)
 	go_anim(delta, direction, mouse_pos, is_attacking, is_boosting)
 	
 	pass_duration(delta)

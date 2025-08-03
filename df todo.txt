@@ -1,33 +1,49 @@
 commit notes:
--finished anse and adelie spritesheet assets
--imported new spritesheets and setup
+-transferred hardcoded move1 into move class
+-created first multi projectile delayed fire move
 
 ======= TODO: combat feeling
 
-- create a move class
-	-the move class will store all the data of the current projectile.
-	-all future projectiles will also be made using this
+- attacking state beauty makeover:
+	-flip attacking animation when appropriate
+	-flip being hit animation when appropriate
+	(should be sufficient to calculate unit and mouse pos)
+
+- new parameter to move:
+	-accuracy: apply random noise to mouse location when calculating proj angle
+	-cursor turn cap: slow down the cursor by this much during the attack
+		or if not cursor, than some kind of aiming reticle
 
 - create one attack of each type:
 	-(ranged) immediate release from the ring in the cursor direction
 	-(melee) placement on the ring in the cursor direction without firing
 	-(summon) placement on the ring followed by firing on the next click
+	testing:
 	-you can test test them by changing which projectile anse has equipped
+	-the move should have a flag to make sure anse uses the right attack animation
 	have them use different projectile shapes and sizes each
 	for the effect areas, i'm fine with just showing coloured shapes, just as is.
 
-- ensure that:
-	-anse can use each of the three different moves
-	-the moves appear on the ring for a moment before being sent outwards
+- move with the ability to move the user?
+	-should this be a thing? i mean, probably, right.
+
+- create the loadout class
+	-a loadout has 3 moves attached to it in order
+	-you may select the equipped move with (1,2,3); (start with 1)
+	-successive left clicks fire the next move in the sequence
+	-a move, once used, cannot be used again (refresh function will unlock them all)
+	test:
+	-make sure that anse can go through the loadout and use each of the 3 moves one time
 
 - background visuals
-	-need a background image
-	-need rocks/pillars
-
+	-draw a background image
+	-draw rocks/pillars
+	
 - background collision
-	-objects block movement and projectiles from passing
-	-edges to the map
-	-rocks/pillars (obstacles)
+	-map scene: main background image and edge borders collision
+	-obstacle scene: iamge (rocks/pillar) and collision
+	a background would probably be best created dynamically within the editor, probably.
+	-in that case, maybe we should look into tilesets for this?
 
 - map logic
 	-units can navigate around obstacles
@@ -45,11 +61,15 @@ camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
 
---- active enemies
+--- engagement
 
+- second loadout:
+	-anse needs a second loadout for the combat to really work
+	-his first loadout should be gun moves
+	-his second loadout should be snaphammer moves
+	(see paper notes, already planned this out, i think.)
 
-
-basic enemy ai:
+- basic enemy ai:
 	(every second or 1/2 second or so)
 	-enemy looks at all player units and decides who to attack based on:
 		-proximity preference (melee likes close, ranged likes far, some are flexible)
@@ -60,7 +80,7 @@ basic enemy ai:
 		-the enemy executes it until completion (hit occurs) or timeout (giving up)
 	and repeat
 
-encounter ai:
+- encounter ai:
 	-there is an encounter manager which helps with:
 		-coordination, so they don't all attack the same target
 		-spawning reinforcements, etc

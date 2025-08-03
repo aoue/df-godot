@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2aeu3y8q8qxh"]
+
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/Projectile.tscn" id="1_h8ndm"]
+[ext_resource type="Script" path="res://scripts/move.gd" id="1_rrtlf"]
+
+[node name="Move" type="Node2D"]
+script = ExtResource("1_rrtlf")
+fire_table = Array[float]([0.5])
+slow_mod = 1.0
+proj_scene = ExtResource("1_h8ndm")

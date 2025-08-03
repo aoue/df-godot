@@ -45,8 +45,6 @@ func _on_body_entered(_body) -> void:
 	hit_something = true
 	damage_label.text = "-" + str(damage)
 	
-	
-
 func _process(delta: float) -> void:
 	# Control movement
 	damage_label.rotation = -rotation  # hehe
