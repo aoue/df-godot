@@ -3,19 +3,24 @@ When introduction a new system, draw at least some passable placeholder art for 
 (This includes colouring)
 This will help you stay in love and avoid becoming overwhelmed with a backlog later.
 
-spritesheets are 4500x4500 by default
-we will go with 5x5, each sprite slot being 900x900
+spritesheets are 4500x5400, with 5x6 dimensions
+making each sprite slot 900x900
 
 
 == sprite breakdown ==
 in the combat scene, a unit has the following sprites:
-left: at rest, moving1, moving2, moving3, moving4 	(5)
-right: (reflected from left)
-up: rest, moving1, moving2, moving3, moving4 		(10)
-down: rest, moving1, moving2, moving3, moving4		(15)
-melee: melee1, melee2, melee3				(18)
-ranged: ranged1, ranged2, ranged3			(21)
-special: special1, special2, special3			(24)
+0_side_rest: 2 frames
+1_side_mov: 3 frames
+2_front_rest: 2 frames
+3_front_rest: 3 frames
+4_back_rest: 2 frames
+5_back_move: 3 frames
+6_melee: 4 frames
+7_ranged: 4 frames
+8_special: 4 frames
+9_being_hit: 2 frames
+9b_defeated: 1 frame
+
 
 remember, the attack's effect will distinguish it from other ones, so it's okay to use the same unit animation, depending on type. The animation will just show the character drawing and holding the weapon.
 E.g. 

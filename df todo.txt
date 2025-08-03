@@ -1,23 +1,36 @@
 commit notes:
--
+-finished anse and adelie spritesheet assets
+-imported new spritesheets and setup
 
 ======= TODO: combat feeling
 
-- draw anse unit sprite animations
-	- melee (swinging hammer overhead)
-	- ranged (leveling rifle)
-	- special (holding box out)
-	- being hit (a bit crumpled, 2 frames)
+- create a move class
+	-the move class will store all the data of the current projectile.
+	-all future projectiles will also be made using this
 
 - create one attack of each type:
 	-(ranged) immediate release from the ring in the cursor direction
 	-(melee) placement on the ring in the cursor direction without firing
 	-(summon) placement on the ring followed by firing on the next click
+	-you can test test them by changing which projectile anse has equipped
 	have them use different projectile shapes and sizes each
+	for the effect areas, i'm fine with just showing coloured shapes, just as is.
 
 - ensure that:
 	-anse can use each of the three different moves
 	-the moves appear on the ring for a moment before being sent outwards
+
+- background visuals
+	-need a background image
+	-need rocks/pillars
+
+- background collision
+	-objects block movement and projectiles from passing
+	-edges to the map
+	-rocks/pillars (obstacles)
+
+- map logic
+	-units can navigate around obstacles
 
 - stunning (visual): when a unit is stunned
 	-display the stun meter above their head showing how much time is left on it
@@ -32,7 +45,9 @@ camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
 
--- active enemies
+--- active enemies
+
+
 
 basic enemy ai:
 	(every second or 1/2 second or so)
@@ -44,7 +59,6 @@ basic enemy ai:
 	-when the decision has been reached (target + move):
 		-the enemy executes it until completion (hit occurs) or timeout (giving up)
 	and repeat
-		
 
 encounter ai:
 	-there is an encounter manager which helps with:

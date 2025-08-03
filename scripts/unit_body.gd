@@ -100,25 +100,24 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	
-	#print("in set_anim(), hit_stun_duration = " + str(hit_stun_duration))
-	
 	# Stunned?
 	if hit_stun_duration > 0.0:
-		character_anim.play("being_hit")
+		character_anim.play("9_being_hit")
 		return
+	# if death delay passed: play("9b_defeated")
 	
 	# React to movement input
 	if direction.x > 0:
-		character_anim.play("side_mov")
+		character_anim.play("1_side_mov")
 		character_anim.flip_h = false
 	elif direction.x < 0:
-		character_anim.play("side_mov")
+		character_anim.play("1_side_mov")
 		character_anim.flip_h = true
 	elif direction.y > 0:
-		character_anim.play("front_mov")
+		character_anim.play("3_front_mov")
 		character_anim.flip_h = false		
 	elif direction.y < 0:
-		character_anim.play("back_mov")
+		character_anim.play("5_back_mov")
 		character_anim.flip_h = false
 	else:
 		# Set the rest animation corresponding to the vector between yourself and the target location.
@@ -131,17 +130,17 @@ func set_anim(direction: Vector2) -> void:
 		x_power = look_dir.x
 		y_power = look_dir.y
 		if abs(x_power) >= abs(y_power):
-			character_anim.play("side_rest")
+			character_anim.play("0_side_rest")
 			if x_power >= 0:
 				character_anim.flip_h = false
 			else:
 				character_anim.flip_h = true
 		else:
 			if y_power >= 0:
-				character_anim.play("front_rest")
+				character_anim.play("2_front_rest")
 				character_anim.flip_h = false
 			else:
-				character_anim.play("back_rest")
+				character_anim.play("4_back_rest")
 				character_anim.flip_h = false
 
 func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
