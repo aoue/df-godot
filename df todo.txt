@@ -1,18 +1,9 @@
 commit notes:
--transferred hardcoded move1 into move class
--created first multi projectile delayed fire move
+-adjusted fire table timings to be relative to move's duration
+-added accuracy noise parameter to move projectile spawning
+-added ring indicator and projectiles now spawn with relation to it instead of mouse
 
 ======= TODO: combat feeling
-
-- attacking state beauty makeover:
-	-flip attacking animation when appropriate
-	-flip being hit animation when appropriate
-	(should be sufficient to calculate unit and mouse pos)
-
-- new parameter to move:
-	-accuracy: apply random noise to mouse location when calculating proj angle
-	-cursor turn cap: slow down the cursor by this much during the attack
-		or if not cursor, than some kind of aiming reticle
 
 - create one attack of each type:
 	-(ranged) immediate release from the ring in the cursor direction
@@ -24,7 +15,7 @@ commit notes:
 	have them use different projectile shapes and sizes each
 	for the effect areas, i'm fine with just showing coloured shapes, just as is.
 
-- move with the ability to move the user?
+- move with the ability to translate the user?
 	-should this be a thing? i mean, probably, right.
 
 - create the loadout class
@@ -85,5 +76,6 @@ camera manager:
 		-coordination, so they don't all attack the same target
 		-spawning reinforcements, etc
 
-
+start of battle animation:
+	-if would be cool if there was an animation with all the rings coming on as the fight began
 

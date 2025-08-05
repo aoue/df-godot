@@ -5,6 +5,7 @@
 
 [node name="Move" type="Node2D"]
 script = ExtResource("1_rrtlf")
-fire_table = Array[float]([0.5])
-slow_mod = 1.0
+fire_table = Array[float]([1.0])
+user_speed_mod = 1.0
+user_rotation_mod = 1.0
 proj_scene = ExtResource("1_h8ndm")

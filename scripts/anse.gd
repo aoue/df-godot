@@ -38,6 +38,9 @@ func get_attack_input() -> bool:
 
 
 """ Running """
+func get_mouse() -> Vector2:
+	return get_global_mouse_position()
+
 func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
 	# Control BoostAnim
 	if isBoosting:

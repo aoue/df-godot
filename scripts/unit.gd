@@ -13,7 +13,7 @@ var PW_cur : int
 
 # Attack variables
 var attacking_duration_left : float = 0.0
-var projectile_counter : int
+var projectile_counter : int = 0
 var can_attack : bool = true
 var can_attack_cooldown : float = 0.0
 var set_attack_anim : bool = false
@@ -42,19 +42,19 @@ func is_defeated() -> bool:
 	return false
 
 # Attacking
-func use_active_move(unit_pos : Vector2, mouse_pos : Vector2):
+func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2):
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
 	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
 	if attacking_duration_left > 0.0:
 		# check against active move's fire times
-		if projectile_counter < len(active_move.fire_table) and attacking_duration_left < active_move.fire_table[projectile_counter]:
+		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.move_duration * active_move.fire_table[projectile_counter]:
 			projectile_counter += 1
-			fire(unit_pos, mouse_pos)
+			fire(unit_pos, ring_indicator_vector)
 		return
 	if can_attack == false:
 		return
 	
-	# enter move state
+	# enter 'new active move' state
 	active_move = move1.instantiate()  # will map depending on which move was selected
 	set_attack_anim = true
 	attacking_duration_left = active_move.move_duration
@@ -62,15 +62,15 @@ func use_active_move(unit_pos : Vector2, mouse_pos : Vector2):
 	can_attack = false
 	can_attack_cooldown = attacking_duration_left + 1.0
 
-func fire(unit_pos : Vector2, mouse_pos : Vector2):
+func fire(unit_pos : Vector2, ring_indicator_vector : Vector2):
 	# find its spawn location (between player and mouse), offset
-	var mouse_direction : Vector2 = (mouse_pos - unit_pos).normalized()
-	var proj_spawn_loc : Vector2 = unit_pos + (mouse_direction * 175 * 4)
+	# Note: 650 is the ring indicator offset.
+	var spawn_direction : Vector2 = ((unit_pos + 650 * ring_indicator_vector) - unit_pos).normalized()  
+	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * 650)
 	
 	# instantiate projectile into the scene
-	var proj : Object = active_move.spawn_projectiles(mouse_direction, proj_spawn_loc)
+	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction)
 	add_child(proj)
-
 
 func _process(delta):
 	# manage attack cooldown

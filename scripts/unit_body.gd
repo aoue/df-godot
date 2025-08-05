@@ -5,6 +5,7 @@ class_name UnitBody
 @export var unit: Node
 @export var character_anim: AnimatedSprite2D
 @export var hp_bar: TextureProgressBar
+@export var ring_indicator: Node2D
 
 # Basic movement variables
 @export var HP_max_coeff: float
@@ -64,8 +65,7 @@ func get_target_direction() -> Vector2:
 	return Vector2.ZERO
 	
 func get_mouse() -> Vector2:
-	# Returns the vector between the player location and the mouse location
-	return get_global_mouse_position()
+	return Vector2.ZERO
 
 """ Reacting """
 func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
@@ -137,18 +137,16 @@ func set_anim(direction: Vector2) -> void:
 		# Set the rest animation corresponding to the vector between yourself and the target location.
 		# if x component is greater, then look to the side
 		# if y component is greater, then look up/down
-		var look_dir: Vector2
-		var x_power: float
-		var y_power: float
-		look_dir = (get_target_direction() - global_position).normalized()
-		x_power = look_dir.x
-		y_power = look_dir.y
+		var look_dir: Vector2 = (get_target_direction() - global_position).normalized()
+		var x_power: float = look_dir.x
+		var y_power: float = look_dir.y
 		if abs(x_power) >= abs(y_power):
 			character_anim.play("0_side_rest")
-			if x_power >= 0:
+			if x_power > 0.0:
 				character_anim.flip_h = false
 			else:
 				character_anim.flip_h = true
+				
 		else:
 			if y_power >= 0:
 				character_anim.play("2_front_rest")
@@ -174,9 +172,25 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	velocity += knockback
 	move_and_slide()
 
-func go_attack(is_attacking: bool, unit_pos: Vector2, mouse_input: Vector2) -> void:
+func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:
-		unit.use_active_move(unit_pos, mouse_input)
+		unit.use_active_move(unit_pos, ring_indicator_vector)
+
+func adjust_ring_indicator(where: Vector2, delta: float):
+	# Changes the position of the ring indicator.
+	# For player, relative to mouse movement, speed can be affected by attacking state and move slowdown.
+	# For enemy, moved with ai.
+	var wanted_rotation_angle: float = position.angle_to_point(where)
+	var current_rotation: float = ring_indicator.rotation
+	var rotation_weight: float = delta * Coeff.rotation_speed
+	if unit.attacking_duration_left > 0.0:
+		rotation_weight *= unit.active_move.user_rotation_mod
+	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
+
+func get_ring_indicator_vector() -> Vector2:
+	var x_component = cos(ring_indicator.rotation)
+	var y_component = sin(ring_indicator.rotation)
+	return Vector2(x_component, y_component)
 
 func pass_duration(delta : float) -> void:
 	boost_duration = max(0, boost_duration - delta)
@@ -198,10 +212,11 @@ func _physics_process(delta: float) -> void:
 		acceleration_value = boost_acceleration
 		speed_value *= boost_speed_mod
 	if unit.attacking_duration_left > 0.0:
-		speed_value *= unit.active_move.slow_mod
-	
+		speed_value *= unit.active_move.user_speed_mod
+		
+	adjust_ring_indicator(mouse_pos, delta)
 	go_move(direction, speed_value, acceleration_value)
-	go_attack(is_attacking, position, mouse_pos)
+	go_attack(is_attacking, position, get_ring_indicator_vector())
 	go_anim(delta, direction, mouse_pos, is_attacking, is_boosting)
 	
 	pass_duration(delta)

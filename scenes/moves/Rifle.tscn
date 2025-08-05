@@ -3,8 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_u7uo8"]
 
 [node name="Move (Rifle)" instance=ExtResource("1_u7uo8")]
-fire_table = Array[float]([1.0, 0.75, 0.5])
-slow_mod = 0.1
+fire_table = Array[float]([0.66, 0.5, 0.33])
+accuracy_deviation = 0.1
+user_speed_mod = 0.1
+user_rotation_mod = 0.05
 move_duration = 1.5
 animation_type = 1
 proj_speed = 2.5

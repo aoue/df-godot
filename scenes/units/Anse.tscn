@@ -316,3 +316,5 @@ shape = SubResource("RectangleShape2D_th8fa")
 [node name="hp_bar" parent="." index="4"]
 offset_left = -324.0
 offset_right = -240.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="5"]
