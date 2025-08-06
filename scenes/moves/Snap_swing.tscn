@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://c34vmtosa8veg"]
+
+[ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_l34j8"]
+
+[node name="Move (Snap swing)" instance=ExtResource("1_l34j8")]
+fire_table = Array[float]([0.8])
+user_speed_mod = 0.33
+user_rotation_mod = 0.2
+move_duration = 3.0
+spawn_type = 1
+animation_type = 0
+proj_speed = 0.0
+proj_damage = 0.3
+proj_damage_spread_percentage = 0.05
+proj_lifetime = 3.0

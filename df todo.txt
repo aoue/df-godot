@@ -1,9 +1,18 @@
 commit notes:
--adjusted fire table timings to be relative to move's duration
--added accuracy noise parameter to move projectile spawning
--added ring indicator and projectiles now spawn with relation to it instead of mouse
+-update move damage range
+-updated accuracy table and fixed math issue
+-update projectile colour coding
+-added projectile lifetime
+-added projectile passthrough
+-added ring projectiles (melee)
+-projectile damage text is now its own scene to allow for accurate display with passthrough moves
+-melee attack half-implemented; working but feels bad
 
 ======= TODO: combat feeling
+
+- creating 'snap swing' move:
+	move should end when collision occurs OR lifetime ends
+	(collision could be well before, after all)
 
 - create one attack of each type:
 	-(ranged) immediate release from the ring in the cursor direction
@@ -16,7 +25,10 @@ commit notes:
 	for the effect areas, i'm fine with just showing coloured shapes, just as is.
 
 - move with the ability to translate the user?
-	-should this be a thing? i mean, probably, right.
+	should this be a thing? i mean, probably, right.
+	you would need to:
+	-move direction offset (from indicator i guess); e.g. you might want a mouse that sends you shooting backwards
+	-speed with which it does this
 
 - create the loadout class
 	-a loadout has 3 moves attached to it in order
@@ -52,7 +64,12 @@ camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
 
+- damage text bugged:
+	rotation and positioning is off
+
 --- engagement
+
+- some stuff is broken with multiple enemies here, btw. I think the issue is that they are not being instantiated separately. It's almost certainly this, but make sure before doing any more.
 
 - second loadout:
 	-anse needs a second loadout for the combat to really work

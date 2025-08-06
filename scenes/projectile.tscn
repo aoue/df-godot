@@ -1,40 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://w2mpitayui1x"]
+[gd_scene load_steps=5 format=3 uid="uid://w2mpitayui1x"]
 
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_w2wu8"]
-[ext_resource type="Texture2D" uid="uid://ekaxkn1nwq6s" path="res://assets/projectile/proj.png" id="2_3w0fc"]
+[ext_resource type="Texture2D" uid="uid://dot0uocagrdjj" path="res://assets/projectile/proj min.png" id="2_7iwm2"]
+[ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/Damage_text.tscn" id="2_du883"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o61th"]
 size = Vector2(98, 73)
 
-[node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider", "damage_label")]
+[node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider")]
 script = ExtResource("1_w2wu8")
 projectile_sprite = NodePath("Projectile Sprite")
 projectile_collider = NodePath("Projectile Collider")
-damage_label = NodePath("Damage Text")
+damage_label = ExtResource("2_du883")
 
 [node name="Projectile Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_3w0fc")
+texture = ExtResource("2_7iwm2")
 
 [node name="Projectile Collider" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7.5)
 shape = SubResource("RectangleShape2D_o61th")
-
-[node name="Damage Text" type="Label" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -140.0
-offset_right = 105.0
-offset_bottom = 133.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.750892, 0.133051, 0.175534, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 160
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

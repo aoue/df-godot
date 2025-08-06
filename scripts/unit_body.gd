@@ -174,7 +174,7 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:
-		unit.use_active_move(unit_pos, ring_indicator_vector)
+		unit.use_active_move(unit_pos, ring_indicator_vector, ring_indicator)
 
 func adjust_ring_indicator(where: Vector2, delta: float):
 	# Changes the position of the ring indicator.

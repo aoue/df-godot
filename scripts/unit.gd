@@ -5,11 +5,14 @@ extends Node
 # All attack/damage stat-related information needs to be retrieved and modified here.
 # But not movement-related things.
 
+enum flag {PLAYER, ALLY, ENEMY}
+
 # Basic statistics
 var HP_max : int
 var HP_cur : int
 var PW_max : int
 var PW_cur : int
+@export var allegiance : flag
 
 # Attack variables
 var attacking_duration_left : float = 0.0
@@ -42,14 +45,14 @@ func is_defeated() -> bool:
 	return false
 
 # Attacking
-func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2):
+func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
 	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
 	if attacking_duration_left > 0.0:
 		# check against active move's fire times
 		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.move_duration * active_move.fire_table[projectile_counter]:
 			projectile_counter += 1
-			fire(unit_pos, ring_indicator_vector)
+			fire(unit_pos, ring_indicator_vector, ring_indicator_obj)
 		return
 	if can_attack == false:
 		return
@@ -62,23 +65,32 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2):
 	can_attack = false
 	can_attack_cooldown = attacking_duration_left + 1.0
 
-func fire(unit_pos : Vector2, ring_indicator_vector : Vector2):
+func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# find its spawn location (between player and mouse), offset
 	# Note: 650 is the ring indicator offset.
 	var spawn_direction : Vector2 = ((unit_pos + 650 * ring_indicator_vector) - unit_pos).normalized()  
 	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * 650)
 	
 	# instantiate projectile into the scene
-	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction)
-	add_child(proj)
+	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance)
+	if active_move.spawn_type == 0:
+		add_child(proj)
+	else:
+		#proj.direction = Vector2.ZERO
+		#proj.offset = Vector2(650, 0)
+		ring_indicator_obj.add_child(proj)
+		proj.position = Vector2(650, 0)
+		#proj.offset = Vector2(650, 0)
+		
+	# enum Move_Spawn_Type {FIRED, ON_RING, SUMMON}
+	# for a melee move, add_child underneath RingIndicator
+	# and set xOffset = 650
+	
 
 func _process(delta):
 	# manage attack cooldown
 	if attacking_duration_left > 0.0:
 		attacking_duration_left = max(0, attacking_duration_left - delta)
-		# check attack times in active_move and fire from there
-		
-		
 	else:
 		can_attack_cooldown = max(0, can_attack_cooldown - delta)
 		if can_attack_cooldown == 0.0:

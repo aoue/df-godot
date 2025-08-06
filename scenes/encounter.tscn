@@ -17,3 +17,10 @@ position = Vector2(1009.33, -132.667)
 scale = Vector2(1.33333, 1.33333)
 zoom = Vector2(0.2, 0.2)
 position_smoothing_enabled = true
+
+[node name="Adelie2" parent="." node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "ring_indicator") instance=ExtResource("4_4r8bx")]
+position = Vector2(2463, 8)
+unit = NodePath("../Adelie/Unit")
+character_anim = NodePath("../Adelie/CharacterAnim")
+hp_bar = NodePath("../Adelie/hp_bar")
+ring_indicator = NodePath("../Adelie/RingAnim/RingIndicator")
