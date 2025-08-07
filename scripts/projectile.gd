@@ -15,11 +15,12 @@ var passthrough: bool = false
 var damage_colour: Color
 
 # State Variables
+var user: Unit
 var hit_something : bool = false
 var expire_delay : float = 1.0
 
 # Collisions
-func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, allegiance: int) -> void:
+func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_allegiance: int, arg_user: Unit) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
@@ -32,11 +33,12 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	stun = arg_stun * Coeff.hit_stun_duration
 	lifetime = arg_lifetime
 	passthrough = arg_passthrough
+	user = arg_user
 	
 	# allegiance is used twofold:
 	#	1. to set the projectile's colour
 	#	2. to set its collision settings (i.e. don't collides with friendlies)
-	damage_colour = Coeff.attack_colour_dict[allegiance]
+	damage_colour = Coeff.attack_colour_dict[arg_allegiance]
 	projectile_sprite.self_modulate = damage_colour
 	# set collision parameters: 
 	
@@ -45,9 +47,23 @@ func _on_body_entered(_body) -> void:
 	# Then, having no more reason to exist, it destroys itself.
 	
 	# Let the target know they've been hit (we trust them to handle this on their end.)
-	var overlapping_bodies = get_overlapping_bodies() 
+	var overlapping_bodies = get_overlapping_bodies()
 	for hit_body in overlapping_bodies:
 		hit_body.being_hit(damage, knockback, stun)
+		
+		# show damage number
+		var floating_damage_text = damage_label.instantiate()
+		floating_damage_text.text = "-" + str(damage)
+		floating_damage_text.self_modulate = damage_colour
+		floating_damage_text.lifetime = 0.5
+		#add_sibling(floating_damage_text)
+		
+		# add position noise
+		var noise: int = 500 
+		var placement_noise: Vector2 = Vector2(randi_range(-noise/2, noise/2), randi_range(-noise/2, noise/2))
+		floating_damage_text.position = placement_noise
+		
+		hit_body.add_child(floating_damage_text)
 	
 	# Hide bullet and collider (unless passthrough)
 	if not passthrough:
@@ -59,15 +75,9 @@ func _on_body_entered(_body) -> void:
 	# Show damage number
 	hit_something = true
 	
-	var floating_damage_text = damage_label.instantiate()
-	#floating_damage_text.position = global_position
-	floating_damage_text.position = position
-	floating_damage_text.rotation = -rotation
-	floating_damage_text.text = "-" + str(damage)
-	floating_damage_text.self_modulate = damage_colour
-	floating_damage_text.lifetime = 0.5
-	add_sibling(floating_damage_text)
-	#add_child(floating_damage_text)
+	# Tell home_unit that you hit something; it might care.
+	if hit_something:
+		user.report_hit()	
 	
 func _process(delta: float) -> void:
 	# Check to despawn (lifetime)

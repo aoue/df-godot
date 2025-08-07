@@ -1,34 +1,29 @@
 commit notes:
--update move damage range
--updated accuracy table and fixed math issue
--update projectile colour coding
--added projectile lifetime
--added projectile passthrough
--added ring projectiles (melee)
--projectile damage text is now its own scene to allow for accurate display with passthrough moves
--melee attack half-implemented; working but feels bad
+-added more h flipping to movement animations
+-adjusted melee move for better feel (timing, less speed penalty, bigger projectile, placed further away from unit)
+-fixed damage text orientation (hierarchy and noise)
+-added finisher animation to melee attack on hit report
+-added translation parameters to moves
 
 ======= TODO: combat feeling
 
-- creating 'snap swing' move:
-	move should end when collision occurs OR lifetime ends
-	(collision could be well before, after all)
+-creating pandora move:
+	1st left click:
+		-character enters animation and after the time projectiles spawn
+		-during this time, you can spin the projectiles around on the ring
+		-projectiles cannot collide during this time
+	(after enough time has passed)	
+	2nd left click:
+		-projectile is fired in ring direction like normal
+		-launched animation plays
 
 - create one attack of each type:
-	-(ranged) immediate release from the ring in the cursor direction
-	-(melee) placement on the ring in the cursor direction without firing
+	-(ranged) immediate release from the ring in the cursor direction	[DONE]
+	-(melee) placement on the ring in the cursor direction without firing	[DONE]
 	-(summon) placement on the ring followed by firing on the next click
-	testing:
-	-you can test test them by changing which projectile anse has equipped
-	-the move should have a flag to make sure anse uses the right attack animation
-	have them use different projectile shapes and sizes each
-	for the effect areas, i'm fine with just showing coloured shapes, just as is.
 
-- move with the ability to translate the user?
-	should this be a thing? i mean, probably, right.
-	you would need to:
-	-move direction offset (from indicator i guess); e.g. you might want a mouse that sends you shooting backwards
-	-speed with which it does this
+- if necessary:
+	-summon move 'launch animation' when projectile is fired
 
 - create the loadout class
 	-a loadout has 3 moves attached to it in order
@@ -54,22 +49,32 @@ commit notes:
 - stunning (visual): when a unit is stunned
 	-display the stun meter above their head showing how much time is left on it
 
+- attacking (visual): when a unit is attacking
+	-show the attacking duration meter above their head to show how much time is left
+
 - create a UI mockup. We need to somehow show:
 	-player health
 	-currently equipped moves and their status, near the player icon?
 	-next move to use very near to the player
 	-enemy health
+	-text and stuff around units on screen.
+	Show:
+	-speed
+	-move they're using
+	-hp
+	-stun duration
+	basically, a bunch of text to make it look more high tech. Super cool.
 
 camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
 
-- damage text bugged:
-	rotation and positioning is off
 
 --- engagement
 
 - some stuff is broken with multiple enemies here, btw. I think the issue is that they are not being instantiated separately. It's almost certainly this, but make sure before doing any more.
+	-pass to encounter manager and have it instantiate them from there
+	should fix any issues
 
 - second loadout:
 	-anse needs a second loadout for the combat to really work

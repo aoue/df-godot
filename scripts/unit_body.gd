@@ -99,6 +99,8 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	
+	
+	
 	# Stunned?
 	if hit_stun_duration > 0.0:
 		character_anim.play("9_being_hit")
@@ -117,8 +119,28 @@ func set_anim(direction: Vector2) -> void:
 			character_anim.play("8_special")
 		return
 	elif unit.attacking_duration_left > 0.0:
+		if unit.scored_hit:
+			if unit.active_move.animation_type == 0:
+				character_anim.play("6b_melee_finisher")
+			#elif unit.active_move.animation_type == 1:
+				#character_anim.play("7_ranged")
+			#else:
+				#character_anim.play("8_special")
+			
 		# Don't play any other animation while ongoing
 		return
+	
+	# check x direction for flipping
+	# Set the rest animation corresponding to the vector between yourself and the target location.
+	# if x component is greater, then look to the side
+	# if y component is greater, then look up/down
+	var look_dir: Vector2 = (get_target_direction() - global_position).normalized()
+	var x_power: float = look_dir.x
+	var y_power: float = look_dir.y
+	if x_power > 0.0:
+		character_anim.flip_h = false
+	else:
+		character_anim.flip_h = true
 	
 	# React to movement input
 	if direction.x > 0:
@@ -129,31 +151,16 @@ func set_anim(direction: Vector2) -> void:
 		character_anim.flip_h = true
 	elif direction.y > 0:
 		character_anim.play("3_front_mov")
-		character_anim.flip_h = false		
 	elif direction.y < 0:
 		character_anim.play("5_back_mov")
-		character_anim.flip_h = false
 	else:
-		# Set the rest animation corresponding to the vector between yourself and the target location.
-		# if x component is greater, then look to the side
-		# if y component is greater, then look up/down
-		var look_dir: Vector2 = (get_target_direction() - global_position).normalized()
-		var x_power: float = look_dir.x
-		var y_power: float = look_dir.y
 		if abs(x_power) >= abs(y_power):
 			character_anim.play("0_side_rest")
-			if x_power > 0.0:
-				character_anim.flip_h = false
-			else:
-				character_anim.flip_h = true
-				
 		else:
 			if y_power >= 0:
 				character_anim.play("2_front_rest")
-				character_anim.flip_h = false
 			else:
 				character_anim.play("4_back_rest")
-				character_anim.flip_h = false
 
 func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
 	# To set animations supporting the unit, but not the character animations themselves.
@@ -213,6 +220,10 @@ func _physics_process(delta: float) -> void:
 		speed_value *= boost_speed_mod
 	if unit.attacking_duration_left > 0.0:
 		speed_value *= unit.active_move.user_speed_mod
+	if unit.move_boost_duration_left > 0.0:
+		# if the move boosts, then add its speed and prioritize its own direction
+		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
+		direction = get_ring_indicator_vector()
 		
 	adjust_ring_indicator(mouse_pos, delta)
 	go_move(direction, speed_value, acceleration_value)

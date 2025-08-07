@@ -1,20 +1,20 @@
 [gd_scene load_steps=3 format=3 uid="uid://b2aeu3y8q8qxh"]
 
-[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/Projectile.tscn" id="1_h8ndm"]
 [ext_resource type="Script" path="res://scripts/move.gd" id="1_rrtlf"]
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Projectile.tscn" id="2_guc75"]
 
 [node name="Move" type="Node2D"]
 script = ExtResource("1_rrtlf")
-fire_table = Array[float]([0.5])
 accuracy_deviation_label = 1
 user_speed_mod = 0.1
 user_rotation_mod = 0.05
 move_duration = 1.5
 animation_type = 1
+proj_spawn_offset = 1.0
 proj_speed = 2.5
 proj_damage = 0.1
 proj_damage_spread_percentage = 0.1
 proj_knockback = 1.0
 proj_stun = 1.0
 proj_lifetime = 2.0
-proj_scene = ExtResource("1_h8ndm")
+proj_scene = ExtResource("2_guc75")

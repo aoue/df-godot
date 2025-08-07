@@ -7,15 +7,22 @@ enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
 
 # Usage 
+@export_group("Usage Variables") 
 @export var fire_table : Array[float]
 @export var accuracy_deviation_label : Accuracy_Labels
+@export var move_speed_add_duration : float
+@export var move_speed_add : float  # negate this value to move backwards
 @export var user_speed_mod : float
 @export var user_rotation_mod : float
 @export var move_duration : float
+
+@export_group("Animation Variables") 
 @export var spawn_type : Move_Spawn_Type
 @export var animation_type : Move_Anim_Type  # the name of the animation which will be fired on use.
 
 # Projectile Setup Information (all these are relative to the values set in coeff.gd, remember.)
+@export_group("Projectile Variables") 
+@export var proj_spawn_offset : float
 @export var proj_speed : float
 @export var proj_damage : float
 @export var proj_damage_spread_percentage : float  # spread of possible damage rolls, relative to proj_damage (between 1+value/2, 1-value/2)
@@ -34,7 +41,7 @@ var accuracy_table = {
 	5: 0.5
 }
 
-func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance: int):
+func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance: int, user: Unit):
 	# return projectiles according to the move's specs.
 	var proj : Object = proj_scene.instantiate()
 	
@@ -47,6 +54,6 @@ func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance
 	#print("===")
 	var proj_damage_roll: float = randf_range(proj_damage * (1 + proj_damage_spread_percentage/2), proj_damage * (1 - proj_damage_spread_percentage/2)) 
 	
-	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), proj_speed, proj_damage_roll, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, allegiance)
+	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), proj_speed, proj_damage_roll, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, allegiance, user)
 	
 	return proj

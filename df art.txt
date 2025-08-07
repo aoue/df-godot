@@ -16,6 +16,7 @@ in the combat scene, a unit has the following sprites:
 4_back_rest: 2 frames
 5_back_move: 3 frames
 6_melee: 4 frames
+6b_melee_finisher: 1 frame
 7_ranged: 4 frames
 8_special: 4 frames
 9_being_hit: 2 frames

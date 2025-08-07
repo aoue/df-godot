@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsv1rx2hbytve"]
+
+[ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_kp35c"]
+
+[node name="Move (Pandora)" instance=ExtResource("1_kp35c")]
+fire_table = Array[float]([])
