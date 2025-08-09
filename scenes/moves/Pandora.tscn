@@ -3,4 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_kp35c"]
 
 [node name="Move (Pandora)" instance=ExtResource("1_kp35c")]
-fire_table = Array[float]([])
+fire_table = Array[float]([0.95, 0.925, 0.9, 0.875, 0.85, 0.825, 0.8, 0.775])
+accuracy_deviation_label = 5
+summon_duration = 1.0
+spawn_type = 2
+animation_type = 2
+proj_damage = 0.065
+proj_lifetime = 1.0

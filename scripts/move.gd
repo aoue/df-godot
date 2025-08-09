@@ -15,6 +15,7 @@ enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
 @export var user_speed_mod : float
 @export var user_rotation_mod : float
 @export var move_duration : float
+@export var summon_duration : float
 
 @export_group("Animation Variables") 
 @export var spawn_type : Move_Spawn_Type
@@ -36,9 +37,9 @@ var accuracy_table = {
 	0: 0,
 	1: 0.05,
 	2: 0.075,
-	3: 0.1,
-	4: 0.2,
-	5: 0.5
+	3: 0.2,
+	4: 0.5,
+	5: 0.75
 }
 
 func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance: int, user: Unit):

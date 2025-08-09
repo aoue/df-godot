@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://8f6wd8hvqtfp"]
+[gd_scene load_steps=19 format=3 uid="uid://8f6wd8hvqtfp"]
 
 [ext_resource type="Script" path="res://scripts/unit_body.gd" id="1_eqrot"]
 [ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ct068dv45xwi0" path="res://assets/ui/hp bar fill.png" id="3_44yiu"]
 [ext_resource type="Texture2D" uid="uid://drd7h0wvo60pv" path="res://assets/ui/ring image.png" id="4_pvg52"]
 [ext_resource type="Texture2D" uid="uid://p3cpcp3500ad" path="res://assets/ui/ring indicator.png" id="5_srvee"]
+[ext_resource type="Texture2D" uid="uid://lw0say8dvjmh" path="res://assets/ui/summon indicator.png" id="6_rlaow"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6v7kx"]
 atlas = ExtResource("2_0odim")
@@ -90,12 +91,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
 size = Vector2(686, 1026)
 
-[node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "ring_indicator")]
+[node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "ring", "ring_indicator", "summon_indicator")]
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
 hp_bar = NodePath("hp_bar")
+ring = NodePath("RingAnim")
 ring_indicator = NodePath("RingAnim/RingIndicator")
+summon_indicator = NodePath("RingAnim/SummonIndicator")
 HP_max_coeff = 1.0
 PW_max_coeff = 1.0
 speed_coeff = 1.0
@@ -111,7 +114,13 @@ autoplay = "still"
 [node name="RingAnim" type="Sprite2D" parent="."]
 texture = ExtResource("4_pvg52")
 
+[node name="SummonIndicator" type="Sprite2D" parent="RingAnim"]
+position = Vector2(0, 725)
+texture = ExtResource("6_rlaow")
+
 [node name="RingIndicator" type="Sprite2D" parent="RingAnim"]
+visible = false
+rotation = -6.28319
 texture = ExtResource("5_srvee")
 offset = Vector2(650, 0)
 

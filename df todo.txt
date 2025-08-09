@@ -1,28 +1,12 @@
 commit notes:
--added more h flipping to movement animations
--adjusted melee move for better feel (timing, less speed penalty, bigger projectile, placed further away from unit)
--fixed damage text orientation (hierarchy and noise)
--added finisher animation to melee attack on hit report
--added translation parameters to moves
+-added backpedaling slowdown mechanic based on angle between ring indicator and movement direction
+-ring and ring indicator coloured based on unit allegiance
+-implemented summon type moves (first click to create it, second click to fire)
+-with this, we've created 1 move of each spawn type and also a translation move
 
 ======= TODO: combat feeling
 
--creating pandora move:
-	1st left click:
-		-character enters animation and after the time projectiles spawn
-		-during this time, you can spin the projectiles around on the ring
-		-projectiles cannot collide during this time
-	(after enough time has passed)	
-	2nd left click:
-		-projectile is fired in ring direction like normal
-		-launched animation plays
-
-- create one attack of each type:
-	-(ranged) immediate release from the ring in the cursor direction	[DONE]
-	-(melee) placement on the ring in the cursor direction without firing	[DONE]
-	-(summon) placement on the ring followed by firing on the next click
-
-- if necessary:
+- visuals:
 	-summon move 'launch animation' when projectile is fired
 
 - create the loadout class

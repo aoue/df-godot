@@ -12,6 +12,7 @@ The actual value is set here, and all stats are proportional to the coefficient 
 """
 
 """Combat Balance"""
+var move_cooldown: float = 1.0
 var rotation_speed: int = 10
 var speed: int = 5000
 var acceleration: float = 0.08

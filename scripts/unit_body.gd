@@ -5,7 +5,9 @@ class_name UnitBody
 @export var unit: Node
 @export var character_anim: AnimatedSprite2D
 @export var hp_bar: TextureProgressBar
+@export var ring: Node2D
 @export var ring_indicator: Node2D
+@export var summon_indicator: Node2D
 
 # Basic movement variables
 @export var HP_max_coeff: float
@@ -40,6 +42,12 @@ func _ready() -> void:
 	speed = speed_coeff * Coeff.speed
 	acceleration = acceleration_coeff * Coeff.acceleration
 	boost_acceleration = 2.0 * Coeff.acceleration
+	
+	# Colour ring
+	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
+	ring.self_modulate = unit_colour
+	ring_indicator.self_modulate = unit_colour
+	summon_indicator.self_modulate = unit_colour
 
 """ Input """
 func get_direction_input() -> Vector2:
@@ -181,9 +189,21 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:
+		
+		# track summon type clicks
+		# catch 1st click
+		if is_attacking and unit.active_move and unit.active_move.spawn_type == 2 and unit.summon_period_over():
+			unit.summon_all_green = true
 		unit.use_active_move(unit_pos, ring_indicator_vector, ring_indicator)
 
-func adjust_ring_indicator(where: Vector2, delta: float):
+func is_backpedaling(move_direction: Vector2, face_direction: Vector2) -> bool:
+	# Slows speed if the unit is backing up. Because that's not fun.
+	# condition: if movement direction is not within 180 degrees of ring indicator direction
+	# (could also make it proportional, if you want)
+	var angle: float = abs((face_direction).angle_to(move_direction))
+	return angle > PI / 2
+
+func adjust_indicators(where: Vector2, delta: float):
 	# Changes the position of the ring indicator.
 	# For player, relative to mouse movement, speed can be affected by attacking state and move slowdown.
 	# For enemy, moved with ai.
@@ -192,7 +212,23 @@ func adjust_ring_indicator(where: Vector2, delta: float):
 	var rotation_weight: float = delta * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0:
 		rotation_weight *= unit.active_move.user_rotation_mod
+	else:
+		rotation_weight *= 2  # adjustment
 	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
+
+	# Adjust summon indicator too
+	var offset = 700
+	var v = get_ring_indicator_vector()
+	summon_indicator.position = Vector2(offset * v.x, offset * v.y)
+	# or, angle between self and ring indicator * 725?
+	
+	if unit.active_move and unit.active_move.spawn_type == 2 and unit.summon_period_over():
+		summon_indicator.visible = true
+		ring_indicator.visible = false
+	else:
+		summon_indicator.visible = false
+		ring_indicator.visible = true
+		
 
 func get_ring_indicator_vector() -> Vector2:
 	var x_component = cos(ring_indicator.rotation)
@@ -209,6 +245,7 @@ func pass_duration(delta : float) -> void:
 
 func _physics_process(delta: float) -> void:
 	var direction: Vector2 = get_direction_input()
+	var ring_direction: Vector2 = get_ring_indicator_vector()
 	var is_attacking: bool = get_attack_input()
 	var mouse_pos: Vector2 = get_mouse()
 	var is_boosting: bool = get_boost_input(direction)
@@ -218,16 +255,18 @@ func _physics_process(delta: float) -> void:
 	if is_boosting:
 		acceleration_value = boost_acceleration
 		speed_value *= boost_speed_mod
-	if unit.attacking_duration_left > 0.0:
+	elif unit.attacking_duration_left > 0.0 and unit.summon_period_over():
 		speed_value *= unit.active_move.user_speed_mod
+	elif is_backpedaling(direction, ring_direction):
+		speed_value /= 2
 	if unit.move_boost_duration_left > 0.0:
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
-		direction = get_ring_indicator_vector()
+		direction = ring_direction
 		
-	adjust_ring_indicator(mouse_pos, delta)
+	adjust_indicators(mouse_pos, delta)
 	go_move(direction, speed_value, acceleration_value)
-	go_attack(is_attacking, position, get_ring_indicator_vector())
+	go_attack(is_attacking, position, ring_direction)
 	go_anim(delta, direction, mouse_pos, is_attacking, is_boosting)
 	
 	pass_duration(delta)
