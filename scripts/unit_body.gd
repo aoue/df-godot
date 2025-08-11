@@ -76,11 +76,14 @@ func get_mouse() -> Vector2:
 	return Vector2.ZERO
 
 """ Reacting """
+func take_recoil(recoil_amount: Vector2):
+	knockback += recoil_amount
+	
 func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	
 	# Do damage and cause knockback
 	unit.take_damage(proj_damage)
-	knockback = proj_knockback
+	knockback += proj_knockback
 	
 	# Affect sprite
 	if stun > 0 and hit_stun_shield == 0:
@@ -150,18 +153,8 @@ func set_anim(direction: Vector2) -> void:
 	else:
 		character_anim.flip_h = true
 	
-	# React to movement input
-	if direction.x > 0:
-		character_anim.play("1_side_mov")
-		character_anim.flip_h = false
-	elif direction.x < 0:
-		character_anim.play("1_side_mov")
-		character_anim.flip_h = true
-	elif direction.y > 0:
-		character_anim.play("3_front_mov")
-	elif direction.y < 0:
-		character_anim.play("5_back_mov")
-	else:
+	# set anims according to direction vector.
+	if direction == Vector2.ZERO:
 		if abs(x_power) >= abs(y_power):
 			character_anim.play("0_side_rest")
 		else:
@@ -169,6 +162,13 @@ func set_anim(direction: Vector2) -> void:
 				character_anim.play("2_front_rest")
 			else:
 				character_anim.play("4_back_rest")
+	else:
+		if abs(x_power) > abs(y_power):
+			character_anim.play("1_side_mov")
+		elif y_power > 0:
+			character_anim.play("3_front_mov")
+		elif y_power < 0:
+			character_anim.play("5_back_mov")
 
 func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
 	# To set animations supporting the unit, but not the character animations themselves.
@@ -184,7 +184,14 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 		velocity = velocity.lerp(direction_input * speed_input, acceleration_input)
 	else:
 		velocity = velocity.lerp(Vector2.ZERO, acceleration_input)	
-	velocity += knockback
+		
+	# unaffected by move slowdowns
+	var speed_compensation_value : float = 1
+	if speed < speed_input:
+		speed_compensation_value = speed / speed_input
+	velocity += (knockback * speed_compensation_value)
+	velocity += (unit.recoil * speed_compensation_value)
+	
 	move_and_slide()
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
@@ -192,7 +199,7 @@ func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vec
 		
 		# track summon type clicks
 		# catch 1st click
-		if is_attacking and unit.active_move and unit.active_move.spawn_type == 2 and unit.summon_period_over():
+		if is_attacking and unit.active_move and unit.summon_period_over():
 			unit.summon_all_green = true
 		unit.use_active_move(unit_pos, ring_indicator_vector, ring_indicator)
 
@@ -210,7 +217,7 @@ func adjust_indicators(where: Vector2, delta: float):
 	var wanted_rotation_angle: float = position.angle_to_point(where)
 	var current_rotation: float = ring_indicator.rotation
 	var rotation_weight: float = delta * Coeff.rotation_speed
-	if unit.attacking_duration_left > 0.0:
+	if unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
 		rotation_weight *= unit.active_move.user_rotation_mod
 	else:
 		rotation_weight *= 2  # adjustment
@@ -222,7 +229,7 @@ func adjust_indicators(where: Vector2, delta: float):
 	summon_indicator.position = Vector2(offset * v.x, offset * v.y)
 	# or, angle between self and ring indicator * 725?
 	
-	if unit.active_move and unit.active_move.spawn_type == 2 and unit.summon_period_over():
+	if unit.active_move and unit.summon_period_over():
 		summon_indicator.visible = true
 		ring_indicator.visible = false
 	else:
@@ -242,6 +249,7 @@ func pass_duration(delta : float) -> void:
 	hit_stun_shield = max(0, hit_stun_shield - delta)
 	
 	knockback = lerp(knockback, Vector2.ZERO, 0.1)
+	unit.recoil = lerp(unit.recoil, Vector2.ZERO, 0.25)
 
 func _physics_process(delta: float) -> void:
 	var direction: Vector2 = get_direction_input()
@@ -255,7 +263,7 @@ func _physics_process(delta: float) -> void:
 	if is_boosting:
 		acceleration_value = boost_acceleration
 		speed_value *= boost_speed_mod
-	elif unit.attacking_duration_left > 0.0 and unit.summon_period_over():
+	elif unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
 		speed_value *= unit.active_move.user_speed_mod
 	elif is_backpedaling(direction, ring_direction):
 		speed_value /= 2

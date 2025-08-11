@@ -5,6 +5,7 @@ extends Node
 enum Move_Spawn_Type {FIRED, ON_RING, SUMMON}
 enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
+enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
 
 # Usage 
 @export_group("Usage Variables") 
@@ -16,6 +17,10 @@ enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
 @export var user_rotation_mod : float
 @export var move_duration : float
 @export var summon_duration : float
+
+@export_group("Recoil Variables") 
+@export var recoil_moment : Recoil_Moments
+@export var recoil_knockback : float
 
 @export_group("Animation Variables") 
 @export var spawn_type : Move_Spawn_Type

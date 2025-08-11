@@ -1,8 +1,8 @@
 commit notes:
--added backpedaling slowdown mechanic based on angle between ring indicator and movement direction
--ring and ring indicator coloured based on unit allegiance
--implemented summon type moves (first click to create it, second click to fire)
--with this, we've created 1 move of each spawn type and also a translation move
+-updated animation visuals to communicate backup slowdown
+-finished summon move speed slowdowns only imposed once firing starts
+-passthrough projectiles cannot hit the same target more than once
+-added recoil parameter to moves, of both on hit and on fire types
 
 ======= TODO: combat feeling
 
@@ -85,3 +85,11 @@ camera manager:
 start of battle animation:
 	-if would be cool if there was an animation with all the rings coming on as the fight began
 
+== vn don't forget
+
+
+
+-visuals (to consider)
+	-lip sync
+	-blinking
+	-breath

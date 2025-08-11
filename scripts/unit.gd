@@ -14,6 +14,7 @@ var HP_cur : int
 var PW_max : int
 var PW_cur : int
 @export var allegiance : flag
+var combat_id : int  # set automatically when spawned in by encounter.
 
 # Attack boost variables
 var move_boost_duration_left : float = 0.0
@@ -26,6 +27,7 @@ var can_attack_cooldown : float = 0.0
 var set_attack_anim : bool = false
 var scored_hit: bool = false
 var summon_all_green: bool = false
+var recoil : Vector2
 
 # Loadouts and moves
 # (will have a link to a move, which has both:
@@ -40,6 +42,9 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	HP_cur = HP_max
 	PW_max = PW_max_coeff * Coeff.hp
 	PW_cur = PW_max
+	
+	# temporary
+	combat_id = 0
 
 # Being Attacked
 func take_damage(damage : int) -> void:
@@ -51,17 +56,22 @@ func is_defeated() -> bool:
 	return false
 
 func summon_period_over() -> bool:
-	return attacking_duration_left <= active_move.move_duration or active_move.summon_duration == 0
+	return (active_move.spawn_type == 2 and attacking_duration_left <= active_move.move_duration)
 
-func summon_cannot_fire() -> bool:
+func summon_waiting_for_2nd_click() -> bool:
 	return active_move.spawn_type == 2 and not summon_all_green
 
 # Attacking
 func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
 	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
-	if attacking_duration_left > 0.0 and summon_period_over():
-		if summon_cannot_fire():
+	if attacking_duration_left > 0.0:
+		# summon conditions: if you are a summon move then:
+		#	-you may not fire if still in the summon period
+		#	-you may not fire if awaiting second click
+		if active_move.spawn_type == 2 and not summon_period_over():
+			return
+		if summon_waiting_for_2nd_click():
 			return
 		# check against active move's fire times
 		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.move_duration * active_move.fire_table[projectile_counter]:
@@ -91,6 +101,10 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	var spawn_direction : Vector2 = ((unit_pos + offset * ring_indicator_vector) - unit_pos).normalized()  
 	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * offset)
 	
+	# calculate recoil too
+	if active_move.recoil_moment == 1:
+		recoil = spawn_direction * active_move.recoil_knockback * Coeff.knockback
+	
 	# instantiate projectile into the scene
 	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance, self)
 	if active_move.spawn_type == 1:  # 'on ring' 
@@ -99,15 +113,21 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	else:  # 'fired' or 'summon'
 		add_child(proj)
 
-func report_hit() -> void:
+func report_hit(hit_body_position : Vector2) -> void:
 	# Called by projectile when it scores a hit to let the unit know what's happened.
 	#print("Scored hit!")
 	scored_hit = true
+	
+	# report knockback too, if 'on_hit' type
+	if active_move and active_move.recoil_moment == 2:
+		var recoil_angle : float = get_parent().global_position.angle_to_point(hit_body_position)
+		var recoil_scalar : float = active_move.recoil_knockback * Coeff.knockback
+		recoil = Vector2(cos(recoil_angle), sin(recoil_angle)).normalized() * recoil_scalar
 
 func _process(delta):
 	# manage attack cooldown
 	if attacking_duration_left > 0.0:
-		if summon_cannot_fire():
+		if summon_waiting_for_2nd_click():
 			attacking_duration_left = max(active_move.move_duration, attacking_duration_left - delta)
 		else:
 			attacking_duration_left = max(0, attacking_duration_left - delta)

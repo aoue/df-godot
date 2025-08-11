@@ -18,6 +18,7 @@ var damage_colour: Color
 var user: Unit
 var hit_something : bool = false
 var expire_delay : float = 1.0
+var hit_set : Array
 
 # Collisions
 func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_allegiance: int, arg_user: Unit) -> void:
@@ -34,6 +35,7 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	lifetime = arg_lifetime
 	passthrough = arg_passthrough
 	user = arg_user
+	hit_set = Array()
 	
 	# allegiance is used twofold:
 	#	1. to set the projectile's colour
@@ -49,6 +51,9 @@ func _on_body_entered(_body) -> void:
 	# Let the target know they've been hit (we trust them to handle this on their end.)
 	var overlapping_bodies = get_overlapping_bodies()
 	for hit_body in overlapping_bodies:
+		if hit_body.unit.combat_id in hit_set:
+			continue
+		hit_set.append(hit_body.unit.combat_id)
 		hit_body.being_hit(damage, knockback, stun)
 		
 		# show damage number
@@ -64,6 +69,9 @@ func _on_body_entered(_body) -> void:
 		floating_damage_text.position = placement_noise
 		
 		hit_body.add_child(floating_damage_text)
+		
+		# report hit and hit recoil if applicable
+		user.report_hit(hit_body.global_position)
 	
 	# Hide bullet and collider (unless passthrough)
 	if not passthrough:
@@ -75,14 +83,10 @@ func _on_body_entered(_body) -> void:
 	# Show damage number
 	hit_something = true
 	
-	# Tell home_unit that you hit something; it might care.
-	if hit_something:
-		user.report_hit()	
-	
 func _process(delta: float) -> void:
 	# Check to despawn (lifetime)
 	lifetime -= delta
-	if not hit_something and lifetime < 0.0:
+	if lifetime < 0.0:
 		queue_free()
 	
 	# Control movement
