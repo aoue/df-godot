@@ -2,13 +2,22 @@ extends CharacterBody2D
 class_name UnitBody
 
 # References
+@export_group("Moving Pieces")
 @export var unit: Node
 @export var character_anim: AnimatedSprite2D
 @export var hp_bar: TextureProgressBar
+@export var utility_bar: TextureProgressBar
 @export var ring: Node2D
 @export var ring_indicator: Node2D
 @export var summon_indicator: Node2D
 
+@export_group("Labels")
+@export var stat_labels : Node2D
+@export var hp_label : Label
+@export var utility_label : Label
+@export var speed_label : Label
+
+@export_group("Stat Coeffs")
 # Basic movement variables
 @export var HP_max_coeff: float
 @export var PW_max_coeff: float
@@ -99,6 +108,47 @@ func start_being_defeated() -> void:
 	#queue_free()
 	pass
 
+func update_utility_bar(delta: float) -> void:
+	# first: discover value we should be comparing:
+	
+	var new_value : float = 0
+	var new_max_value : float = 1
+	
+	# case -1: we are stunned:
+	if hit_stun_duration > 0.0:
+		new_max_value = Coeff.hit_stun_duration
+		new_value = hit_stun_duration
+	# case 0: we are in summon
+	elif unit.attacking_duration_left > 0.0 and unit.active_move.spawn_type == 2 and not unit.summon_period_over():
+		# attacking_duration_left <= active_move.move_duration
+		new_max_value = unit.active_move.summon_duration
+		new_value = unit.attacking_duration_left - unit.active_move.move_duration
+		
+		#new_max_value = unit.active_move.summon_duration
+		#new_value = (unit.active_move.move_duration + unit.active_move.summon_duration) - unit.attacking_duration_left
+	## case 1: we are attacking; update attack thing
+	elif unit.attacking_duration_left > 0.0:
+		new_max_value = unit.active_move.move_duration
+		new_value = unit.attacking_duration_left
+	# case 2: in cooldown
+	elif unit.can_attack_cooldown > 0.0:
+		new_max_value = Coeff.move_cooldown
+		new_value = unit.can_attack_cooldown
+	# case 3: switching loadouts
+	elif unit.loadout_gate_time > 0.0:
+		new_max_value = Coeff.loadout_cooldown
+		new_value = unit.loadout_gate_time
+	
+	new_value *= 100
+	new_max_value *= 100
+	utility_bar.max_value = new_max_value
+	
+	if utility_bar.value > new_value:
+		utility_bar.value -= Coeff.hp_bar_update_speed * delta
+	elif utility_bar.value < new_value:
+		#utility_bar.value += Coeff.hp_bar_update_speed * delta
+		utility_bar.value = new_value
+		
 func update_hp_bar(new_value: int, delta: float) -> void:
 	# Graphical only; we don't check for death or anything like that here.
 	if hp_bar.value > new_value:
@@ -106,11 +156,14 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 	elif hp_bar.value < new_value:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
+func update_labels(speed_value : float) -> void:
+	hp_label.text = "CN--" + str(hp_bar.value)
+	utility_label.text = "UTL--" + str(utility_bar.value)
+	speed_label.text = "SPD--" + str(speed_value)
+
 """ Running """
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
-	
-	
 	
 	# Stunned?
 	if hit_stun_duration > 0.0:
@@ -170,14 +223,15 @@ func set_anim(direction: Vector2) -> void:
 		elif y_power < 0:
 			character_anim.play("5_back_mov")
 
-func set_anim_plus(mouse_pos: Vector2, isAttacking: bool, isBoosting: bool) -> void:
+func set_anim_plus(isBoosting: bool) -> void:
 	# To set animations supporting the unit, but not the character animations themselves.
 	pass
 
-func go_anim(delta: float, direction_input: Vector2, mouse_input: Vector2, attack_input: bool, boost_input: bool) -> void:
+func go_anim(delta: float, direction_input: Vector2, boost_input: bool) -> void:
 	set_anim(direction_input)
-	set_anim_plus(mouse_input, attack_input, boost_input)
+	set_anim_plus(boost_input)
 	update_hp_bar(unit.HP_cur, delta)
+	update_utility_bar(delta)
 	
 func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float) -> void:
 	if direction_input.length() > 0:
@@ -196,6 +250,9 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:
+		
+		# force loadout switch?
+		unit.update_loadout_status()
 		
 		# track summon type clicks
 		# catch 1st click
@@ -228,6 +285,11 @@ func adjust_indicators(where: Vector2, delta: float):
 	var v = get_ring_indicator_vector()
 	summon_indicator.position = Vector2(offset * v.x, offset * v.y)
 	# or, angle between self and ring indicator * 725?
+	
+	# adjust stat labels too (test)
+	var x_offset = 500
+	var y_offset = 500
+	stat_labels.position = Vector2(x_offset * v.x, y_offset * v.y)
 	
 	if unit.active_move and unit.summon_period_over():
 		summon_indicator.visible = true
@@ -274,7 +336,9 @@ func _physics_process(delta: float) -> void:
 		
 	adjust_indicators(mouse_pos, delta)
 	go_move(direction, speed_value, acceleration_value)
-	go_attack(is_attacking, position, ring_direction)
-	go_anim(delta, direction, mouse_pos, is_attacking, is_boosting)
+	#go_attack(is_attacking, position, ring_direction)
+	go_attack(is_attacking, global_position, ring_direction)
+	go_anim(delta, direction, is_boosting)
+	update_labels(speed_value)
 	
 	pass_duration(delta)

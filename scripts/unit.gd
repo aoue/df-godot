@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name Unit
 
 # Holds all the stat information for a unit. 
@@ -36,6 +36,7 @@ var recoil : Vector2
 @export var all_loadouts : Array[Loadout]
 var loadout : Loadout
 var loadout_pointer : int
+var loadout_gate_time : float
 var active_move : Move
 var early_exit_taken : bool = false
 
@@ -45,7 +46,9 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	HP_cur = HP_max
 	PW_max = PW_max_coeff * Coeff.hp
 	PW_cur = PW_max
+	
 	loadout_pointer = 0
+	loadout_gate_time = 0.0
 	
 	# temporary
 	combat_id = 0
@@ -70,6 +73,20 @@ func early_exit() -> void:
 	attacking_duration_left = Coeff.move_cooldown
 	can_attack_cooldown = Coeff.move_cooldown
 	move_boost_duration_left = Coeff.move_cooldown
+
+func update_loadout_status() -> void:
+	if not loadout:
+		loadout = all_loadouts[0]
+	elif loadout.is_loadout_finished():
+		#print("Current loadout finished... switching loadout")
+		loadout.finished()
+		# switch loadout
+		loadout_pointer += 1
+		if loadout_pointer == len(all_loadouts):
+			loadout_pointer = 0
+		loadout = all_loadouts[loadout_pointer]
+		loadout_gate_time = Coeff.loadout_cooldown
+	loadout.refresh()
 
 func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
@@ -97,17 +114,9 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		return
 	
 	# check loadout state: either give next move or switch to next loadout
-	if not loadout:
-		loadout = all_loadouts[0]
-	elif loadout.is_loadout_finished():
-		print("Current loadout finished... switching loadout")
-		loadout.finished()
-		# switch loadout
-		loadout_pointer += 1
-		if loadout_pointer > len(all_loadouts):
-			loadout_pointer = 0
-		loadout = all_loadouts[loadout_pointer]		
-	loadout.refresh()
+	update_loadout_status()
+	if loadout_gate_time > 0.0:
+		return
 
 	var next_move = loadout.get_next_move()
 	
@@ -128,9 +137,12 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# find its spawn location (between player and mouse), offset
 	# Note: 650 is the ring indicator offset.
-	var offset: int = 650 * active_move.proj_spawn_offset
+	var offset: int = Coeff.proj_spawn_offset * active_move.proj_spawn_offset
 	var spawn_direction : Vector2 = ((unit_pos + offset * ring_indicator_vector) - unit_pos).normalized()  
 	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * offset)
+	
+	#var temp = unit_pos - proj_spawn_loc
+	#print("proj spawn loc relative = " + str(temp))
 	
 	# calculate recoil too
 	if active_move.recoil_moment == 1:
@@ -139,10 +151,12 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	# instantiate projectile into the scene
 	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance, self)
 	if active_move.spawn_type == 1:  # 'on ring' 
-		ring_indicator_obj.add_child(proj)
 		proj.position = Vector2(offset, 0)
+		ring_indicator_obj.add_child(proj)
 	else:  # 'fired' or 'summon'
-		add_child(proj)
+		ProjectileMother.place_projectile(proj)
+		#Encounter.place_projectile(proj)
+		#add_child(proj)
 
 func report_hit(hit_body_position : Vector2) -> void:
 	# Called by projectile when it scores a hit to let the unit know what's happened.
@@ -173,4 +187,8 @@ func _process(delta):
 	# manage move speed effect
 	if move_boost_duration_left > 0.0:
 		move_boost_duration_left = max(0, move_boost_duration_left - delta)
+		
+	# manage loadout switch
+	if loadout_gate_time > 0.0:
+		loadout_gate_time = max(0, loadout_gate_time - delta)
 

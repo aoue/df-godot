@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 [autoload]
 
 Coeff="*res://scenes/Coeff.tscn"
+ProjectileMother="*res://scenes/ProjectileMother.tscn"
 
 [display]
 

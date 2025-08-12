@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name Move
 
 # Holds information used to create the projectiles resulting from the move's use.

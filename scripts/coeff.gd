@@ -8,10 +8,12 @@ Holds the coefficients for things like:
 	hp
 and etc
 
-The actual value is set here, and all stats are proportional to the coefficient value set out here.
+The values are set here, and all stats are proportional to the coefficient value described.
 """
 
 """Combat Balance"""
+var proj_spawn_offset : int = 750
+var loadout_cooldown: float = 2.0
 var move_cooldown: float = 0.25
 var rotation_speed: int = 10
 var speed: int = 5000

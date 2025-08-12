@@ -48,6 +48,8 @@ func _on_body_entered(_body) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
 	
+	hit_something = true
+	
 	# Let the target know they've been hit (we trust them to handle this on their end.)
 	var overlapping_bodies = get_overlapping_bodies()
 	for hit_body in overlapping_bodies:
@@ -77,11 +79,8 @@ func _on_body_entered(_body) -> void:
 	if not passthrough:
 		projectile_collider.hide()
 		projectile_sprite.hide()
-		monitoring = false
-		monitorable = false
-	
-	# Show damage number
-	hit_something = true
+		set_deferred("monitoring", false)
+		set_deferred("monitorable", false)
 	
 func _process(delta: float) -> void:
 	# Check to despawn (lifetime)

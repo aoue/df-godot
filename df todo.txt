@@ -1,7 +1,9 @@
 commit notes:
--added loadout functionality sans swapping
--added combo incentive system
--added loadout swapping
+-loadout switch gate added
+-added utility bar to help indicate the unit's state and how long remains in it
+-loadout switch happens automatically now; forced gate (maybe this mechanic will go?)
+-added prototype of stat labels
+-had a bluescreen that messed projectile spawning up somehow, implemented projectile mother to avoid the issue forever (also updated drivers)
 
 ======= TODO: combat feeling
 
@@ -18,49 +20,25 @@ commit notes:
 - map logic
 	-units can navigate around obstacles
 
-- stunning (visual): when a unit is stunned
-	-display the stun meter above their head showing how much time is left on it
-
-- attacking (visual): when a unit is attacking
-	-show the attacking duration meter above their head to show how much time is left
-
-- create a UI mockup. We need to somehow show:
-	-player health
-	-currently equipped moves and their status, near the player icon?
-	-next move to use very near to the player
-	-enemy health
-	-text and stuff around units on screen.
-	Show:
-	-speed
-	-move they're using
-	-hp
-	-stun duration
-	basically, a bunch of text to make it look more high tech. Super cool.
-
 camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
-
-- visuals:
-	-summon move 'launch animation' when projectile is fired
-	similar logic to melee finisher animation
-
---- engagement
 
 - flow mechanic:
 	-some moves generate 'flow'
 	-some moves can consume 'flow' to increase their damage
 	just a little something for players to think about when building a combo, that's it.
 
+--- engagement
+
+- remember to create the combat ai in such a way to allow 3-way battles.
+
 - some stuff is broken with multiple enemies here, btw. I think the issue is that they are not being instantiated separately. It's almost certainly this, but make sure before doing any more.
 	-pass to encounter manager and have it instantiate them from there
 	should fix any issues
 
-- second loadout:
-	-anse needs a second loadout for the combat to really work
-	-his first loadout should be gun moves
-	-his second loadout should be snaphammer moves
-	(see paper notes, already planned this out, i think.)
+- build loadouts properly:
+	-see paper notes for movesets. we'll need 2 for anse.
 
 - basic enemy ai:
 	(every second or 1/2 second or so)

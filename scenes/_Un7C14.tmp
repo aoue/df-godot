@@ -111,9 +111,11 @@ HP_max_coeff = 1.0
 PW_max_coeff = 1.0
 speed_coeff = 1.0
 acceleration_coeff = 1.0
+boost_speed_mod = null
+boost_full_duration = null
+boost_full_cooldown = null
 
-[node name="Unit" parent="." node_paths=PackedStringArray("all_loadouts") instance=ExtResource("1_nye7s")]
-all_loadouts = [NodePath("Loadout0"), NodePath("Loadout1")]
+[node name="Unit" parent="." instance=ExtResource("1_nye7s")]
 
 [node name="Loadout0" parent="Unit" instance=ExtResource("2_4ykhy")]
 

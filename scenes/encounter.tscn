@@ -1,26 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://dk3veiqccd2ah"]
+[gd_scene load_steps=5 format=3 uid="uid://dk3veiqccd2ah"]
 
 [ext_resource type="Script" path="res://scripts/encounter.gd" id="1_kqml8"]
 [ext_resource type="PackedScene" uid="uid://bheobjlecy41s" path="res://scenes/units/Anse.tscn" id="2_aaoje"]
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
+[ext_resource type="PackedScene" uid="uid://by800qhg41i6u" path="res://scenes/ProjectileMother.tscn" id="4_r851w"]
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_kqml8")
+Anse = ExtResource("2_aaoje")
+Adelie = ExtResource("4_4r8bx")
 
-[node name="Adelie" parent="." instance=ExtResource("4_4r8bx")]
-position = Vector2(1302, 33)
-
-[node name="Anse" parent="." instance=ExtResource("2_aaoje")]
-
-[node name="Camera2D" type="Camera2D" parent="Anse"]
-position = Vector2(1009.33, -132.667)
-scale = Vector2(1.33333, 1.33333)
-zoom = Vector2(0.2, 0.2)
-position_smoothing_enabled = true
-
-[node name="Adelie2" parent="." node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "ring_indicator") instance=ExtResource("4_4r8bx")]
-position = Vector2(2463, 8)
-unit = NodePath("../Adelie/Unit")
-character_anim = NodePath("../Adelie/CharacterAnim")
-hp_bar = NodePath("../Adelie/hp_bar")
-ring_indicator = NodePath("../Adelie/RingAnim/RingIndicator")
+[node name="ProjectileMother" parent="." instance=ExtResource("4_r851w")]

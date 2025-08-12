@@ -219,9 +219,3 @@ autoplay = ""
 [node name="CollisionShape2D" parent="." index="3"]
 position = Vector2(-17.2857, 1.00001)
 shape = SubResource("RectangleShape2D_8d6h6")
-
-[node name="hp_bar" parent="." index="4"]
-offset_left = -296.0
-offset_top = -168.0
-offset_right = -212.0
-offset_bottom = 337.0
