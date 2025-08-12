@@ -12,7 +12,7 @@ The actual value is set here, and all stats are proportional to the coefficient 
 """
 
 """Combat Balance"""
-var move_cooldown: float = 1.0
+var move_cooldown: float = 0.25
 var rotation_speed: int = 10
 var speed: int = 5000
 var acceleration: float = 0.08
@@ -35,7 +35,5 @@ var attack_colour_dict = {	# colours projectiles and damage numbers according to
 enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Move_Spawn_Type {FIRED, ON_RING, SUMMON}
 
-"""Not yet in use"""
-var delay : int = 1
-# var spawn_distance (to make sure to clear the unit's own hitbox...?? 
-# or maybe this will because irrelevant once the layers are set up) 
+
+

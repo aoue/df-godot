@@ -1,21 +1,9 @@
 commit notes:
--updated animation visuals to communicate backup slowdown
--finished summon move speed slowdowns only imposed once firing starts
--passthrough projectiles cannot hit the same target more than once
--added recoil parameter to moves, of both on hit and on fire types
+-added loadout functionality sans swapping
+-added combo incentive system
+-added loadout swapping
 
 ======= TODO: combat feeling
-
-- visuals:
-	-summon move 'launch animation' when projectile is fired
-
-- create the loadout class
-	-a loadout has 3 moves attached to it in order
-	-you may select the equipped move with (1,2,3); (start with 1)
-	-successive left clicks fire the next move in the sequence
-	-a move, once used, cannot be used again (refresh function will unlock them all)
-	test:
-	-make sure that anse can go through the loadout and use each of the 3 moves one time
 
 - background visuals
 	-draw a background image
@@ -53,8 +41,16 @@ camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
 
+- visuals:
+	-summon move 'launch animation' when projectile is fired
+	similar logic to melee finisher animation
 
 --- engagement
+
+- flow mechanic:
+	-some moves generate 'flow'
+	-some moves can consume 'flow' to increase their damage
+	just a little something for players to think about when building a combo, that's it.
 
 - some stuff is broken with multiple enemies here, btw. I think the issue is that they are not being instantiated separately. It's almost certainly this, but make sure before doing any more.
 	-pass to encounter manager and have it instantiate them from there
@@ -76,6 +72,9 @@ camera manager:
 	-when the decision has been reached (target + move):
 		-the enemy executes it until completion (hit occurs) or timeout (giving up)
 	and repeat
+
+	you can make a basic pattern to enemy attacks like this if you want:
+	-2 loadouts, but one loadout just has a 'stop' time waster move. interesting.
 
 - encounter ai:
 	-there is an encounter manager which helps with:

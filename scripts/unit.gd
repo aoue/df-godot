@@ -33,8 +33,11 @@ var recoil : Vector2
 # (will have a link to a move, which has both:
 # - a link to its projectile type 
 # - a function that specifies the usage and spawning of projectiles)
-@export var move1 : PackedScene
-var active_move : Object
+@export var all_loadouts : Array[Loadout]
+var loadout : Loadout
+var loadout_pointer : int
+var active_move : Move
+var early_exit_taken : bool = false
 
 func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	# sets the unit's stats to their initial state
@@ -42,6 +45,7 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	HP_cur = HP_max
 	PW_max = PW_max_coeff * Coeff.hp
 	PW_cur = PW_max
+	loadout_pointer = 0
 	
 	# temporary
 	combat_id = 0
@@ -62,6 +66,11 @@ func summon_waiting_for_2nd_click() -> bool:
 	return active_move.spawn_type == 2 and not summon_all_green
 
 # Attacking
+func early_exit() -> void:
+	attacking_duration_left = Coeff.move_cooldown
+	can_attack_cooldown = Coeff.move_cooldown
+	move_boost_duration_left = Coeff.move_cooldown
+
 func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
 	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
@@ -77,12 +86,33 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.move_duration * active_move.fire_table[projectile_counter]:
 			projectile_counter += 1
 			fire(unit_pos, ring_indicator_vector, ring_indicator_obj)
+			
+		#  try :combo incentive?
+		# if the move has hit, then you can immediately finish it after the last projectile has been fired
+		elif projectile_counter == len(active_move.fire_table) and scored_hit and not early_exit_taken:
+			early_exit_taken = true
+			early_exit()
 		return
 	if can_attack == false:
 		return
 	
+	# check loadout state: either give next move or switch to next loadout
+	if not loadout:
+		loadout = all_loadouts[0]
+	elif loadout.is_loadout_finished():
+		print("Current loadout finished... switching loadout")
+		loadout.finished()
+		# switch loadout
+		loadout_pointer += 1
+		if loadout_pointer > len(all_loadouts):
+			loadout_pointer = 0
+		loadout = all_loadouts[loadout_pointer]		
+	loadout.refresh()
+
+	var next_move = loadout.get_next_move()
+	
 	# enter 'new active move' state
-	active_move = move1.instantiate()  # will map depending on which move was selected
+	active_move = next_move.instantiate()
 	# set timers
 	attacking_duration_left = active_move.move_duration + active_move.summon_duration
 	move_boost_duration_left = active_move.move_speed_add_duration
@@ -93,6 +123,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	can_attack = false
 	scored_hit = false
 	summon_all_green = false
+	early_exit_taken = false
 
 func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# find its spawn location (between player and mouse), offset
@@ -132,6 +163,8 @@ func _process(delta):
 		else:
 			attacking_duration_left = max(0, attacking_duration_left - delta)
 	else:
+		if active_move:
+			active_move.queue_free()
 		active_move = null
 		can_attack_cooldown = max(0, can_attack_cooldown - delta)
 		if can_attack_cooldown == 0.0:

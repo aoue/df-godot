@@ -1,4 +1,5 @@
 extends Node
+class_name Move
 
 # Holds information used to create the projectiles resulting from the move's use.
 # Used in loadouts from unit.gd

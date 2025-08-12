@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://8f6wd8hvqtfp"]
+[gd_scene load_steps=20 format=3 uid="uid://8f6wd8hvqtfp"]
 
 [ext_resource type="Script" path="res://scripts/unit_body.gd" id="1_eqrot"]
 [ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
 [ext_resource type="Texture2D" uid="uid://lbyjfxsskwhc" path="res://assets/anims/adelie spritesheet.png" id="2_0odim"]
+[ext_resource type="PackedScene" uid="uid://tuj5a3vkff0o" path="res://scenes/Loadout.tscn" id="2_4ykhy"]
 [ext_resource type="Texture2D" uid="uid://bxk2020tvwb88" path="res://assets/ui/hp bar bg.png" id="2_r1v5x"]
 [ext_resource type="Texture2D" uid="uid://ct068dv45xwi0" path="res://assets/ui/hp bar fill.png" id="3_44yiu"]
 [ext_resource type="Texture2D" uid="uid://drd7h0wvo60pv" path="res://assets/ui/ring image.png" id="4_pvg52"]
@@ -105,6 +106,11 @@ speed_coeff = 1.0
 acceleration_coeff = 1.0
 
 [node name="Unit" parent="." instance=ExtResource("1_nye7s")]
+
+[node name="Loadout0" parent="Unit" instance=ExtResource("2_4ykhy")]
+
+[node name="Loadout1" parent="Unit" instance=ExtResource("2_4ykhy")]
+loadoutID = 1
 
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_kvqv2")

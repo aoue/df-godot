@@ -1,9 +1,12 @@
-[gd_scene load_steps=41 format=3 uid="uid://bheobjlecy41s"]
+[gd_scene load_steps=44 format=3 uid="uid://bheobjlecy41s"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_8i7ei"]
 [ext_resource type="Script" path="res://scripts/anse.gd" id="2_uger1"]
 [ext_resource type="Texture2D" uid="uid://dwvffgns8wmv7" path="res://assets/anims/anse spritesheet.png" id="3_h3deu"]
+[ext_resource type="PackedScene" uid="uid://bg324cc2cyi5h" path="res://scenes/moves/Rifle.tscn" id="3_nhue4"]
 [ext_resource type="PackedScene" uid="uid://c34vmtosa8veg" path="res://scenes/moves/Snap_swing.tscn" id="3_oldn2"]
+[ext_resource type="PackedScene" uid="uid://7o4ppb3nmby7" path="res://scenes/moves/Ram.tscn" id="4_1tntk"]
+[ext_resource type="PackedScene" uid="uid://bsv1rx2hbytve" path="res://scenes/moves/Pandora.tscn" id="5_8dghd"]
 [ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="5_lwr15"]
 [ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://assets/effects/boost f2.png" id="6_71na4"]
 
@@ -308,8 +311,18 @@ size = Vector2(332, 929)
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
 
-[node name="Unit" parent="." index="0"]
-move1 = ExtResource("3_oldn2")
+[node name="Unit" parent="." index="0" node_paths=PackedStringArray("all_loadouts")]
+all_loadouts = [NodePath("Loadout0"), NodePath("Loadout1")]
+
+[node name="Loadout0" parent="Unit" index="0"]
+slot0 = ExtResource("3_nhue4")
+slot1 = ExtResource("4_1tntk")
+slot2 = ExtResource("5_8dghd")
+
+[node name="Loadout1" parent="Unit" index="1"]
+slot0 = ExtResource("3_oldn2")
+slot1 = ExtResource("5_8dghd")
+slot2 = ExtResource("3_nhue4")
 
 [node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
