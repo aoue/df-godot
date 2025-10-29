@@ -1,19 +1,49 @@
 commit notes:
--loadout switch gate added
--added utility bar to help indicate the unit's state and how long remains in it
--loadout switch happens automatically now; forced gate (maybe this mechanic will go?)
--added prototype of stat labels
--had a bluescreen that messed projectile spawning up somehow, implemented projectile mother to avoid the issue forever (also updated drivers)
+-
 
 ======= TODO: combat feeling
 
+- new visual take:
+	- unit sprites
+		- redo attacks/damaged/dead for anse
+	- draw an example background just as a plain image
+		- we want anse to fit into the background prettily
+
 - background visuals
+	-plain background to match with player
+	-snow effect too (and wind too?)
+	from that nice image we had working:
+	convert it to a tilemap
+	-snow
 	-draw a background image
 	-draw rocks/pillars
+
+- adelie unit visual overhaul
+	- update the spritesheet
+
+- system to fire projectiles in multiple directions
+	in addition to the projectile list, there is a projectile offset
+	- range: 0-359
+	- offset variable: fires the whole projectile list at each intervals.
+	- e.g. 0 fires from the front. 90 fires in the 4 cardinal directions (0, 90, 180, 270)
+	but uses the same projectile list for each one.
+
+- new movement system to consider and test
+	create a branch to test it
+	2nd reflection:
+	-w/s acceleration towards pointer
+	-a/d for short sideways dashes (slows forward/back acceleration too, probably)
+	when close to an enemy, your side dashes and small movement should work
+	but to reposition yourself, etc, you will need to rely on your movement
+	-this system should also be flexible enough to work for flight challenges too
+	-fly through with mouth and use boosts to dodge obstacles without losing speed
+
+- melee projectile colliders
+	- they should extend all the way from the unit's core to the endpoint. it's not cool to miss the target because they are too close inside your ring.
 	
 - background collision
 	-map scene: main background image and edge borders collision
-	-obstacle scene: iamge (rocks/pillar) and collision
+	-obstacle scene: image (rocks/pillar) and collision
 	a background would probably be best created dynamically within the editor, probably.
 	-in that case, maybe we should look into tilesets for this?
 
@@ -30,6 +60,10 @@ camera manager:
 	just a little something for players to think about when building a combo, that's it.
 
 --- engagement
+
+- red line tracer
+	- draw a line between mouse position and player to help with aiming
+	- or should we?
 
 - remember to create the combat ai in such a way to allow 3-way battles.
 
