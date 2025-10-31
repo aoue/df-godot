@@ -3,11 +3,20 @@ commit notes:
 
 ======= TODO: combat feeling
 
+- note:
+	- add shadows baked in to all the sprites
+
 - new visual take:
-	- unit sprites
-		- redo attacks/damaged/dead for anse
-	- draw an example background just as a plain image
-		- we want anse to fit into the background prettily
+	draw an example background just as a plain image
+	- we want anse to fit into the background prettily pretty
+	gather refs:
+	- folder already started
+	- baldr sky/heart
+	- just look around i guess, dragon's crown, maybe? 13 sentinels, maybe?
+	some places to start:
+	- a snowy tunnel inside
+	- snow dunes outside
+	- snowy ruins outside
 
 - background visuals
 	-plain background to match with player
