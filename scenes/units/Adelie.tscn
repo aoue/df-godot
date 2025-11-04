@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c2ibc55iafa7i"]
+[gd_scene load_steps=26 format=3 uid="uid://c2ibc55iafa7i"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_ixxd5"]
 [ext_resource type="Script" path="res://scripts/adelie.gd" id="2_opqaw"]
@@ -199,10 +199,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8d6h6"]
-size = Vector2(292.572, 442)
-
 [node name="Adelie" instance=ExtResource("1_ixxd5")]
+collision_layer = 1
 script = ExtResource("2_opqaw")
 HP_max_coeff = 0.25
 speed_coeff = 0.75
@@ -215,7 +213,3 @@ position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_id33x")
 animation = &"6_melee"
 autoplay = ""
-
-[node name="CollisionShape2D" parent="." index="3"]
-position = Vector2(-17.2857, 1.00001)
-shape = SubResource("RectangleShape2D_8d6h6")

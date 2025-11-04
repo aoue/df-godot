@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bheobjlecy41s"]
+[gd_scene load_steps=37 format=3 uid="uid://bheobjlecy41s"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_8i7ei"]
 [ext_resource type="Script" path="res://scripts/anse.gd" id="2_uger1"]
@@ -271,9 +271,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_th8fa"]
-size = Vector2(332, 929)
-
 [node name="Anse" node_paths=PackedStringArray("boost_anim") instance=ExtResource("1_8i7ei")]
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
@@ -298,11 +295,10 @@ scale = Vector2(2.5, 2.631)
 sprite_frames = SubResource("SpriteFrames_kvmtv")
 animation = &"boost"
 
-[node name="CollisionShape2D" parent="." index="3"]
-position = Vector2(-37, 3.5)
-shape = SubResource("RectangleShape2D_th8fa")
+[node name="MovementHitbox" parent="." index="4"]
+position = Vector2(0, 416.688)
 
-[node name="Camera2D" type="Camera2D" parent="." index="7"]
+[node name="Camera2D" type="Camera2D" parent="." index="6"]
 scale = Vector2(1.33333, 1.33333)
 zoom = Vector2(0.2, 0.2)
 position_smoothing_enabled = true

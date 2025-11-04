@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cweuj6pt4a0p8"]
+
+[ext_resource type="Texture2D" uid="uid://ch0w8dyya0wx3" path="res://assets/maps/mats/test mat.png" id="1_kus1m"]
+
+[node name="Geography" type="Node2D"]
+
+[node name="SpriteMat" type="Sprite2D" parent="."]
+scale = Vector2(4, 4)
+texture = ExtResource("1_kus1m")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(0, -100)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(-7674, -1299)
+scale = Vector2(37.45, 33.1)
+build_mode = 1
+polygon = PackedVector2Array(409.506, 171.027, 409.506, -39.6677, 260.748, -29.9094, 175.274, 34.9547, 148.171, 38.3082, 95.9146, 32.4471, 38.6649, -1.0574, 0, 0, -0.640854, 170.393)

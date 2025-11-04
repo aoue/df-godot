@@ -1,43 +1,76 @@
 commit notes:
--
+-started geography scene with mat and world border
+-redid collision to decouple projectile collision and movement collision
+
 
 ======= TODO: combat feeling
 
-- note:
-	- add shadows baked in to all the sprites
+collision layers/masks notes:
+	- 1: everything related to units moving and hitting world border or obstacles.
+	- 2: everything related to projectiles hitting at units and obstacles.
 
-- new visual take:
-	draw an example background just as a plain image
-	- we want anse to fit into the background prettily pretty
-	gather refs:
-	- folder already started
-	- baldr sky/heart
-	- just look around i guess, dragon's crown, maybe? 13 sentinels, maybe?
-	some places to start:
-	- a snowy tunnel inside
-	- snow dunes outside
-	- snowy ruins outside
+next steps:
+- import mat into scene---------------------------------------------------------[DONE]
+- create borders around mat-----------------------------------------------------[DONE]
+- decouple movement/projectile collision----------------------------------------[DONE]
+- create obstacle object (scene) that	
+	- has bullet collision
+	- has unit collision
+- before going too far, make them pathfinding compatible
+	- something simple like ai on one side, a wall, move to other side
+	- we will know it works if they can circumnavigate it
 
-- background visuals
-	-plain background to match with player
-	-snow effect too (and wind too?)
-	from that nice image we had working:
-	convert it to a tilemap
-	-snow
-	-draw a background image
-	-draw rocks/pillars
+- backgrounds and collision (graphical)
+	- it would be really cool if objects and background borders had an indicator of where
+	  exactly a border is.
+	- for example, something like an inobtrusive dotted line around collision objects.
+
+- new visual take
+	things to remember for background:
+	- should be clear where the border with the out of bounds area is.
+	- big flat image map to make the background image. does nothing.
+		- is it troublesome to have a massive png in the level? No, almost certainly not.
+		- and if it is, then you can always change how things work. 
+	- then place obstacles and other important things on the level mat.
+		- have a big set of obstacles, so we can use many of them without repeating too much.
+	- can also place non-obstacles too, of course. Just visual flavor.
+	a single map is only geographic and can be reused across many encounters.
+	and in fact, it should be.
 
 - adelie unit visual overhaul
 	- update the spritesheet
 
 - system to fire projectiles in multiple directions
-	in addition to the projectile list, there is a projectile offset
-	- range: 0-359
-	- offset variable: fires the whole projectile list at each intervals.
-	- e.g. 0 fires from the front. 90 fires in the 4 cardinal directions (0, 90, 180, 270)
-	but uses the same projectile list for each one.
+	of course we want moves that are able to shoot in every direction.
+	in addition to the projectile list, there is a projectile offset list
+	- for each entry in the projectile list, it fires a projectile at every position in the offset list.
+	- entries in the list range from 0-359 are correspond to a position around the unit relative to the position
+	  of the unit circle arrow.
 
 - new movement system to consider and test
+	will this really work?
+	i think the main issue with it is that:
+	- it is possible to adjust to w/s for acceleration/de towards pointer
+	- but it is much harder for the side dashes. So change how they work.
+	what about something like:
+	- double tap in the constant direction? this way you don't have to disorient yourself everytime.
+	- you would also have to let go of the de/accelerator before hand though (but i think that's fine)
+
+	another concern is that it will feel troublesome to position yourself for your combos.
+	- i think that is true. how can it be fixed, though?
+	- maybe on the contrary it means that you should be more careful with positioning?
+
+	ACTUALLY, here's like probably a way better idea:
+	- instead of shift being a boost, holding shift would enter into flight mode.
+	- when in flight mode, character moves in direction of pointer. faster than normal.
+	- probably there would also be a limited duration to it.
+	- simple as.
+	so you would only want to do this to escape enemies, or close distance fast, or dodge a tricky attack.
+	- does it create a situation where you can just shift and run away every time an enemy attacks?
+	- maybe, but you still have to get closer yourself too, you know.
+	- also, you could still do that in baldr sky, but game still slapped.
+	- our method of forcing different weapon sets to be equipped should combat that, right?
+
 	create a branch to test it
 	2nd reflection:
 	-w/s acceleration towards pointer
@@ -46,6 +79,7 @@ commit notes:
 	but to reposition yourself, etc, you will need to rely on your movement
 	-this system should also be flexible enough to work for flight challenges too
 	-fly through with mouth and use boosts to dodge obstacles without losing speed
+
 
 - melee projectile colliders
 	- they should extend all the way from the unit's core to the endpoint. it's not cool to miss the target because they are too close inside your ring.
@@ -65,8 +99,19 @@ camera manager:
 
 - flow mechanic:
 	-some moves generate 'flow'
-	-some moves can consume 'flow' to increase their damage
+	-some moves can consume 'flow' to change their effect
 	just a little something for players to think about when building a combo, that's it.
+
+- encounter design:
+	a given encounter will be made up of the following:
+	- geography: the scene that holds the mat and the obstacles placed on it.
+	- army setup: given the geography, this is where all units are placed initially.
+	- plot: potential intro and ending cutscene sequences. Kept simple, usually.
+	- encounter: rules that dictate how the encounter will play out in terms of combat, like:
+		- when to spawn additional enemies/allies (timing, defeated x, etc)
+		- unusual victory/defeat conditions (time elapses, ally/boss defeated, etc)
+		- scrolling, the route and the speed, if applicable.
+		this could end up being complicated, with scrolling, then a room, then more scrolling, etc.
 
 --- engagement
 

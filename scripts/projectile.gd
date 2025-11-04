@@ -45,18 +45,23 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	# set collision parameters: 
 	
 func _on_body_entered(_body) -> void:
+	pass
+	
+		
+func _on_area_entered(area) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
 	
 	hit_something = true
 	
 	# Let the target know they've been hit (we trust them to handle this on their end.)
-	var overlapping_bodies = get_overlapping_bodies()
-	for hit_body in overlapping_bodies:
-		if hit_body.unit.combat_id in hit_set:
+	var overlapping_areas = get_overlapping_areas()
+	for reporter in overlapping_areas:
+		if reporter.get_unit_id() in hit_set:
 			continue
-		hit_set.append(hit_body.unit.combat_id)
-		hit_body.being_hit(damage, knockback, stun)
+		hit_set.append(reporter.get_unit_id())
+		
+		reporter.report_hit(damage, knockback, stun)
 		
 		# show damage number
 		var floating_damage_text = damage_label.instantiate()
@@ -70,10 +75,10 @@ func _on_body_entered(_body) -> void:
 		var placement_noise: Vector2 = Vector2(randi_range(-noise/2, noise/2), randi_range(-noise/2, noise/2))
 		floating_damage_text.position = placement_noise
 		
-		hit_body.add_child(floating_damage_text)
+		reporter.add_child(floating_damage_text)
 		
 		# report hit and hit recoil if applicable
-		user.report_hit(hit_body.global_position)
+		user.report_hit(reporter.global_position)
 	
 	# Hide bullet and collider (unless passthrough)
 	if not passthrough:
@@ -81,6 +86,7 @@ func _on_body_entered(_body) -> void:
 		projectile_sprite.hide()
 		set_deferred("monitoring", false)
 		set_deferred("monitorable", false)
+	
 	
 func _process(delta: float) -> void:
 	# Check to despawn (lifetime)
@@ -98,10 +104,3 @@ func _process(delta: float) -> void:
 		position = position + (speed * direction * delta)
 	
 
-
-
-	
-	
-	
-	
-	

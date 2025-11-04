@@ -8,6 +8,8 @@
 size = Vector2(115, 31)
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider")]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_xmqdq")
 projectile_sprite = NodePath("Projectile Sprite")
 projectile_collider = NodePath("Projectile Collider")
@@ -20,4 +22,5 @@ texture = ExtResource("3_t6val")
 position = Vector2(4.5, -1.5)
 shape = SubResource("RectangleShape2D_o61th")
 
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

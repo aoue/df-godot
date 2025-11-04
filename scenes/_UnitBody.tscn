@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://8f6wd8hvqtfp"]
+[gd_scene load_steps=24 format=3 uid="uid://8f6wd8hvqtfp"]
 
 [ext_resource type="Script" path="res://scripts/unit_body.gd" id="1_eqrot"]
 [ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://drd7h0wvo60pv" path="res://assets/ui/ring image.png" id="4_pvg52"]
 [ext_resource type="Texture2D" uid="uid://p3cpcp3500ad" path="res://assets/ui/ring indicator.png" id="5_srvee"]
 [ext_resource type="Texture2D" uid="uid://lw0say8dvjmh" path="res://assets/ui/summon indicator.png" id="6_rlaow"]
+[ext_resource type="Script" path="res://scripts/hit_reporter.gd" id="8_5clpj"]
 [ext_resource type="Texture2D" uid="uid://yxdat8gwqop3" path="res://assets/ui/utility bar empty.png" id="10_2emss"]
 [ext_resource type="Texture2D" uid="uid://ct8unmymjcyr5" path="res://assets/ui/utility bar fill.png" id="11_mt87a"]
 
@@ -91,10 +92,14 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ieh1m"]
+height = 27.3418
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
-size = Vector2(516, 1026)
+size = Vector2(516, 83.7189)
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "utility_bar", "ring", "ring_indicator", "summon_indicator", "stat_labels", "hp_label", "utility_label", "speed_label")]
+collision_layer = 0
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
@@ -138,7 +143,20 @@ rotation = 6.28319
 texture = ExtResource("5_srvee")
 offset = Vector2(650, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." node_paths=PackedStringArray("bodyChief")]
+scale = Vector2(1, 0.990325)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("8_5clpj")
+bodyChief = NodePath("..")
+
+[node name="ProjectileHitbox" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -89.8695)
+scale = Vector2(-20.8048, 25.711)
+shape = SubResource("CapsuleShape2D_ieh1m")
+
+[node name="MovementHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 394)
 shape = SubResource("RectangleShape2D_4brxe")
 
 [node name="HPBar" type="TextureProgressBar" parent="."]
