@@ -13,4 +13,5 @@ func _process(delta):
 func place_projectile(proj : Object) -> void:
 	# called when a projectile needs to be created in the world
 	# (except for ring types)
+	#add_child(proj)
 	add_child(proj)

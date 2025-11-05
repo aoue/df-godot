@@ -148,15 +148,15 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	if active_move.recoil_moment == 1:
 		recoil = spawn_direction * active_move.recoil_knockback * Coeff.knockback
 	
-	# instantiate projectile into the scene
+	# instantiate projectile 'proj'
 	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance, self)
 	if active_move.spawn_type == 1:  # 'on ring' 
 		proj.position = Vector2(offset, 0)
 		ring_indicator_obj.add_child(proj)
 	else:  # 'fired' or 'summon'
+		# this projectile type should not be tied to the unit.
+		# instead it will be tied to the projectile mother, guardian of all projectiles.
 		ProjectileMother.place_projectile(proj)
-		#Encounter.place_projectile(proj)
-		#add_child(proj)
 
 func report_hit(hit_body_position : Vector2) -> void:
 	# Called by projectile when it scores a hit to let the unit know what's happened.

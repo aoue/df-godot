@@ -1,7 +1,6 @@
 commit notes:
--started geography scene with mat and world border
--redid collision to decouple projectile collision and movement collision
-
+-added obstacle with proj and unit collision
+-fixed bug where projectiles were hidden behind geography, i was expecting children to inherit parent's z-order but it seems that they do not
 
 ======= TODO: combat feeling
 
@@ -13,29 +12,29 @@ next steps:
 - import mat into scene---------------------------------------------------------[DONE]
 - create borders around mat-----------------------------------------------------[DONE]
 - decouple movement/projectile collision----------------------------------------[DONE]
-- create obstacle object (scene) that	
-	- has bullet collision
-	- has unit collision
-- before going too far, make them pathfinding compatible
-	- something simple like ai on one side, a wall, move to other side
-	- we will know it works if they can circumnavigate it
+- create obstacle object (scene)------------------------------------------------[DONE]
+	- create and import sprite asset----------------------------------------[DONE]
+	- has bullet collision--------------------------------------------------[DONE]
+	- has unit collision----------------------------------------------------[DONE]
+	- place obstacle scene into geography scene-----------------------------[DONE]
+	- ensure that obstacle collision works----------------------------------[DONE]
+	- bug: projectiles do not show up on top of geography-------------------[DONE]
+	- before going too far, make sure obstacles are pathfinding compatible
+		something simple like :
+		- ai on one side of an obstacle, a hardcoded dest on the other
+		- make it move to other side
+		we will know it works if ai guy can circumnavigate it
 
 - backgrounds and collision (graphical)
 	- it would be really cool if objects and background borders had an indicator of where
 	  exactly a border is.
-	- for example, something like an inobtrusive dotted line around collision objects.
+	- for example, something like an inobtrusive dotted line around the edges of collision objects.
+	bake it into art? seems simplest.
+	can then just draw polygons along them.
 
-- new visual take
-	things to remember for background:
-	- should be clear where the border with the out of bounds area is.
-	- big flat image map to make the background image. does nothing.
-		- is it troublesome to have a massive png in the level? No, almost certainly not.
-		- and if it is, then you can always change how things work. 
-	- then place obstacles and other important things on the level mat.
-		- have a big set of obstacles, so we can use many of them without repeating too much.
-	- can also place non-obstacles too, of course. Just visual flavor.
-	a single map is only geographic and can be reused across many encounters.
-	and in fact, it should be.
+- encounter + geography
+	- an encounter should take a geography object to use as the level map
+	so do this
 
 - adelie unit visual overhaul
 	- update the spritesheet

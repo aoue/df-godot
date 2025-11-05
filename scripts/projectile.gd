@@ -45,7 +45,9 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	# set collision parameters: 
 	
 func _on_body_entered(_body) -> void:
-	pass
+	# This should trigger when hitting a border or projectile, because those have bodies.
+	# So on collision, betray and destroy yourself.
+	lifetime = 0.0
 	
 		
 func _on_area_entered(area) -> void:
@@ -91,7 +93,7 @@ func _on_area_entered(area) -> void:
 func _process(delta: float) -> void:
 	# Check to despawn (lifetime)
 	lifetime -= delta
-	if lifetime < 0.0:
+	if lifetime <= 0.0:
 		queue_free()
 	
 	# Control movement
