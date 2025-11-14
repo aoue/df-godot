@@ -1,6 +1,5 @@
 commit notes:
--added obstacle with proj and unit collision
--fixed bug where projectiles were hidden behind geography, i was expecting children to inherit parent's z-order but it seems that they do not
+-added geography + obstacle navigation and pathfinding
 
 ======= TODO: combat feeling
 
@@ -19,22 +18,12 @@ next steps:
 	- place obstacle scene into geography scene-----------------------------[DONE]
 	- ensure that obstacle collision works----------------------------------[DONE]
 	- bug: projectiles do not show up on top of geography-------------------[DONE]
-	- before going too far, make sure obstacles are pathfinding compatible
-		something simple like :
-		- ai on one side of an obstacle, a hardcoded dest on the other
-		- make it move to other side
-		we will know it works if ai guy can circumnavigate it
-
-- backgrounds and collision (graphical)
-	- it would be really cool if objects and background borders had an indicator of where
-	  exactly a border is.
-	- for example, something like an inobtrusive dotted line around the edges of collision objects.
-	bake it into art? seems simplest.
-	can then just draw polygons along them.
-
-- encounter + geography
-	- an encounter should take a geography object to use as the level map
-	so do this
+	- reorganize so that obstacles are a part of geography scene------------[DONE]
+	- add pathfinding around obstacles
+		- should probably be a part of the geography scene--------------[DONE]
+		- ai on one side of an obstacle, a hardcoded dest on the other--[DONE]
+		- task it to move to the other side-----------------------------[DONE]
+		we will know it works if ai guy can circumnavigate it-----------[DONE]
 
 - adelie unit visual overhaul
 	- update the spritesheet
@@ -79,18 +68,9 @@ next steps:
 	-this system should also be flexible enough to work for flight challenges too
 	-fly through with mouth and use boosts to dodge obstacles without losing speed
 
-
-- melee projectile colliders
-	- they should extend all the way from the unit's core to the endpoint. it's not cool to miss the target because they are too close inside your ring.
-	
-- background collision
-	-map scene: main background image and edge borders collision
-	-obstacle scene: image (rocks/pillar) and collision
-	a background would probably be best created dynamically within the editor, probably.
-	-in that case, maybe we should look into tilesets for this?
-
-- map logic
-	-units can navigate around obstacles
+- point of fire problem:
+	- if an enemy is too close, you could fire past them. and the player could facehug enemies too.
+	this is undesirable, so we need a solution.
 
 camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
@@ -101,7 +81,7 @@ camera manager:
 	-some moves can consume 'flow' to change their effect
 	just a little something for players to think about when building a combo, that's it.
 
-- encounter design:
+- encounter scene expansion:
 	a given encounter will be made up of the following:
 	- geography: the scene that holds the mat and the obstacles placed on it.
 	- army setup: given the geography, this is where all units are placed initially.
@@ -111,12 +91,17 @@ camera manager:
 		- unusual victory/defeat conditions (time elapses, ally/boss defeated, etc)
 		- scrolling, the route and the speed, if applicable.
 		this could end up being complicated, with scrolling, then a room, then more scrolling, etc.
+	so create a full encounter scene with all this stuff defined.
 
---- engagement
+- backgrounds and collision (graphical)
+	- it would be really cool if objects and background borders had an indicator of where
+	  exactly a border is.
+	- for example, something like an inobtrusive dotted line around the edges of collision objects.
+	bake it into art? seems simplest.
+	can then just draw polygons along them.
 
 - red line tracer
-	- draw a line between mouse position and player to help with aiming
-	- or should we?
+	- should we draw a line between mouse position and player to help with aiming?
 
 - remember to create the combat ai in such a way to allow 3-way battles.
 

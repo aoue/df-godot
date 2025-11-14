@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
 [ext_resource type="PackedScene" uid="uid://by800qhg41i6u" path="res://scenes/ProjectileMother.tscn" id="4_r851w"]
 [ext_resource type="PackedScene" uid="uid://cweuj6pt4a0p8" path="res://scenes/Geography.tscn" id="5_1ojfr"]
-[ext_resource type="PackedScene" uid="uid://cx6agfwmkn6rl" path="res://scenes/Obstacle.tscn" id="6_xw600"]
+[ext_resource type="Texture2D" uid="uid://ftw51jn7m7ou" path="res://assets/ui/encounter_cursor.png" id="6_v3l5k"]
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_kqml8")
@@ -14,9 +14,9 @@ Adelie = ExtResource("4_4r8bx")
 
 [node name="Geography" parent="." instance=ExtResource("5_1ojfr")]
 
-[node name="Obstacle" parent="." instance=ExtResource("6_xw600")]
-position = Vector2(1146, 1312)
-rotation = -0.176278
-scale = Vector2(2, 2)
-
 [node name="ProjectileMother" parent="." instance=ExtResource("4_r851w")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(911, 2335)
+scale = Vector2(5, 5)
+texture = ExtResource("6_v3l5k")

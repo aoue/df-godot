@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cweuj6pt4a0p8"]
+[gd_scene load_steps=4 format=3 uid="uid://cweuj6pt4a0p8"]
 
 [ext_resource type="Texture2D" uid="uid://ch0w8dyya0wx3" path="res://assets/maps/mats/test mat.png" id="1_kus1m"]
+[ext_resource type="PackedScene" uid="uid://cx6agfwmkn6rl" path="res://scenes/Obstacle.tscn" id="2_p63s6"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_5f1ao"]
+vertices = PackedVector2Array(-609, 480, 117, 419, 393, 423, 1887, 1047, -651, 547, 437, 356, 1882, -667, 519, -596, 357, 266, -286, -64, 188, 304, -548, -32, 111, 408, -687, 390, -1915, 1038, -1910, -344, -1556, -349, -1027, -80, -856, 428, -934, 532, -928, 543)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(5, 6, 3, 2), PackedInt32Array(7, 6, 5, 8), PackedInt32Array(9, 7, 8, 10), PackedInt32Array(11, 9, 12, 1, 0, 13), PackedInt32Array(14, 15, 16, 17, 18, 19), PackedInt32Array(9, 10, 12), PackedInt32Array(17, 11, 13, 18), PackedInt32Array(14, 19, 20), PackedInt32Array(3, 14, 20, 4)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-290, -74, 516, -606, 1892, -678, 1898, 1058, -1926, 1048, -1920, -354, -1554, -360, -1024, -90, -548, -42)])
+source_geometry_group_name = &"navigation_polygon_source_group"
 
 [node name="Geography" type="Node2D"]
 scale = Vector2(4, 4)
@@ -9,6 +16,7 @@ scale = Vector2(4, 4)
 texture = ExtResource("1_kus1m")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+visible = false
 position = Vector2(0, -100)
 scale = Vector2(0.249385, 0.249385)
 collision_mask = 0
@@ -18,3 +26,14 @@ position = Vector2(-7706.95, -1026.52)
 scale = Vector2(37.45, 33.1)
 build_mode = 1
 polygon = PackedVector2Array(409.506, 171.027, 409.506, -39.6677, 260.748, -29.9094, 175.274, 34.9547, 148.171, 38.3082, 95.9146, 32.4471, 38.6649, -1.0574, 0, 0, -0.640854, 170.393)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_5f1ao")
+
+[node name="Obstacle1" parent="NavigationRegion2D" instance=ExtResource("2_p63s6")]
+position = Vector2(276, 348)
+scale = Vector2(0.5, 0.5)
+
+[node name="Obstacle2" parent="NavigationRegion2D" instance=ExtResource("2_p63s6")]
+position = Vector2(-768, 472)
+scale = Vector2(0.5, 0.5)
