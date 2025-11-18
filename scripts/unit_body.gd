@@ -63,25 +63,13 @@ func get_direction_input() -> Vector2:
 	return Vector2.ZERO
 	
 func get_boost_input(direction: Vector2) -> bool:
-	if boost_duration > 0.0:  # already boosting
-		return true
-		
-	if Input.is_action_pressed('boost') and boost_cooldown <= 0.0 and direction.length() > 0:  # start boosting
-		# Save current direction for our boost
-		boost_vector = direction
-		boost_duration = boost_full_duration
-		boost_cooldown = boost_full_cooldown + boost_full_duration  # wow that's pretty smart (it was my idea)
-		return true
 	return false
 	
 func get_attack_input() -> bool:
 	return false
 
-func get_target_direction() -> Vector2:
-	# Returns the vector that the unitBody wants to move towards
-	return Vector2.ZERO
-	
-func get_mouse() -> Vector2:
+func get_target_position() -> Vector2:
+	# Returns the vector that the unitBody is looking at
 	return Vector2.ZERO
 
 """ Reacting """
@@ -183,14 +171,8 @@ func set_anim(direction: Vector2) -> void:
 			character_anim.play("8_special")
 		return
 	elif unit.attacking_duration_left > 0.0:
-		if unit.scored_hit:
-			if unit.active_move.animation_type == 0:
-				character_anim.play("6b_melee_finisher")
-			#elif unit.active_move.animation_type == 1:
-				#character_anim.play("7_ranged")
-			#else:
-				#character_anim.play("8_special")
-			
+		if unit.scored_hit and unit.active_move.animation_type == 0:
+			character_anim.play("6b_melee_finisher")
 		# Don't play any other animation while ongoing
 		return
 	
@@ -198,7 +180,7 @@ func set_anim(direction: Vector2) -> void:
 	# Set the rest animation corresponding to the vector between yourself and the target location.
 	# if x component is greater, then look to the side
 	# if y component is greater, then look up/down
-	var look_dir: Vector2 = (get_target_direction() - global_position).normalized()
+	var look_dir: Vector2 = (get_target_position() - global_position).normalized()
 	var x_power: float = look_dir.x
 	var y_power: float = look_dir.y
 	if x_power > 0.0:
@@ -298,7 +280,6 @@ func adjust_indicators(where: Vector2, delta: float):
 		summon_indicator.visible = false
 		ring_indicator.visible = true
 		
-
 func get_ring_indicator_vector() -> Vector2:
 	var x_component = cos(ring_indicator.rotation)
 	var y_component = sin(ring_indicator.rotation)
@@ -317,7 +298,7 @@ func _physics_process(delta: float) -> void:
 	var direction: Vector2 = get_direction_input()
 	var ring_direction: Vector2 = get_ring_indicator_vector()
 	var is_attacking: bool = get_attack_input()
-	var mouse_pos: Vector2 = get_mouse()
+	var target_pos: Vector2 = get_target_position()
 	var is_boosting: bool = get_boost_input(direction)
 	
 	var acceleration_value = acceleration
@@ -334,9 +315,8 @@ func _physics_process(delta: float) -> void:
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
 		direction = ring_direction
 		
-	adjust_indicators(mouse_pos, delta)
+	adjust_indicators(target_pos, delta)
 	go_move(direction, speed_value, acceleration_value)
-	#go_attack(is_attacking, position, ring_direction)
 	go_attack(is_attacking, global_position, ring_direction)
 	go_anim(delta, direction, is_boosting)
 	update_labels(speed_value)

@@ -1,32 +1,58 @@
 commit notes:
--added geography + obstacle navigation and pathfinding
+-started implementing structure for ai, remarrying unitbody's physics_process to adelie
+-generalized target position in unitbody to account for both player input and ai input
+
+======= NOTES
+collision layers/masks notes:
+	- 1: everything related to units moving and hitting world border or obstacles.
+	- 2: everything related to ANTI-ENEMY projectiles hitting units and obstacles.
+	- 3: everything related to ANTI-ALLY projectiles hitting units and obstacles
 
 ======= TODO: combat feeling
 
-collision layers/masks notes:
-	- 1: everything related to units moving and hitting world border or obstacles.
-	- 2: everything related to projectiles hitting at units and obstacles.
-
-next steps:
-- import mat into scene---------------------------------------------------------[DONE]
-- create borders around mat-----------------------------------------------------[DONE]
-- decouple movement/projectile collision----------------------------------------[DONE]
-- create obstacle object (scene)------------------------------------------------[DONE]
-	- create and import sprite asset----------------------------------------[DONE]
-	- has bullet collision--------------------------------------------------[DONE]
-	- has unit collision----------------------------------------------------[DONE]
-	- place obstacle scene into geography scene-----------------------------[DONE]
-	- ensure that obstacle collision works----------------------------------[DONE]
-	- bug: projectiles do not show up on top of geography-------------------[DONE]
-	- reorganize so that obstacles are a part of geography scene------------[DONE]
-	- add pathfinding around obstacles
-		- should probably be a part of the geography scene--------------[DONE]
-		- ai on one side of an obstacle, a hardcoded dest on the other--[DONE]
-		- task it to move to the other side-----------------------------[DONE]
-		we will know it works if ai guy can circumnavigate it-----------[DONE]
+- change visuals of melee on-ring projectiles:
+	- they should be more like arcs or arrows on the ring, covering a larger area along the length of it
+	looks cooler and is easier to hit
 
 - adelie unit visual overhaul
 	- update the spritesheet
+
+- enemy sample move:
+	- adelie dive: adds ring projectile, tries to ram unit by moving quickly a short distance towards target
+	test move on its own:
+	1. have the enemy unit stand there for a second, then use the move.
+	test walking and move together:
+	2. then, have the enemy unit walk towards the player until it gets close enough, then use the move.
+
+- basic enemy ai:
+	(every second or 1/2 second or so)
+	-enemy looks at all player units and decides who to attack based on:
+		-proximity preference (melee likes close, ranged likes far, others are flexible)
+		-how many other units are targeting it (stored by encounter manager)
+		this helps the battle flow better and not be a whole bunch of enemies all chasing after 1 character
+	-based on the chosen target, enemy decides what to do:
+		-checks against action ranges and decides based on that
+		-could attack melee, could attack ranged, could decide to approach or retreat instead
+	-when the decision has been reached:
+		-we calculate the position/or attack for the unit to use
+		-the enemy executes it until completion (hit occurs) or time elapses (~0.25 seconds) or the enemy is stunned into breaking it
+	then repeat
+
+	you can make a basic pattern to enemy attacks like this if you want:
+	-2 loadouts, but one loadout just has a 'stop' time waster move. so it gives a pause for the player.
+	maybe interesting?
+	WE WILL KNOW THIS IS DONE WHEN:
+	-we spawn in
+	-the enemy spawns in
+	-the enemy lunges for us, but we dodge
+	-we follow up and hit them, stunning them
+	-we use that moment to fall back and dodge their next move
+
+- combat feeling:
+	- it's not enough to work, it must also feel right.
+	we will be able to judge it feels right if we're in a situation where:
+	- we have a scene in a pretty encounter map with anse + Friday vs like 4 adelie.
+	(of course this is something we aren't just 1 step away from)
 
 - system to fire projectiles in multiple directions
 	of course we want moves that are able to shoot in every direction.
@@ -72,7 +98,7 @@ next steps:
 	- if an enemy is too close, you could fire past them. and the player could facehug enemies too.
 	this is undesirable, so we need a solution.
 
-camera manager:
+- camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
 
@@ -111,20 +137,6 @@ camera manager:
 
 - build loadouts properly:
 	-see paper notes for movesets. we'll need 2 for anse.
-
-- basic enemy ai:
-	(every second or 1/2 second or so)
-	-enemy looks at all player units and decides who to attack based on:
-		-proximity preference (melee likes close, ranged likes far, some are flexible)
-		-how many other units are targeting it (stored by encounter manager)
-	-enemy decides which move to use:
-		-could be ranged, could be melee, could decide to simply approach instead
-	-when the decision has been reached (target + move):
-		-the enemy executes it until completion (hit occurs) or timeout (giving up)
-	and repeat
-
-	you can make a basic pattern to enemy attacks like this if you want:
-	-2 loadouts, but one loadout just has a 'stop' time waster move. interesting.
 
 - encounter ai:
 	-there is an encounter manager which helps with:

@@ -275,6 +275,9 @@ animations = [{
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
 
+[node name="Unit" parent="." index="0"]
+unitName = "Anse"
+
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("3_nhue4")
 slot1 = ExtResource("4_1tntk")

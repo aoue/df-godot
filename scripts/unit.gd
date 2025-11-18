@@ -9,6 +9,7 @@ class_name Unit
 enum flag {PLAYER, ALLY, ENEMY}
 
 # Basic statistics
+@export var unitName : String
 var HP_max : int
 var HP_cur : int
 var PW_max : int

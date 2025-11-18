@@ -203,17 +203,20 @@ animations = [{
 collision_layer = 1
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
+desired_distance_to_target = 0.0
+desired_attackers_on_target = 0
 HP_max_coeff = 0.25
 speed_coeff = 0.33
 acceleration_coeff = 0.75
 
 [node name="Unit" parent="." index="0"]
+unitName = "Adelie"
 allegiance = 2
 
 [node name="CharacterAnim" parent="." index="1"]
 position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_id33x")
-animation = &"1_side_mov"
-autoplay = "1_side_mov"
+animation = &"0_side_rest"
+autoplay = ""
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." index="8"]
