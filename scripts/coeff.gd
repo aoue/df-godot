@@ -23,6 +23,7 @@ var damage: int = 1000
 var knockback: float = 200
 var hit_stun_duration: float = 1.0
 var stun_shield_duration: float = 1.0
+var ai_action_timer: float = 0.15
 
 """Purely Visual"""
 var damage_text_slowdown: float = 0.01

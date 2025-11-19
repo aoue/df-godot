@@ -1,6 +1,5 @@
 commit notes:
--started implementing structure for ai, remarrying unitbody's physics_process to adelie
--generalized target position in unitbody to account for both player input and ai input
+- created GameMother to store encounter-related details like units and gamerules. Added basic unit follow ai behavior.
 
 ======= NOTES
 collision layers/masks notes:
@@ -10,9 +9,12 @@ collision layers/masks notes:
 
 ======= TODO: combat feeling
 
-- change visuals of melee on-ring projectiles:
-	- they should be more like arcs or arrows on the ring, covering a larger area along the length of it
-	looks cooler and is easier to hit
+immediate notes:
+1. create a move for adelie to use (penguin rush)
+	a. calc direction of target
+	b. create ring projectile
+	c. move in that direction for duration
+2. once in position, choose to use the move
 
 - adelie unit visual overhaul
 	- update the spritesheet
@@ -53,6 +55,10 @@ collision layers/masks notes:
 	we will be able to judge it feels right if we're in a situation where:
 	- we have a scene in a pretty encounter map with anse + Friday vs like 4 adelie.
 	(of course this is something we aren't just 1 step away from)
+
+- change melee on-ring projectiles:
+	- they should be more like arcs or arrows on the ring, covering a larger area along the length of it
+	looks cooler and is easier to hit
 
 - system to fire projectiles in multiple directions
 	of course we want moves that are able to shoot in every direction.

@@ -18,17 +18,19 @@ How the AI works:
 var action_timer: float = 0.0  # The time remaining on the current action. Will reselect an action when it expires.
 
 # dummy testing variables
+var target_unit: UnitBody
 var movement_target_position: Vector2 = Vector2(1000.0, 2500.0)
 
-func _ready():
-	super()
-	actor_setup.call_deferred()
+#func _ready():
+	#super()
+	#actor_setup.call_deferred()
 
 """ Main Brain """
 func ponder() -> void:
 	decide_on_target()  # pick target
 	decide_on_action()  # pick what to do about it
 	pick_destination()  # set values that will lead to this execution
+	action_timer = Coeff.ai_action_timer
 
 """ Target Selection """
 func decide_on_target() -> void:
@@ -37,16 +39,23 @@ func decide_on_target() -> void:
 	# 1. [distance to target] compared to [desired_distance_to_target]
 	# 2. [friendlies already attacking target] compared to [desired_attackers_on_target]
 	# 3. []
-	pass
+	
+	# first, simply choose to target the first unit in Heroes. Set a vector2D.
+	var check_target: UnitBody
+	for hero in GameMother.get_heroes():
+		check_target = hero
+		break
+	target_unit = check_target
 
 """ Action Selection """
 func decide_on_action() -> void:
-	pass
+	movement_target_position = target_unit.position
 
 """ Action Calculation """
 func pick_destination() -> void:
 	if nav.is_navigation_finished():
-		set_movement_target(Vector2.ZERO)
+		var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * -1000)
+		set_movement_target(adjusted_position)
 	# otherwise, obviously pick something related to target and action
 
 """ Physics Process Helpers """
@@ -68,15 +77,17 @@ func get_target_position() -> Vector2:
 	return nav.get_next_path_position()
 
 """ Movement """
-func actor_setup():
-	await get_tree().physics_frame
-	set_movement_target(movement_target_position)
+#func actor_setup():
+	#await get_tree().physics_frame
+	#set_movement_target(movement_target_position)
 func set_movement_target(movement_target: Vector2):
 	nav.target_position = movement_target
 	
-#func _physics_process(delta):
+func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
 	## This is because it is only concerned with execution.
 	#
 	## think carefully about how this will integrate
-	#super(delta)
+	action_timer -= delta
+	super(delta)
+	
