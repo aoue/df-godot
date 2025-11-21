@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://ds57vrog0ydj8"]
+
+[ext_resource type="Script" path="res://scripts/ai_move.gd" id="1_0diew"]
+[ext_resource type="PackedScene" uid="uid://dusduqp0ukwfh" path="res://scenes/projectiles/Villain_projectile.tscn" id="2_7dt0e"]
+
+[node name="AiMove" type="Node2D"]
+script = ExtResource("1_0diew")
+min_range = 0.05
+max_range = 100.0
+fire_table = Array[float]([0.66, 0.5, 0.33])
+accuracy_deviation_label = 1
+user_speed_mod = 0.1
+user_rotation_mod = 0.25
+move_duration = 1.5
+recoil_moment = 1
+recoil_knockback = -1.0
+proj_spawn_offset = 1.0
+proj_speed = 2.5
+proj_damage = 0.08
+proj_damage_spread_percentage = 0.1
+proj_knockback = 1.0
+proj_stun = 1.0
+proj_lifetime = 2.0
+proj_scene = ExtResource("2_7dt0e")

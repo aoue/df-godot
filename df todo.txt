@@ -1,5 +1,5 @@
 commit notes:
-- created GameMother to store encounter-related details like units and gamerules. Added basic unit follow ai behavior.
+-continued working on enemy ai, fully implemented ranged attack.
 
 ======= NOTES
 collision layers/masks notes:
@@ -10,6 +10,18 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
+just added rifle to adelie
+-in addition to min/max range for moves, should we add angle requirement as well?
+
+create 'rush' move:
+	remember, these systems are generalized. So, build the infra along with the move.
+	==MELEE OPERATION
+	- save targeted location
+	- start move timer (switch to attacking animation)
+	- after projectile spawn delay, spawn projectile
+	- apply recoil
+	- (unit can still move as normal though. But should they? For now, yes. they will continue following after their target.)
+
 1. create a move for adelie to use (penguin rush)
 	a. calc direction of target
 	b. create ring projectile

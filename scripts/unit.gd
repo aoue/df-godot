@@ -15,7 +15,7 @@ var HP_cur : int
 var PW_max : int
 var PW_cur : int
 @export var allegiance : flag
-var combat_id : int  # set automatically when spawned in by encounter.
+var combat_id : int  # assigned each battle. Value doesn't matter, as long as it is unique. Used for hit reporting.
 
 # Attack boost variables
 var move_boost_duration_left : float = 0.0
@@ -31,9 +31,6 @@ var summon_all_green: bool = false
 var recoil : Vector2
 
 # Loadouts and moves
-# (will have a link to a move, which has both:
-# - a link to its projectile type 
-# - a function that specifies the usage and spawning of projectiles)
 @export var all_loadouts : Array[Loadout]
 var loadout : Loadout
 var loadout_pointer : int
@@ -50,10 +47,8 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	
 	loadout_pointer = 0
 	loadout_gate_time = 0.0
+	update_loadout_status()
 	
-	# temporary
-	combat_id = 0
-
 # Being Attacked
 func take_damage(damage : int) -> void:
 	HP_cur = clamp(HP_cur - damage, 0, HP_max)
@@ -90,6 +85,7 @@ func update_loadout_status() -> void:
 	loadout.refresh()
 
 func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
+	# This function is called like all the time when you are in an attack; as soon as you click to attack.
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
 	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
 	if attacking_duration_left > 0.0:
@@ -103,6 +99,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		# check against active move's fire times
 		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.move_duration * active_move.fire_table[projectile_counter]:
 			projectile_counter += 1
+			
 			fire(unit_pos, ring_indicator_vector, ring_indicator_obj)
 			
 		#  try :combo incentive?
@@ -118,7 +115,6 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	update_loadout_status()
 	if loadout_gate_time > 0.0:
 		return
-
 	var next_move = loadout.get_next_move()
 	
 	# enter 'new active move' state

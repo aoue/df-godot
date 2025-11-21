@@ -298,6 +298,10 @@ scale = Vector2(2.5, 2.631)
 sprite_frames = SubResource("SpriteFrames_kvmtv")
 animation = &"boost"
 
+[node name="Area2D" parent="." index="3"]
+collision_layer = 4
+collision_mask = 4
+
 [node name="Camera2D" type="Camera2D" parent="." index="6"]
 scale = Vector2(1.33333, 1.33333)
 zoom = Vector2(0.2, 0.2)

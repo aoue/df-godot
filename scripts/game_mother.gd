@@ -19,7 +19,18 @@ func add_hero(unit: UnitBody) -> void:
 	
 func add_villain(unit: UnitBody) -> void:
 	villains.append(unit)
-	
+
+func assign_combat_ids() -> void:
+	# given all the heroes and villains, assigns unique combat ids to all of them.
+	# necessary so we don't hit the same unit more than once with a single attack.
+	var id_value: int = 0
+	for hero in get_heroes():
+		hero.unit.combat_id = id_value
+		id_value += 1
+	for villain in get_villains():
+		villain.unit.combat_id = id_value
+		id_value += 1
+
 """ Encounter Getters """
 func get_heroes() -> Array[UnitBody]:
 	return heroes

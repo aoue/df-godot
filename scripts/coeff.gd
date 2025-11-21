@@ -23,7 +23,11 @@ var damage: int = 1000
 var knockback: float = 200
 var hit_stun_duration: float = 1.0
 var stun_shield_duration: float = 1.0
-var ai_action_timer: float = 0.15
+
+"""AI Parameters"""
+var ai_action_timer: float = 1.0
+var standoff: float = -1000.0  # distance away from target you want to stay at.
+var move_range: float = 1000.0  # affects 
 
 """Purely Visual"""
 var damage_text_slowdown: float = 0.01
