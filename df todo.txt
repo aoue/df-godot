@@ -1,5 +1,5 @@
 commit notes:
--continued working on enemy ai, fully implemented ranged attack.
+-changed proj spawning and redid melee projectiles hitboxes to prevent effective facehugging
 
 ======= NOTES
 collision layers/masks notes:
@@ -10,57 +10,37 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
-just added rifle to adelie
--in addition to min/max range for moves, should we add angle requirement as well?
+
+1. add a ranged move for the adelie-------------------------------[DONE]
+a. anti-facehugging measures (ranged)-----------------------------[DONE]
+b. anti-facehugging measures (melee arc areas)--------------------[DONE]
+c. loaded move dictates target position (ai loadout system)-------[]
+2. add a melee move for the adelie (see rush details below)-------[]
+3. use a loadout to make sure the adelie cycles moves properly----[]
+
+changes to do:
+	-current system is choose target position, choose move, use it
+	should we instead do choose move, choose target position, use it? Forces ai to follow loadouts.
+	let's try it like this for now. Because it would be better if it works.
+	(basically, the currently loaded move dictates what action they will go for.)
 
 create 'rush' move:
-	remember, these systems are generalized. So, build the infra along with the move.
-	==MELEE OPERATION
-	- save targeted location
-	- start move timer (switch to attacking animation)
-	- after projectile spawn delay, spawn projectile
-	- apply recoil
-	- (unit can still move as normal though. But should they? For now, yes. they will continue following after their target.)
-
-1. create a move for adelie to use (penguin rush)
-	a. calc direction of target
-	b. create ring projectile
-	c. move in that direction for duration
-2. once in position, choose to use the move
+	-it should work like this:
+	unit enters rush mode, creating a melee projectile area on the front of their ring.
+	then, they surge forward in the direction they are targeting.
+	
 
 - adelie unit visual overhaul
 	- update the spritesheet
 
-- enemy sample move:
-	- adelie dive: adds ring projectile, tries to ram unit by moving quickly a short distance towards target
-	test move on its own:
-	1. have the enemy unit stand there for a second, then use the move.
-	test walking and move together:
-	2. then, have the enemy unit walk towards the player until it gets close enough, then use the move.
-
 - basic enemy ai:
-	(every second or 1/2 second or so)
-	-enemy looks at all player units and decides who to attack based on:
-		-proximity preference (melee likes close, ranged likes far, others are flexible)
-		-how many other units are targeting it (stored by encounter manager)
-		this helps the battle flow better and not be a whole bunch of enemies all chasing after 1 character
-	-based on the chosen target, enemy decides what to do:
-		-checks against action ranges and decides based on that
-		-could attack melee, could attack ranged, could decide to approach or retreat instead
-	-when the decision has been reached:
-		-we calculate the position/or attack for the unit to use
-		-the enemy executes it until completion (hit occurs) or time elapses (~0.25 seconds) or the enemy is stunned into breaking it
-	then repeat
-
-	you can make a basic pattern to enemy attacks like this if you want:
-	-2 loadouts, but one loadout just has a 'stop' time waster move. so it gives a pause for the player.
-	maybe interesting?
 	WE WILL KNOW THIS IS DONE WHEN:
-	-we spawn in
-	-the enemy spawns in
-	-the enemy lunges for us, but we dodge
-	-we follow up and hit them, stunning them
+	-anse and an enemy are spawned in
+	-the enemy lunges for anse, but he dodges
+	-then, anse dives in and hits them, also stunning them and hitting a full combo
+	-after the combo, the enemy recovers and preps to hit us again
 	-we use that moment to fall back and dodge their next move
+	then the whole system basically repeats
 
 - combat feeling:
 	- it's not enough to work, it must also feel right.
@@ -80,37 +60,17 @@ create 'rush' move:
 	  of the unit circle arrow.
 
 - new movement system to consider and test
-	will this really work?
-	i think the main issue with it is that:
-	- it is possible to adjust to w/s for acceleration/de towards pointer
-	- but it is much harder for the side dashes. So change how they work.
-	what about something like:
-	- double tap in the constant direction? this way you don't have to disorient yourself everytime.
-	- you would also have to let go of the de/accelerator before hand though (but i think that's fine)
-
-	another concern is that it will feel troublesome to position yourself for your combos.
-	- i think that is true. how can it be fixed, though?
-	- maybe on the contrary it means that you should be more careful with positioning?
-
 	ACTUALLY, here's like probably a way better idea:
-	- instead of shift being a boost, holding shift would enter into flight mode.
+	- in normal movement mode, wasd like already implemented.
+	- instead of shift being a boost, pressing shift would enter into flight mode.
 	- when in flight mode, character moves in direction of pointer. faster than normal.
-	- probably there would also be a limited duration to it.
+	- probably there would also be a limited duration to it. and also a lockout period too.
 	- simple as.
 	so you would only want to do this to escape enemies, or close distance fast, or dodge a tricky attack.
 	- does it create a situation where you can just shift and run away every time an enemy attacks?
 	- maybe, but you still have to get closer yourself too, you know.
 	- also, you could still do that in baldr sky, but game still slapped.
 	- our method of forcing different weapon sets to be equipped should combat that, right?
-
-	create a branch to test it
-	2nd reflection:
-	-w/s acceleration towards pointer
-	-a/d for short sideways dashes (slows forward/back acceleration too, probably)
-	when close to an enemy, your side dashes and small movement should work
-	but to reposition yourself, etc, you will need to rely on your movement
-	-this system should also be flexible enough to work for flight challenges too
-	-fly through with mouth and use boosts to dodge obstacles without losing speed
 
 - point of fire problem:
 	- if an enemy is too close, you could fire past them. and the player could facehug enemies too.

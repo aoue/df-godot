@@ -277,6 +277,7 @@ boost_anim = NodePath("CharacterAnim/BoostAnim")
 
 [node name="Unit" parent="." index="0"]
 unitName = "Anse"
+allegiance = null
 
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("3_nhue4")
@@ -298,7 +299,7 @@ scale = Vector2(2.5, 2.631)
 sprite_frames = SubResource("SpriteFrames_kvmtv")
 animation = &"boost"
 
-[node name="Area2D" parent="." index="3"]
+[node name="AreaHitbox" parent="." index="3"]
 collision_layer = 4
 collision_mask = 4
 

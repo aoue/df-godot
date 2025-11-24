@@ -133,9 +133,11 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 
 func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# find its spawn location (between player and mouse), offset
-	# Note: 650 is the ring indicator offset.
+	
 	var offset: int = Coeff.proj_spawn_offset * active_move.proj_spawn_offset
-	var spawn_direction : Vector2 = ((unit_pos + offset * ring_indicator_vector) - unit_pos).normalized()  
+	var spawn_direction : Vector2 = Vector2.ZERO
+	if active_move.spawn_type != 1:
+		spawn_direction = ((unit_pos + offset * ring_indicator_vector) - unit_pos).normalized()
 	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * offset)
 	
 	#var temp = unit_pos - proj_spawn_loc
@@ -146,8 +148,8 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 		recoil = spawn_direction * active_move.recoil_knockback * Coeff.knockback
 	
 	# instantiate projectile 'proj'
-	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance, self)
-	if active_move.spawn_type == 1:  # 'on ring' 
+	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance, self)	
+	if active_move.spawn_type == 1:  # 'on ring'
 		proj.position = Vector2(offset, 0)
 		ring_indicator_obj.add_child(proj)
 	else:  # 'fired' or 'summon'

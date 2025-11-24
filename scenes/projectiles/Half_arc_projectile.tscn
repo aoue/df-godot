@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdwps6uouefeu"]
+
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Projectile.tscn" id="1_f02hv"]
+[ext_resource type="Texture2D" uid="uid://gdyc14v5oq2" path="res://assets/projectile/proj half arc.png" id="2_7kll3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_othab"]
+size = Vector2(601.167, 1252)
+
+[node name="Large Projectile" instance=ExtResource("1_f02hv")]
+
+[node name="Projectile Sprite" parent="." index="0"]
+texture = ExtResource("2_7kll3")
+
+[node name="Projectile Collider" parent="." index="1"]
+position = Vector2(308.667, -15)
+shape = SubResource("RectangleShape2D_othab")

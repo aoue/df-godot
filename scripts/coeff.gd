@@ -12,7 +12,9 @@ The values are set here, and all stats are proportional to the coefficient value
 """
 
 """Combat Balance"""
-var proj_spawn_offset : int = 750
+#var proj_spawn_offset : int = 750
+var proj_spawn_offset : int = 50  # to prevent facehugging, it seems.
+
 var loadout_cooldown: float = 2.0
 var move_cooldown: float = 0.25
 var rotation_speed: int = 10

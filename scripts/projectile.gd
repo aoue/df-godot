@@ -43,7 +43,10 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	damage_colour = Coeff.attack_colour_dict[arg_allegiance]
 	projectile_sprite.self_modulate = damage_colour
 	# set collision parameters: 
-	
+
+func flip_direction() -> void:
+	direction = -direction
+
 func _on_body_entered(_body) -> void:
 	# This should trigger when hitting a border or projectile, because those have bodies.
 	# So on collision, betray and destroy yourself.
