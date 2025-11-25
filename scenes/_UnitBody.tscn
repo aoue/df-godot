@@ -37,7 +37,6 @@ speed_coeff = 1.0
 acceleration_coeff = 1.0
 
 [node name="Unit" parent="." node_paths=PackedStringArray("all_loadouts") instance=ExtResource("1_nye7s")]
-allegiance = null
 all_loadouts = [NodePath("Loadout0"), NodePath("Loadout1")]
 
 [node name="Loadout0" parent="Unit" instance=ExtResource("2_4ykhy")]

@@ -1,5 +1,5 @@
 commit notes:
--changed proj spawning and redid melee projectiles hitboxes to prevent effective facehugging
+-added rush move to adelie
 
 ======= NOTES
 collision layers/masks notes:
@@ -10,12 +10,16 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
+-create 'rush' move:
+	-it should work like this:
+	unit enters rush mode, creating a melee projectile area on the front of their ring.
+	then, they surge forward in the direction they are targeting.
 
 1. add a ranged move for the adelie-------------------------------[DONE]
 a. anti-facehugging measures (ranged)-----------------------------[DONE]
 b. anti-facehugging measures (melee arc areas)--------------------[DONE]
+2. add a melee move for the adelie (see rush details below)-------[DONE]
 c. loaded move dictates target position (ai loadout system)-------[]
-2. add a melee move for the adelie (see rush details below)-------[]
 3. use a loadout to make sure the adelie cycles moves properly----[]
 
 changes to do:
@@ -24,10 +28,7 @@ changes to do:
 	let's try it like this for now. Because it would be better if it works.
 	(basically, the currently loaded move dictates what action they will go for.)
 
-create 'rush' move:
-	-it should work like this:
-	unit enters rush mode, creating a melee projectile area on the front of their ring.
-	then, they surge forward in the direction they are targeting.
+
 	
 
 - adelie unit visual overhaul

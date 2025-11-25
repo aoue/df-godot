@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://ds57vrog0ydj8"]
 
-[ext_resource type="Script" path="res://scripts/ai_move.gd" id="1_0diew"]
-[ext_resource type="PackedScene" uid="uid://dusduqp0ukwfh" path="res://scenes/projectiles/Villain_projectile.tscn" id="2_7dt0e"]
+[ext_resource type="Script" path="res://scripts/ai_move.gd" id="1_yllbx"]
+[ext_resource type="PackedScene" uid="uid://dusduqp0ukwfh" path="res://scenes/projectiles/Villain_projectile.tscn" id="2_ubqno"]
 
-[node name="AiMove" type="Node2D"]
-script = ExtResource("1_0diew")
-min_range = 0.05
-max_range = 100.0
+[node name="AiRifle" type="Node2D"]
+script = ExtResource("1_yllbx")
+min_range = 0.25
+max_range = 4.0
 fire_table = Array[float]([0.66, 0.5, 0.33])
 accuracy_deviation_label = 1
 user_speed_mod = 0.1
@@ -21,4 +21,4 @@ proj_damage_spread_percentage = 0.1
 proj_knockback = 1.0
 proj_stun = 1.0
 proj_lifetime = 2.0
-proj_scene = ExtResource("2_7dt0e")
+proj_scene = ExtResource("2_ubqno")

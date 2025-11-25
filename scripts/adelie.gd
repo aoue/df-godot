@@ -16,7 +16,7 @@ How the AI works:
 @export var desired_distance_to_target: float
 @export var desired_attackers_on_target: int
 
-var action_timer: float = 0.0  # The time remaining on the current action. Will reselect an action when it expires.
+var action_timer: float = 1.0  # The time remaining on the current action. Will reselect an action when it expires.
 var standoff_distance: float = 0.0
 
 # dummy testing variables
@@ -56,12 +56,14 @@ func decide_on_target() -> void:
 """ Action Selection """
 func decide_on_action() -> void:
 	# if target is close enough, then decide to attack (mark 'can_attack' as true)
+	if not unit.can_attack:
+		return
 	
 	var packed_move_in_consideration = unit.loadout.peek_next_move()
 	var move_in_consideration = packed_move_in_consideration.instantiate()
 	
 	var abs_distance_to_target = abs(target_unit.position.distance_to(global_position))
-	if unit.can_attack and abs_distance_to_target > move_in_consideration.get_min_range() and abs_distance_to_target < move_in_consideration.get_max_range():
+	if abs_distance_to_target > move_in_consideration.get_min_range() and abs_distance_to_target < move_in_consideration.get_max_range():
 		# in that case, permission to fire is granted.
 		attack_ready = true
 	

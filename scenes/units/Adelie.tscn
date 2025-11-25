@@ -1,8 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://c2ibc55iafa7i"]
+[gd_scene load_steps=28 format=3 uid="uid://c2ibc55iafa7i"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_ixxd5"]
 [ext_resource type="Script" path="res://scripts/adelie.gd" id="2_opqaw"]
-[ext_resource type="PackedScene" uid="uid://ds57vrog0ydj8" path="res://scenes/ai moves/AIMove.tscn" id="3_iyhfj"]
+[ext_resource type="PackedScene" uid="uid://ds57vrog0ydj8" path="res://scenes/ai moves/AI_Rifle.tscn" id="3_6jkg4"]
+[ext_resource type="PackedScene" uid="uid://c2h231n81s8rr" path="res://scenes/ai moves/AI_Rush.tscn" id="3_743jk"]
 [ext_resource type="Texture2D" uid="uid://lbyjfxsskwhc" path="res://assets/anims/adelie spritesheet.png" id="3_lgy3h"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_57xry"]
@@ -215,10 +216,10 @@ unitName = "Adelie"
 allegiance = 2
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("3_iyhfj")
+slot0 = ExtResource("3_743jk")
 
 [node name="Loadout1" parent="Unit" index="1"]
-slot0 = ExtResource("3_iyhfj")
+slot0 = ExtResource("3_6jkg4")
 
 [node name="CharacterAnim" parent="." index="1"]
 position = Vector2(31, -236)

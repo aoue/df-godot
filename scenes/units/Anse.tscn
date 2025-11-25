@@ -277,7 +277,6 @@ boost_anim = NodePath("CharacterAnim/BoostAnim")
 
 [node name="Unit" parent="." index="0"]
 unitName = "Anse"
-allegiance = null
 
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("3_nhue4")
