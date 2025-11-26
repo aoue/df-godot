@@ -12,31 +12,49 @@ How the AI works:
 """
 @export_group("AI")
 @export var nav: NavigationAgent2D
-@export var delay_between_actions: float
-@export var desired_distance_to_target: float
+@export var delay_between_actions: float  # how long after completing an action before beginning a new one.
 @export var desired_attackers_on_target: int
 
+# AI_Move variables that determine how the unit acts while it tries to use the loaded action.
 var action_timer: float = 1.0  # The time remaining on the current action. Will reselect an action when it expires.
 var standoff_distance: float = 0.0
+var min_range: float = 0.0
+var max_range: float = 0.0
 
 # dummy testing variables
+var grace_period: float = 0.5
 var target_unit: UnitBody
 var movement_target_position: Vector2 = Vector2(1000.0, 2500.0)
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
 
 #func _ready():
 	#super()
-	##actor_setup.call_deferred()
+	##ponder.call_deferred()
 
 """ Main Brain """
 func ponder() -> void:
-	decide_on_target()  # pick target
-	decide_on_action()  # pick what to do about it
-	pick_destination()  # set values that will lead to this execution
+	# AI units follow a pseudo loadout system just like the player does.
+	# 1. Read in the attributes of the loadout's move.
+	# 2. Based on that move's attributes, decide how to move.
+	# 3. Finally, if you're in an appropriate position to use the move, do so.
+	if grace_period > 0.0:
+		return
+	read_in_move_ai_parameters()  # read in ai attributes based on the loaded move
+	decide_on_target()  # pick positon to move too based on read-in ai target
+	decide_to_attack()  # pick if you can in a position to attack
+	pick_destination()  # move closer to your desires
+
+func read_in_move_ai_parameters() -> void:
+	# Given the current loadout's current move, set unit's ai parameters.
+	var packed_loaded_move = unit.loadout.peek_next_move()
+	var loaded_move = packed_loaded_move.instantiate()
 	
-	# specific to the move itself
-	action_timer = delay_between_actions * Coeff.ai_action_timer # Coeff.ai_action_timer  # i.e. move's duration
-	standoff_distance = Coeff.standoff
+	action_timer = loaded_move.get_action_timer()
+	standoff_distance = loaded_move.get_standoff_distance()
+	min_range = loaded_move.get_min_range()
+	max_range = loaded_move.get_max_range()
+	
+	loaded_move.queue_free()
 
 """ Target Selection """
 func decide_on_target() -> void:
@@ -54,30 +72,23 @@ func decide_on_target() -> void:
 	target_unit = check_target
 
 """ Action Selection """
-func decide_on_action() -> void:
+func decide_to_attack() -> void:
 	# if target is close enough, then decide to attack (mark 'can_attack' as true)
 	if not unit.can_attack:
 		return
 	
-	var packed_move_in_consideration = unit.loadout.peek_next_move()
-	var move_in_consideration = packed_move_in_consideration.instantiate()
-	
 	var abs_distance_to_target = abs(target_unit.position.distance_to(global_position))
-	if abs_distance_to_target > move_in_consideration.get_min_range() and abs_distance_to_target < move_in_consideration.get_max_range():
+	if abs_distance_to_target > min_range and abs_distance_to_target < max_range:
 		# in that case, permission to fire is granted.
 		attack_ready = true
 	
-	move_in_consideration.queue_free()
-	
-	# and keep moving
-	movement_target_position = target_unit.position
 
 """ Action Calculation """
 func pick_destination() -> void:
 	if nav.is_navigation_finished():
 		
-		# note: maybe standoff should actually be relative to move, instead, eh?
-		var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * Coeff.standoff)
+		movement_target_position = target_unit.position
+		var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance)
 		
 		set_movement_target(adjusted_position)
 	# otherwise, obviously pick something related to target and action
@@ -106,9 +117,6 @@ func get_target_position() -> Vector2:
 	return nav.get_next_path_position()
 
 """ Movement """
-#func actor_setup():
-	#await get_tree().physics_frame
-	#set_movement_target(movement_target_position)
 func set_movement_target(movement_target: Vector2):
 	nav.target_position = movement_target
 	
@@ -118,5 +126,6 @@ func _physics_process(delta):
 	#
 	## think carefully about how this will integrate
 	action_timer -= delta
+	grace_period -= delta
 	super(delta)
 	

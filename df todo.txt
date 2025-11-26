@@ -1,5 +1,5 @@
 commit notes:
--added rush move to adelie
+-updated ai to properly use the loadout system like the player does
 
 ======= NOTES
 collision layers/masks notes:
@@ -10,26 +10,28 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
--create 'rush' move:
-	-it should work like this:
-	unit enters rush mode, creating a melee projectile area on the front of their ring.
-	then, they surge forward in the direction they are targeting.
+-
 
 1. add a ranged move for the adelie-------------------------------[DONE]
 a. anti-facehugging measures (ranged)-----------------------------[DONE]
 b. anti-facehugging measures (melee arc areas)--------------------[DONE]
 2. add a melee move for the adelie (see rush details below)-------[DONE]
-c. loaded move dictates target position (ai loadout system)-------[]
-3. use a loadout to make sure the adelie cycles moves properly----[]
+c. loaded move dictates target position (ai loadout system)-------[DONE]
+3. use a loadout to make sure the adelie cycles moves properly----[DONE]
 
-changes to do:
-	-current system is choose target position, choose move, use it
-	should we instead do choose move, choose target position, use it? Forces ai to follow loadouts.
-	let's try it like this for now. Because it would be better if it works.
-	(basically, the currently loaded move dictates what action they will go for.)
+- masters of spinjutsu
+	- the ai is a master of spinjutsu. This is not desirable (for the ai, that is)
+	Why does this happen?
+	- it's related to spinning the unit pointer. What moves the pointer?
+		the function unitbody.adjust_indicators(target_pos)
+		for adelie, it is nav.get_next_path_position()
+		which is set by position.
+		so i wonder if this is caused by little jig jogs caused by standoff.
+		if so, we could fix this by making it so that you only care enough about 
+		standoff if the difference is past some threshold.
 
-
-	
+- need a small grace period at the start of an encounter where ai cannot attack
+	- just like half a second is fine
 
 - adelie unit visual overhaul
 	- update the spritesheet

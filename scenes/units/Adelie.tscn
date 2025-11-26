@@ -205,20 +205,23 @@ animations = [{
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
 delay_between_actions = 0.33
-desired_distance_to_target = 0.0
 desired_attackers_on_target = 0
 HP_max_coeff = 0.25
 speed_coeff = 0.25
 acceleration_coeff = 0.75
 
-[node name="Unit" parent="." index="0"]
+[node name="Unit" parent="." index="0" node_paths=PackedStringArray("all_loadouts")]
 unitName = "Adelie"
 allegiance = 2
+all_loadouts = [NodePath("Loadout0")]
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("3_743jk")
+slot0 = ExtResource("3_6jkg4")
+slot1 = ExtResource("3_743jk")
+slot2 = ExtResource("3_743jk")
 
 [node name="Loadout1" parent="Unit" index="1"]
+visible = false
 slot0 = ExtResource("3_6jkg4")
 
 [node name="CharacterAnim" parent="." index="1"]

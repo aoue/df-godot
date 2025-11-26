@@ -160,7 +160,7 @@ func set_anim(direction: Vector2) -> void:
 	# if dead and death delay passed: play("9b_defeated")
 	
 	# Attacking?
-	if unit.set_attack_anim:
+	if unit.set_attack_anim and unit.active_move:
 		# Play the corresponding animation
 		unit.set_attack_anim = false
 		if unit.active_move.animation_type == 0:

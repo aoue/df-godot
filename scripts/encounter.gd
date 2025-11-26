@@ -31,7 +31,7 @@ func create_world() -> void:
 	GameMother.add_hero(anse_in_world)
 	
 	adelie_in_world = Adelie.instantiate()
-	adelie_in_world.position = Vector2(1302, 33)
+	adelie_in_world.position = Vector2(4500, 30)
 	add_child(adelie_in_world)
 	GameMother.add_villain(adelie_in_world)
 	
