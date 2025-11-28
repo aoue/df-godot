@@ -204,7 +204,7 @@ animations = [{
 [node name="Adelie" node_paths=PackedStringArray("nav") instance=ExtResource("1_ixxd5")]
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
-delay_between_actions = 0.33
+delay_between_actions = 0.5
 desired_attackers_on_target = 0
 HP_max_coeff = 0.25
 speed_coeff = 0.25

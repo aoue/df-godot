@@ -11,12 +11,13 @@ And of course, the variables here are all relative to constants set in Coeff.
 
 @export_group("AI")
 @export var action_timer: float
-@export var standoff_distance: float
 @export var min_range: float
+@export var standoff_distance: float
 @export var max_range: float
 
 func get_action_timer() -> float:
-	return action_timer * Coeff.ai_action_timer
+	#return action_timer * Coeff.ai_action_timer
+	return move_duration
 func get_standoff_distance() -> float:
 	return standoff_distance * Coeff.standoff
 

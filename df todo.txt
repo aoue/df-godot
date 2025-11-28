@@ -1,5 +1,6 @@
 commit notes:
--updated ai to properly use the loadout system like the player does
+-fixed ai spinjutsu by updating movement update frequency
+-separated ai movement desires and direction desires to allow for strafing
 
 ======= NOTES
 collision layers/masks notes:
@@ -18,20 +19,40 @@ b. anti-facehugging measures (melee arc areas)--------------------[DONE]
 2. add a melee move for the adelie (see rush details below)-------[DONE]
 c. loaded move dictates target position (ai loadout system)-------[DONE]
 3. use a loadout to make sure the adelie cycles moves properly----[DONE]
+4. fix the masters of spinjutsu bug-------------------------------[DONE]
+a. distinct target position and movement position for strafing----[DONE]
+5. around unit ui-------------------------------------------------[]
+6. stun mechanic and timing---------------------------------------[]
+7. stun expanded (breaking move)----------------------------------[]
 
-- masters of spinjutsu
-	- the ai is a master of spinjutsu. This is not desirable (for the ai, that is)
-	Why does this happen?
-	- it's related to spinning the unit pointer. What moves the pointer?
-		the function unitbody.adjust_indicators(target_pos)
-		for adelie, it is nav.get_next_path_position()
-		which is set by position.
-		so i wonder if this is caused by little jig jogs caused by standoff.
-		if so, we could fix this by making it so that you only care enough about 
-		standoff if the difference is past some threshold.
 
-- need a small grace period at the start of an encounter where ai cannot attack
-	- just like half a second is fine
+- around unit ui:
+	ui around a unit consists of:
+	- health meter, which depletes
+	- stun meter, which fills? Or should it deplete as well? Maybe deplete too.
+	or maybe stun meter should actually be a percentage?
+	should all these numbers be a percentage displayed instead of meters?
+
+- stun timing problem:
+	- units trading damage
+	when you hit, it doesn't like actually stop the ai from retaliating it seems
+	so we should add that mechanic in.
+	in more exact terms:
+	- all moves do damage and also stun damage (as a multiplier of damage)
+	- when a unit's stun meter is filled, they are stunned.
+		- whatever action they were in the middle of immediately ends
+		- they remain in that stunned state for a period of time based on
+		  the attack that inflicted the final break.
+
+- stun extra mechanics:
+	- can we incentivize stun even more? Or make it more interesting?
+	what about something like:
+	- in addition to your loadouts, a unit has a timer recharge 'breaker' which is the only way to break something.
+	  you use this with right click. You can also get different breakers, etc, over the course of the game.
+	  basically, it makes it so that you have to recognize when something is ready to be broken, and then do it with
+	  intent. Also gives you explicit control over when you want to start your break-combo.
+	- dmg multiplier (sure, obvious)
+	- no loadout switch delay when you're attacking a broken target? Could be, maybe?
 
 - adelie unit visual overhaul
 	- update the spritesheet

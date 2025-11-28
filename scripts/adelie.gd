@@ -12,20 +12,20 @@ How the AI works:
 """
 @export_group("AI")
 @export var nav: NavigationAgent2D
-@export var delay_between_actions: float  # how long after completing an action before beginning a new one.
+@export var delay_between_actions: float  # Changes how quick to respond the enemy is, very influential variable.
 @export var desired_attackers_on_target: int
 
 # AI_Move variables that determine how the unit acts while it tries to use the loaded action.
-var action_timer: float = 1.0  # The time remaining on the current action. Will reselect an action when it expires.
+var hold_timer: float = 0.0  # The time remaining on the current action. Will reselect an action when it expires.
 var standoff_distance: float = 0.0
 var min_range: float = 0.0
 var max_range: float = 0.0
 
 # dummy testing variables
-var grace_period: float = 0.5
 var target_unit: UnitBody
-var movement_target_position: Vector2 = Vector2(1000.0, 2500.0)
+var movement_target_position: Vector2  # where the unit wants to move to
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
+var action_timer: float = 0.0  # will be true when the unit thinks it is in a position ready to attack
 
 #func _ready():
 	#super()
@@ -37,19 +37,17 @@ func ponder() -> void:
 	# 1. Read in the attributes of the loadout's move.
 	# 2. Based on that move's attributes, decide how to move.
 	# 3. Finally, if you're in an appropriate position to use the move, do so.
-	if grace_period > 0.0:
-		return
 	read_in_move_ai_parameters()  # read in ai attributes based on the loaded move
 	decide_on_target()  # pick positon to move too based on read-in ai target
-	decide_to_attack()  # pick if you can in a position to attack
 	pick_destination()  # move closer to your desires
+	decide_to_attack()  # pick if you can in a position to attack
 
 func read_in_move_ai_parameters() -> void:
 	# Given the current loadout's current move, set unit's ai parameters.
 	var packed_loaded_move = unit.loadout.peek_next_move()
 	var loaded_move = packed_loaded_move.instantiate()
 	
-	action_timer = loaded_move.get_action_timer()
+	hold_timer = loaded_move.get_action_timer()
 	standoff_distance = loaded_move.get_standoff_distance()
 	min_range = loaded_move.get_min_range()
 	max_range = loaded_move.get_max_range()
@@ -77,28 +75,39 @@ func decide_to_attack() -> void:
 	if not unit.can_attack:
 		return
 	
+	# also, do not attack if we are not looking within like 30 degrees of the target
+	var vector_from_unit_to_target = global_position.direction_to(target_unit.position)
+	var own_direction_vector = get_ring_indicator_vector()
+	if not vector_from_unit_to_target.dot(own_direction_vector) > 0:
+		return
+	#print("i see you")
+	
 	var abs_distance_to_target = abs(target_unit.position.distance_to(global_position))
 	if abs_distance_to_target > min_range and abs_distance_to_target < max_range:
 		# in that case, permission to fire is granted.
 		attack_ready = true
-	
+		action_timer = hold_timer
+		# signal that navigation should be updated with the target's precise position
+		pick_dest_helper()
 
 """ Action Calculation """
+func pick_dest_helper() -> void:
+	movement_target_position = target_unit.position
+	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance)
+	action_timer = delay_between_actions * Coeff.ai_action_timer
+	set_movement_target(adjusted_position)
+	
 func pick_destination() -> void:
-	if nav.is_navigation_finished():
-		
-		movement_target_position = target_unit.position
-		var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance)
-		
-		set_movement_target(adjusted_position)
-	# otherwise, obviously pick something related to target and action
+	if nav.is_navigation_finished() or action_timer < 0.0:
+		pick_dest_helper()
 
 """ Physics Process Helpers """
-func get_direction_input() -> Vector2:
+func get_direction_input() -> Vector2:	
 	# update if nav is finished or action timer elapsed
 	if nav.is_navigation_finished() or action_timer < 0.0:
 		# probably do not immediately call destination, rather, start the whole selection idea.
 		ponder()
+
 	var current_agent_position: Vector2 = global_position
 	return current_agent_position.direction_to(nav.get_next_path_position())
 	
@@ -112,13 +121,21 @@ func get_attack_input() -> bool:
 		return true
 	return false
 func get_target_position() -> Vector2:
-	# Returns the position that the unitBody is looking at
-	# calculate the direction between self and 
-	return nav.get_next_path_position()
+	# Returns the position that the unitBody wants to look at.
+	# if capable of attacking a target, then look at it.
+	# if incapable, then look in the direction you're moving.
+	var abs_distance_to_target = abs(target_unit.position.distance_to(global_position))
+	if abs_distance_to_target > min_range and abs_distance_to_target < max_range:
+		return target_unit.position
+	else:
+		return nav.get_next_path_position()
+		
+	
 
 """ Movement """
 func set_movement_target(movement_target: Vector2):
 	nav.target_position = movement_target
+	#nav.target_desired_distance = standoff_distance
 	
 func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
@@ -126,6 +143,5 @@ func _physics_process(delta):
 	#
 	## think carefully about how this will integrate
 	action_timer -= delta
-	grace_period -= delta
 	super(delta)
 	

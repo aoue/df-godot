@@ -268,7 +268,7 @@ func adjust_indicators(where: Vector2, delta: float):
 	summon_indicator.position = Vector2(offset * v.x, offset * v.y)
 	# or, angle between self and ring indicator * 725?
 	
-	# adjust stat labels too (test)
+	# adjust stat labels too (still in progress)
 	var x_offset = 500
 	var y_offset = 500
 	stat_labels.position = Vector2(x_offset * v.x, y_offset * v.y)
