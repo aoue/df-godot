@@ -1,14 +1,17 @@
 commit notes:
--fixed bug with loadout not updating in time for ai peek
--changed timing on when hit projectiles disappear to better communicate hits
--combined timing bar and ring indicator to make ui simpler
--added stun ui prototype
+-added stops relating to hit stun mechanic for combat feel/flow
+-overhauled collision layers for clarity, potential future growth, and to fix a bug where melee projectiles were disappearing like ranged projectiles when hitting obstacles
 
 ======= NOTES
 collision layers/masks notes:
 	- 1: everything related to units moving and hitting world border or obstacles.
-	- 2: everything related to ANTI-ENEMY projectiles hitting units and obstacles.
-	- 3: everything related to ANTI-ALLY projectiles hitting units and obstacles
+	- 9: everything related to RANGED ANTI-ENEMY projectiles hitting units and obstacles.
+	- 10: everything related to MELEE ANTI-ENEMY projectiles
+	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
+	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
+	remember:
+	layer: others can tell when they hit you
+	mask: you can tell when you hit others
 
 ======= TODO: combat feeling
 
@@ -24,17 +27,30 @@ c. loaded move dictates target position (ai loadout system)-------[DONE]
 4. fix the masters of spinjutsu bug-------------------------------[DONE]
 a. distinct target position and movement position for strafing----[DONE]
 5. around unit ui-------------------------------------------------[DONE]
-6. stun mechanic and timing---------------------------------------[]
-7. stun expanded (breaking move)----------------------------------[]
+6. hit stun mechanic and timing-----------------------------------[DONE]
+a. melee projectiles disappearing against obstacles bug-----------[DONE]
+7. breaking mechanic (stun expanded)------------------------------[]
 
 
-- stun mechanic:
+- break mechanic:
 	- when a unit is hit in the middle of an attack, any ongoing attack should be canceled.
 	- then they should also be unable to attack for a quick moment
-	what happens when player gets stunned?
-	spin out at 100%? 
-	- this mechanic is still not great
-	
+	this essential rhythm to the game is very important, so spend some time getting it to feel exactly right
+	you can't move on until you get it
+
+	remember, this is the feeling/flow we want:
+	- hit enemy, giving an opening for the rest of the 3 move combo to be done safely
+	- a short moment afterward where the enemy recovers--
+	  but they can act before we finish switching loadouts!
+	- we retreat as the enemy attacks
+
+- enemy ai:
+	- the player is encouraged to use moves in a burst of 3
+	- the ai is not. they just use them as it pleases them.
+	- should we add a mechanic to try to force ai units to use moves in a true combo?
+	as in, some kind of timer after beginning a move in the loadout whereupon they are forced to use the next?
+	well, no. you can instead design their loadouts to lead into natural combos.
+
 - break mechanic:
 	when hitting a unit, their (displayed %) stun meter goes up, capping at 100%:
 	- a projectile deals a move-specific amount of damage on hit, sometimes more, sometimes less, etc.
@@ -45,6 +61,9 @@ a. distinct target position and movement position for strafing----[DONE]
 	so it's like a reward. you've created an opening and now take all the time you can to just slam into the enemy
 	as fast as you can.
 	- broken state fades after some time, too. naturally.
+	what happens when player stun hits 100%?
+	enemy have to use a special break move?
+	- this mechanic is still not great
 
 - adelie unit visual overhaul
 	- update the spritesheet

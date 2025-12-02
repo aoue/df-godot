@@ -277,7 +277,7 @@ boost_anim = NodePath("CharacterAnim/BoostAnim")
 
 [node name="Camera2D" type="Camera2D" parent="." index="0"]
 scale = Vector2(1.33333, 1.33333)
-zoom = Vector2(0.2, 0.2)
+zoom = Vector2(0.15, 0.15)
 position_smoothing_enabled = true
 
 [node name="Unit" parent="." index="1"]
@@ -304,5 +304,4 @@ sprite_frames = SubResource("SpriteFrames_kvmtv")
 animation = &"boost"
 
 [node name="AreaHitbox" parent="." index="4"]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 196608

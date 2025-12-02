@@ -50,7 +50,6 @@ func _on_body_entered(_body) -> void:
 	# This should trigger when hitting a border or projectile, because those have bodies.
 	# So on collision, betray and destroy yourself.
 	lifetime = 0.0
-	
 		
 func _on_area_entered(area) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 

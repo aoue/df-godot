@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://7o4ppb3nmby7"]
 
 [ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_j1jpj"]
-[ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Half_arc_projectile.tscn" id="2_8nmxi"]
+[ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Hero_half_arc_projectile.tscn" id="2_dlk62"]
 
 [node name="Move (Ram)" instance=ExtResource("1_j1jpj")]
 fire_table = Array[float]([0.9])
@@ -15,4 +15,4 @@ animation_type = 0
 proj_speed = 0.0
 proj_damage = 0.15
 proj_lifetime = 1.0
-proj_scene = ExtResource("2_8nmxi")
+proj_scene = ExtResource("2_dlk62")

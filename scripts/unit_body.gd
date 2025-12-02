@@ -64,7 +64,11 @@ func get_direction_input() -> Vector2:
 	
 func get_boost_input(direction: Vector2) -> bool:
 	return false
-	
+
+func get_attack_input_helper() -> bool:
+	if hit_stun_duration > 0.0:
+		return false
+	return get_attack_input()
 func get_attack_input() -> bool:
 	return false
 
@@ -82,10 +86,14 @@ func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	unit.take_damage(proj_damage)
 	knockback += proj_knockback
 	
+	# Cancel any ongoing action
+	# or rather, being hit is a timer based flag that stops them from triggering.
+	
 	# Affect sprite
 	if stun > 0 and hit_stun_shield == 0:
 		hit_stun_duration = stun
-		hit_stun_shield = stun + Coeff.stun_shield_duration
+		# try ignoring stun shield for now. 
+		#hit_stun_shield = stun + Coeff.stun_shield_duration  
 	
 	if unit.is_defeated():
 		start_being_defeated()
@@ -233,6 +241,8 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	move_and_slide()
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
+	if hit_stun_duration > 0.0:  # interrupt an attack if hit stun occurs
+		return
 	if is_attacking or unit.attacking_duration_left > 0.0:
 		
 		# force loadout switch?
@@ -260,8 +270,9 @@ func adjust_indicators(where: Vector2, delta: float):
 	var rotation_weight: float = delta * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
 		rotation_weight *= unit.active_move.user_rotation_mod
-	else:
-		rotation_weight *= 2  # adjustment
+	if hit_stun_duration > 0.0:
+		rotation_weight *= Coeff.hit_stun_rotation_speed
+
 	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
 
 	# Adjust summon indicator too
@@ -291,6 +302,7 @@ func pass_duration(delta : float) -> void:
 	boost_duration = max(0, boost_duration - delta)
 	boost_cooldown = max(0, boost_cooldown - delta)
 	hit_stun_duration = max(0, hit_stun_duration - delta)
+	#hit_stun_duration = 1
 	hit_stun_shield = max(0, hit_stun_shield - delta)
 	
 	knockback = lerp(knockback, Vector2.ZERO, 0.1)
@@ -299,7 +311,7 @@ func pass_duration(delta : float) -> void:
 func _physics_process(delta: float) -> void:
 	var direction: Vector2 = get_direction_input()
 	var ring_direction: Vector2 = get_ring_indicator_vector()
-	var is_attacking: bool = get_attack_input()
+	var is_attacking: bool = get_attack_input_helper()
 	var target_pos: Vector2 = get_target_position()
 	var is_boosting: bool = get_boost_input(direction)
 	

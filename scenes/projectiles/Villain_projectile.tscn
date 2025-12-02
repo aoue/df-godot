@@ -9,8 +9,8 @@ size = Vector2(115, 31)
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider")]
 z_index = 100
-collision_layer = 4
-collision_mask = 4
+collision_layer = 0
+collision_mask = 65536
 script = ExtResource("1_m5qx8")
 projectile_sprite = NodePath("Projectile Sprite")
 projectile_collider = NodePath("Projectile Collider")

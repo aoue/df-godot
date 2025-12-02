@@ -204,7 +204,7 @@ animations = [{
 [node name="Adelie" node_paths=PackedStringArray("nav") instance=ExtResource("1_ixxd5")]
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
-delay_between_actions = 0.5
+delay_between_actions = 1.0
 desired_attackers_on_target = 0
 HP_max_coeff = 0.25
 speed_coeff = 0.25
@@ -229,5 +229,8 @@ position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_id33x")
 animation = &"0_side_rest"
 autoplay = ""
+
+[node name="AreaHitbox" parent="." index="3"]
+collision_layer = 768
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." index="6"]
