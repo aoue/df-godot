@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://8f6wd8hvqtfp"]
+[gd_scene load_steps=13 format=3 uid="uid://8f6wd8hvqtfp"]
 
 [ext_resource type="Script" path="res://scripts/unit_body.gd" id="1_eqrot"]
 [ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
@@ -8,9 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://drd7h0wvo60pv" path="res://assets/ui/ring image.png" id="4_pvg52"]
 [ext_resource type="Texture2D" uid="uid://p3cpcp3500ad" path="res://assets/ui/ring indicator.png" id="5_srvee"]
 [ext_resource type="Texture2D" uid="uid://lw0say8dvjmh" path="res://assets/ui/summon indicator.png" id="6_rlaow"]
+[ext_resource type="Texture2D" uid="uid://h8ubpiqijltf" path="res://assets/ui/ring indicator coloured.png" id="7_4ayb7"]
 [ext_resource type="Script" path="res://scripts/hit_reporter.gd" id="8_5clpj"]
-[ext_resource type="Texture2D" uid="uid://yxdat8gwqop3" path="res://assets/ui/utility bar empty.png" id="10_2emss"]
-[ext_resource type="Texture2D" uid="uid://ct8unmymjcyr5" path="res://assets/ui/utility bar fill.png" id="11_mt87a"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ieh1m"]
 height = 27.3418
@@ -18,17 +17,17 @@ height = 27.3418
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
 size = Vector2(48, 48)
 
-[node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "utility_bar", "ring", "ring_indicator", "summon_indicator", "stat_labels", "hp_label", "utility_label", "speed_label")]
+[node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "summon_indicator", "stat_labels", "stun_label", "utility_label", "speed_label")]
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
-hp_bar = NodePath("HPBar")
-utility_bar = NodePath("UtilityBar")
+hp_bar = NodePath("Stat Labels/HPBar")
+timing_bar = NodePath("RingAnim/RingIndicator/TimingBar")
 ring = NodePath("RingAnim")
 ring_indicator = NodePath("RingAnim/RingIndicator")
 summon_indicator = NodePath("RingAnim/SummonIndicator")
 stat_labels = NodePath("Stat Labels")
-hp_label = NodePath("Stat Labels/HP Label")
+stun_label = NodePath("Stat Labels/Stun Label")
 utility_label = NodePath("Stat Labels/Utility Label")
 speed_label = NodePath("Stat Labels/Speed Label")
 HP_max_coeff = 1.0
@@ -58,8 +57,15 @@ texture = ExtResource("6_rlaow")
 
 [node name="RingIndicator" type="Sprite2D" parent="RingAnim"]
 rotation = 6.28319
-texture = ExtResource("5_srvee")
 offset = Vector2(650, 0)
+
+[node name="TimingBar" type="TextureProgressBar" parent="RingAnim/RingIndicator"]
+offset_left = 512.799
+offset_top = -128.002
+offset_right = 768.799
+offset_bottom = 127.998
+texture_under = ExtResource("5_srvee")
+texture_progress = ExtResource("7_4ayb7")
 
 [node name="AreaHitbox" type="Area2D" parent="." node_paths=PackedStringArray("bodyChief")]
 scale = Vector2(1, 0.990325)
@@ -76,46 +82,41 @@ shape = SubResource("CapsuleShape2D_ieh1m")
 [node name="MovementHitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_4brxe")
 
-[node name="HPBar" type="TextureProgressBar" parent="."]
-visible = false
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
+[node name="Stat Labels" type="Node2D" parent="."]
+position = Vector2(-315, 45)
+
+[node name="HPBar" type="TextureProgressBar" parent="Stat Labels"]
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -438.0
-offset_right = -354.0
-offset_bottom = 505.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+offset_left = 42.0
+offset_top = -45.0
+offset_right = 126.0
+offset_bottom = 460.0
+grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.75, 0.5)
 rounded = true
 fill_mode = 3
 texture_under = ExtResource("2_r1v5x")
 texture_progress = ExtResource("3_44yiu")
-metadata/_edit_use_anchors_ = true
 
-[node name="UtilityBar" type="TextureProgressBar" parent="."]
-offset_left = -325.0
-offset_top = -866.0
-offset_right = -69.0
-offset_bottom = -610.0
-scale = Vector2(2.5, 2.5)
-texture_under = ExtResource("10_2emss")
-texture_progress = ExtResource("11_mt87a")
-
-[node name="Stat Labels" type="Node2D" parent="."]
-position = Vector2(500, -150)
-scale = Vector2(1.5, 1.5)
-
-[node name="HP Label" type="Label" parent="Stat Labels"]
-offset_left = -72.0
-offset_top = -105.0
-offset_right = 113.0
+[node name="Stun Label" type="Label" parent="Stat Labels"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -133.0
+offset_right = 106.0
 offset_bottom = -50.0
-theme_override_font_sizes/font_size = 40
-text = "CN--100"
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.8, 0.796078, 0.109804, 1)
+theme_override_font_sizes/font_size = 60
+text = "100%"
 
 [node name="Utility Label" type="Label" parent="Stat Labels"]
+visible = false
 offset_left = -87.0
 offset_top = -51.0
 offset_right = 98.0
@@ -124,6 +125,7 @@ theme_override_font_sizes/font_size = 40
 text = "UTL--0.5"
 
 [node name="Speed Label" type="Label" parent="Stat Labels"]
+visible = false
 offset_left = -95.0
 offset_right = 90.0
 offset_bottom = 55.0

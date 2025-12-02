@@ -14,6 +14,7 @@ var HP_max : int
 var HP_cur : int
 var PW_max : int
 var PW_cur : int
+var stun_cur : int
 @export var allegiance : flag
 var combat_id : int  # assigned each battle. Value doesn't matter, as long as it is unique. Used for hit reporting.
 
@@ -52,6 +53,7 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 # Being Attacked
 func take_damage(damage : int) -> void:
 	HP_cur = clamp(HP_cur - damage, 0, HP_max)
+	stun_cur = clamp(stun_cur + (damage / 10), 0, 100)
 
 func is_defeated() -> bool:
 	if HP_cur == 0:
@@ -99,7 +101,6 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		# check against active move's fire times
 		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.move_duration * active_move.fire_table[projectile_counter]:
 			projectile_counter += 1
-			
 			fire(unit_pos, ring_indicator_vector, ring_indicator_obj)
 			
 		#  try :combo incentive?
@@ -112,10 +113,10 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		return
 	
 	# check loadout state: either give next move or switch to next loadout
-	update_loadout_status()
 	if loadout_gate_time > 0.0:
 		return
 	var next_move = loadout.get_next_move()
+	update_loadout_status()
 	
 	# enter 'new active move' state
 	active_move = next_move.instantiate()

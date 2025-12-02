@@ -17,7 +17,6 @@ var damage_colour: Color
 # State Variables
 var user: Unit
 var hit_something : bool = false
-var expire_delay : float = 1.0
 var hit_set : Array
 
 # Collisions
@@ -56,7 +55,6 @@ func _on_body_entered(_body) -> void:
 func _on_area_entered(area) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
-	
 	hit_something = true
 	
 	# Let the target know they've been hit (we trust them to handle this on their end.)
@@ -67,6 +65,7 @@ func _on_area_entered(area) -> void:
 		hit_set.append(reporter.get_unit_id())
 		
 		reporter.report_hit(damage, knockback, stun)
+		GameMother.log_hit(damage, user.combat_id, reporter.get_unit_id())
 		
 		# show damage number
 		var floating_damage_text = damage_label.instantiate()
@@ -84,11 +83,13 @@ func _on_area_entered(area) -> void:
 		
 		# report hit and hit recoil if applicable
 		user.report_hit(reporter.global_position)
+		
 	
 	# Hide bullet and collider (unless passthrough)
 	if not passthrough:
-		projectile_collider.hide()
-		projectile_sprite.hide()
+		lifetime = min(lifetime, 0.5)
+		#projectile_collider.hide()
+		#projectile_sprite.hide()
 		set_deferred("monitoring", false)
 		set_deferred("monitorable", false)
 	
@@ -102,8 +103,8 @@ func _process(delta: float) -> void:
 	# Control movement
 	if hit_something:
 		position = position + (speed * Coeff.damage_text_slowdown * direction * delta)
-		if not passthrough:
-			queue_free()
+		#if not passthrough:
+			#queue_free()
 		
 	if not hit_something or passthrough:
 		position = position + (speed * direction * delta)

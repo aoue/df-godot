@@ -7,6 +7,8 @@ Also holds gamerules and stuff like that too.
 
 """
 
+@export_group("UI")
+@export var logLabel : Label
 
 """ Tracking during battle """
 var heroes : Array[UnitBody] = []  # Anse and friends
@@ -14,6 +16,10 @@ var villains : Array[UnitBody] = []  # Opponents to Anse and friends
 #var thirds : Array[UnitBody]  # enemies of all
 
 """ Encounter Setup Functions """
+func setup_UI() -> void:
+	pass
+	#logLabel.text = "testing ui text"
+
 func add_hero(unit: UnitBody) -> void:
 	heroes.append(unit)
 	
@@ -30,6 +36,11 @@ func assign_combat_ids() -> void:
 	for villain in get_villains():
 		villain.unit.combat_id = id_value
 		id_value += 1
+
+""" UI Functions """
+func log_hit(damage: int, user_id: int, target_id: int) -> void:
+	pass
+	#logLabel.text = "A hit was scored!"
 
 """ Encounter Getters """
 func get_heroes() -> Array[UnitBody]:

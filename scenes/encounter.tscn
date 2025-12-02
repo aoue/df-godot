@@ -22,5 +22,19 @@ position = Vector2(911, 2335)
 scale = Vector2(5, 5)
 texture = ExtResource("6_v3l5k")
 
-[node name="GameMother" type="Node2D" parent="."]
+[node name="CanvasGroup" type="CanvasGroup" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CanvasGroup"]
+
+[node name="Log" type="Label" parent="CanvasGroup/CanvasLayer"]
+offset_right = 2443.0
+offset_bottom = 1101.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "testo"
+
+[node name="GameMother" type="Node2D" parent="." node_paths=PackedStringArray("logLabel")]
 script = ExtResource("7_7msjs")
+logLabel = NodePath("../CanvasGroup/CanvasLayer/Log")

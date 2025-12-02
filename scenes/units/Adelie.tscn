@@ -230,4 +230,4 @@ sprite_frames = SubResource("SpriteFrames_id33x")
 animation = &"0_side_rest"
 autoplay = ""
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." index="8"]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." index="6"]

@@ -26,6 +26,8 @@ func create_world() -> void:
 	# hardcoded
 	# will do things like: load encounter 
 	# (includes geography, units/enemies starting positions, gamerules, etc)
+	GameMother.setup_UI()
+	
 	anse_in_world = Anse.instantiate()
 	add_child(anse_in_world)
 	GameMother.add_hero(anse_in_world)

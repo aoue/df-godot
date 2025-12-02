@@ -275,7 +275,12 @@ animations = [{
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
 
-[node name="Unit" parent="." index="0"]
+[node name="Camera2D" type="Camera2D" parent="." index="0"]
+scale = Vector2(1.33333, 1.33333)
+zoom = Vector2(0.2, 0.2)
+position_smoothing_enabled = true
+
+[node name="Unit" parent="." index="1"]
 unitName = "Anse"
 
 [node name="Loadout0" parent="Unit" index="0"]
@@ -288,7 +293,7 @@ slot0 = ExtResource("3_oldn2")
 slot1 = ExtResource("5_8dghd")
 slot2 = ExtResource("3_nhue4")
 
-[node name="CharacterAnim" parent="." index="1"]
+[node name="CharacterAnim" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
 animation = &"3_front_mov"
 autoplay = ""
@@ -298,11 +303,6 @@ scale = Vector2(2.5, 2.631)
 sprite_frames = SubResource("SpriteFrames_kvmtv")
 animation = &"boost"
 
-[node name="AreaHitbox" parent="." index="3"]
+[node name="AreaHitbox" parent="." index="4"]
 collision_layer = 4
 collision_mask = 4
-
-[node name="Camera2D" type="Camera2D" parent="." index="6"]
-scale = Vector2(1.33333, 1.33333)
-zoom = Vector2(0.2, 0.2)
-position_smoothing_enabled = true

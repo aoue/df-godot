@@ -1,6 +1,8 @@
 commit notes:
--fixed ai spinjutsu by updating movement update frequency
--separated ai movement desires and direction desires to allow for strafing
+-fixed bug with loadout not updating in time for ai peek
+-changed timing on when hit projectiles disappear to better communicate hits
+-combined timing bar and ring indicator to make ui simpler
+-added stun ui prototype
 
 ======= NOTES
 collision layers/masks notes:
@@ -21,38 +23,28 @@ c. loaded move dictates target position (ai loadout system)-------[DONE]
 3. use a loadout to make sure the adelie cycles moves properly----[DONE]
 4. fix the masters of spinjutsu bug-------------------------------[DONE]
 a. distinct target position and movement position for strafing----[DONE]
-5. around unit ui-------------------------------------------------[]
+5. around unit ui-------------------------------------------------[DONE]
 6. stun mechanic and timing---------------------------------------[]
 7. stun expanded (breaking move)----------------------------------[]
 
 
-- around unit ui:
-	ui around a unit consists of:
-	- health meter, which depletes
-	- stun meter, which fills? Or should it deplete as well? Maybe deplete too.
-	or maybe stun meter should actually be a percentage?
-	should all these numbers be a percentage displayed instead of meters?
-
-- stun timing problem:
-	- units trading damage
-	when you hit, it doesn't like actually stop the ai from retaliating it seems
-	so we should add that mechanic in.
-	in more exact terms:
-	- all moves do damage and also stun damage (as a multiplier of damage)
-	- when a unit's stun meter is filled, they are stunned.
-		- whatever action they were in the middle of immediately ends
-		- they remain in that stunned state for a period of time based on
-		  the attack that inflicted the final break.
-
-- stun extra mechanics:
-	- can we incentivize stun even more? Or make it more interesting?
-	what about something like:
-	- in addition to your loadouts, a unit has a timer recharge 'breaker' which is the only way to break something.
-	  you use this with right click. You can also get different breakers, etc, over the course of the game.
-	  basically, it makes it so that you have to recognize when something is ready to be broken, and then do it with
-	  intent. Also gives you explicit control over when you want to start your break-combo.
-	- dmg multiplier (sure, obvious)
-	- no loadout switch delay when you're attacking a broken target? Could be, maybe?
+- stun mechanic:
+	- when a unit is hit in the middle of an attack, any ongoing attack should be canceled.
+	- then they should also be unable to attack for a quick moment
+	what happens when player gets stunned?
+	spin out at 100%? 
+	- this mechanic is still not great
+	
+- break mechanic:
+	when hitting a unit, their (displayed %) stun meter goes up, capping at 100%:
+	- a projectile deals a move-specific amount of damage on hit, sometimes more, sometimes less, etc.
+	there exists a 'breaking move' that a unit can use with RMB:
+	- longer recharge time. used outside of loadout system. various ones exist.
+	- only the breaking move can send a unit from 100% meter to broken state
+	- when a unit is in broken state, the player does not suffer loadout swap timer when hitting them?
+	so it's like a reward. you've created an opening and now take all the time you can to just slam into the enemy
+	as fast as you can.
+	- broken state fades after some time, too. naturally.
 
 - adelie unit visual overhaul
 	- update the spritesheet
@@ -71,6 +63,9 @@ a. distinct target position and movement position for strafing----[DONE]
 	we will be able to judge it feels right if we're in a situation where:
 	- we have a scene in a pretty encounter map with anse + Friday vs like 4 adelie.
 	(of course this is something we aren't just 1 step away from)
+
+- snow effect:
+	- when you change direction or come to a stop, pop us a snow effect?
 
 - change melee on-ring projectiles:
 	- they should be more like arcs or arrows on the ring, covering a larger area along the length of it

@@ -6,14 +6,14 @@ class_name UnitBody
 @export var unit: Node
 @export var character_anim: AnimatedSprite2D
 @export var hp_bar: TextureProgressBar
-@export var utility_bar: TextureProgressBar
+@export var timing_bar: TextureProgressBar
 @export var ring: Node2D
 @export var ring_indicator: Node2D
 @export var summon_indicator: Node2D
 
 @export_group("Labels")
 @export var stat_labels : Node2D
-@export var hp_label : Label
+@export var stun_label : Label
 @export var utility_label : Label
 @export var speed_label : Label
 
@@ -96,7 +96,7 @@ func start_being_defeated() -> void:
 	#queue_free()
 	pass
 
-func update_utility_bar(delta: float) -> void:
+func update_timing_bar(delta: float) -> void:
 	# first: discover value we should be comparing:
 	
 	var new_value : float = 0
@@ -129,25 +129,27 @@ func update_utility_bar(delta: float) -> void:
 	
 	new_value *= 100
 	new_max_value *= 100
-	utility_bar.max_value = new_max_value
+	timing_bar.max_value = new_max_value
 	
-	if utility_bar.value > new_value:
-		utility_bar.value -= Coeff.hp_bar_update_speed * delta
-	elif utility_bar.value < new_value:
-		#utility_bar.value += Coeff.hp_bar_update_speed * delta
-		utility_bar.value = new_value
+	if timing_bar.value > new_value:
+		timing_bar.value -= Coeff.hp_bar_update_speed * delta
+	elif timing_bar.value < new_value:
+		#timing_bar.value += Coeff.hp_bar_update_speed * delta
+		timing_bar.value = new_value
 		
 func update_hp_bar(new_value: int, delta: float) -> void:
 	# Graphical only; we don't check for death or anything like that here.
+	if hp_bar.value == new_value:
+		return
 	if hp_bar.value > new_value:
 		hp_bar.value -= Coeff.hp_bar_update_speed * delta
 	elif hp_bar.value < new_value:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
 func update_labels(speed_value : float) -> void:
-	hp_label.text = "CN--" + str(hp_bar.value)
-	utility_label.text = "UTL--" + str(utility_bar.value)
-	speed_label.text = "SPD--" + str(speed_value)
+	stun_label.text = str(unit.stun_cur) + "%"
+	#utility_label.text = "UTL--" + str(timing_bar.value)
+	#speed_label.text = "SPD--" + str(speed_value)
 
 """ Running """
 func set_anim(direction: Vector2) -> void:
@@ -213,7 +215,7 @@ func go_anim(delta: float, direction_input: Vector2, boost_input: bool) -> void:
 	set_anim(direction_input)
 	set_anim_plus(boost_input)
 	update_hp_bar(unit.HP_cur, delta)
-	update_utility_bar(delta)
+	update_timing_bar(delta)
 	
 func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float) -> void:
 	if direction_input.length() > 0:
@@ -269,9 +271,9 @@ func adjust_indicators(where: Vector2, delta: float):
 	# or, angle between self and ring indicator * 725?
 	
 	# adjust stat labels too (still in progress)
-	var x_offset = 500
-	var y_offset = 500
-	stat_labels.position = Vector2(x_offset * v.x, y_offset * v.y)
+	#var x_offset = 500
+	#var y_offset = 500
+	#stat_labels.position = Vector2(x_offset * v.x, y_offset * v.y)
 	
 	if unit.active_move and unit.summon_period_over():
 		summon_indicator.visible = true
