@@ -1,7 +1,5 @@
 commit notes:
--toned down boost and made full speed movement angle gate smaller from 180 to 135 degrees.
--tweaked snapswing timings
--fixed bug where units resumed fire after hit stun if the move's timer was still ongoing (by forcing early exit)
+-removed rmb and space from old attack input settings, restricting now to solely lmb.
 
 ======= NOTES
 collision layers/masks notes:
@@ -19,27 +17,20 @@ collision layers/masks notes:
 immediate notes:
 -
 
-1. add a ranged move for the adelie-------------------------------[DONE]
-a. anti-facehugging measures (ranged)-----------------------------[DONE]
-b. anti-facehugging measures (melee arc areas)--------------------[DONE]
-2. add a melee move for the adelie (see rush details below)-------[DONE]
-c. loaded move dictates target position (ai loadout system)-------[DONE]
-3. use a loadout to make sure the adelie cycles moves properly----[DONE]
-4. fix the masters of spinjutsu bug-------------------------------[DONE]
-a. distinct target position and movement position for strafing----[DONE]
-5. around unit ui-------------------------------------------------[DONE]
-6. hit stun mechanic and timing-----------------------------------[DONE]
-a. melee projectiles disappearing against obstacles bug-----------[DONE]
-b. break percentage damage hit proper implementation--------------[DONE]
-c. tweak boosting mechanic to be subtler--------------------------[DONE]
-d. resume fire after hit stun bug---------------------------------[DONE]
-e. enemy ai standoff/surrounding motivation-----------------------[]
-7. add ability to use break move----------------------------------[]
-8. breaking mechanic (stun expanded)------------------------------[]
-9. consider 'flight mode'  mechanic; should we?-------------------[]
+1. enemy ai standoff/surrounding motivation----------------------[]
+...
+. determine exactly what happens when a unit breaks--------------[]
+. implement dummy system where units break at 100% break---------[]
+. add ability to use break move----------------------------------[]
 
-- adelie unit visual overhaul
-	- update the spritesheet
+. absolutely complete adelie spritesheet gate--------------------[]
+
+. add ally scarecrow unit----------------------------------------[]
+. add enemy ai target selection system---------------------------[]
+
+. think more 'flight mode' mechanic------------------------------[]
+
+
 
 - enemy ai standoff:
 	- let's make enemy units spread out a little bit amongst themselves to avoid clumping
@@ -47,7 +38,14 @@ e. enemy ai standoff/surrounding motivation-----------------------[]
 	to test that this works properly:
 	- add 2 enemies that start near each other and are targeting the player
 	- they don't just go straight for the player, they spread out a little bit during their approach
-	but they still make sure to straight on approach them
+	but they still make sure to straight on approach them.
+
+	something like, approach the target while also making distance between yourself and closest ally above a certain value, but only while practical, of course. How to actually do this is a bit trickier, but i know you can do it.
+
+- adelie unit visual overhaul
+	- update the spritesheet
+
+... honestly, i still feel unsure about the break move mechanic. i don't really believe that it is good.
 
 - break move mechanic:
 	- (change get attack input to only respond to left click)
@@ -56,11 +54,19 @@ e. enemy ai standoff/surrounding motivation-----------------------[]
 	the move 
 	
 - break mechanic:
+	simple version:
+	- no such thing as a break move. Instead, when a unit's break reaches 100 naturally, they break.
+	- in this case, it's just something that happens.
+	for now, let's go with this simple version.
+
+	breaking move version:
 	there exists a 'breaking move' that a unit can use with RMB:
 	- longer recharge time. used outside of loadout system. various ones exist.
 	- only the breaking move can send a unit from 100% meter to broken state
 	- on break, show [BREAK] text or similar, through floating damage text
 	- when a unit is in broken state, the player does not suffer loadout swap timer when hitting them?
+	
+	
 
 - map border collision:
 	super unreliable, units often just move right through with no issue. Why's that?
@@ -71,14 +77,13 @@ e. enemy ai standoff/surrounding motivation-----------------------[]
 
 
 
-
-
 - ally unit:
 	- create one for testing ai target picking (scarecrow is fine at first)
 	- also just to make sure that larger scale fights work
 
 - enemy ai:
-	- enemy units are encouraged to spread out and attack different targets to avoid clumping	
+	- enemy units are encouraged to spread out and attack different targets to avoid clumping
+	(this is to do with their target selection function.)
 
 - combat feeling:
 	- it's not enough to work, it must also feel right.
@@ -171,6 +176,7 @@ start of battle animation:
 	- a simple and elegant way to determine which loadout you're switching to next
 	rather than just going through them all in a preset order.
 	(for the beginning, we only have 2 loadouts so we can ignore it for now.)
+	(mousewhell scroll could be a winner for this; or pressing a bound key could also.)
 
 == vn don't forget
 

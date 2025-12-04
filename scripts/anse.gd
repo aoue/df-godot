@@ -42,7 +42,7 @@ func get_target_position() -> Vector2:
 	return get_mouse()
 	
 func get_attack_input() -> bool:
-	if Input.is_action_pressed('attack0') or Input.is_action_pressed('attack1') or Input.is_action_pressed('attack2'):
+	if Input.is_action_pressed('attack_lmb'):
 		return true
 	return false
 
