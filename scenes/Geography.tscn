@@ -16,17 +16,17 @@ scale = Vector2(4, 4)
 texture = ExtResource("1_kus1m")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-visible = false
-position = Vector2(0, -100)
+position = Vector2(14, -78)
 scale = Vector2(0.249385, 0.249385)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 position = Vector2(-7706.95, -1026.52)
 scale = Vector2(37.45, 33.1)
 build_mode = 1
-polygon = PackedVector2Array(409.506, 171.027, 409.506, -39.6677, 260.748, -29.9094, 175.274, 34.9547, 148.171, 38.3082, 95.9146, 32.4471, 38.6649, -1.0574, 0, 0, -0.640854, 170.393)
+polygon = PackedVector2Array(409.506, 171.027, 409.506, -39.6677, 260.748, -29.9094, 175.274, 34.9547, 148.171, 38.3082, 95.9146, 32.4471, 38.6649, -1.0574, -0.000244141, -0.969307, -0.640854, 170.393)
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(20, 24)
 navigation_polygon = SubResource("NavigationPolygon_5f1ao")
 
 [node name="Obstacle1" parent="NavigationRegion2D" instance=ExtResource("2_p63s6")]

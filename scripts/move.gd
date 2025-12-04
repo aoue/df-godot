@@ -33,6 +33,7 @@ enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
 @export var proj_speed : float
 @export var proj_damage : float
 @export var proj_damage_spread_percentage : float  # spread of possible damage rolls, relative to proj_damage (between 1+value/2, 1-value/2)
+@export var proj_break_percentage : float
 @export var proj_knockback : float
 @export var proj_stun : float
 @export var proj_lifetime : float
@@ -61,6 +62,6 @@ func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance
 	#print("===")
 	var proj_damage_roll: float = randf_range(proj_damage * (1 + proj_damage_spread_percentage/2), proj_damage * (1 - proj_damage_spread_percentage/2)) 
 	
-	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), proj_speed, proj_damage_roll, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, allegiance, user)
+	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), proj_speed, proj_damage_roll, proj_break_percentage, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, allegiance, user)
 	
 	return proj

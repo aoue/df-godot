@@ -140,7 +140,7 @@ func set_movement_target(movement_target: Vector2):
 func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
 	## This is because it is only concerned with execution.
-	return
+	#return
 	action_timer -= delta
 	super(delta)
 	

@@ -51,9 +51,9 @@ func refresh(HP_max_coeff: float, PW_max_coeff: float):
 	update_loadout_status()
 	
 # Being Attacked
-func take_damage(damage : int) -> void:
+func take_damage(damage : int, breakPer: int) -> void:
 	HP_cur = clamp(HP_cur - damage, 0, HP_max)
-	stun_cur = clamp(stun_cur + (damage / 10), 0, 100)
+	stun_cur = clamp(stun_cur + breakPer, 0, 100)
 
 func is_defeated() -> bool:
 	if HP_cur == 0:
@@ -64,10 +64,13 @@ func summon_period_over() -> bool:
 	return (active_move.spawn_type == 2 and attacking_duration_left <= active_move.move_duration)
 
 func summon_waiting_for_2nd_click() -> bool:
-	return active_move.spawn_type == 2 and not summon_all_green
+	return active_move and active_move.spawn_type == 2 and not summon_all_green
 
 # Attacking
 func early_exit() -> void:
+	if early_exit_taken:  # idempotent
+		return
+	early_exit_taken = true
 	attacking_duration_left = Coeff.move_cooldown
 	can_attack_cooldown = Coeff.move_cooldown
 	move_boost_duration_left = Coeff.move_cooldown
@@ -106,7 +109,6 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		#  try :combo incentive?
 		# if the move has hit, then you can immediately finish it after the last projectile has been fired
 		elif projectile_counter == len(active_move.fire_table) and scored_hit and not early_exit_taken:
-			early_exit_taken = true
 			early_exit()
 		return
 	if can_attack == false:

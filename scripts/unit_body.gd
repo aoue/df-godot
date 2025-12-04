@@ -28,9 +28,6 @@ var acceleration: float
 var knockback: Vector2
 
 # Boost variables
-@export var boost_speed_mod: float = 2.5
-@export var boost_full_duration: float = 0.2
-@export var boost_full_cooldown: float = 1.5
 var boost_acceleration: float
 var boost_vector: Vector2
 var boost_duration: float = 0.0
@@ -80,10 +77,10 @@ func get_target_position() -> Vector2:
 func take_recoil(recoil_amount: Vector2):
 	knockback += recoil_amount
 	
-func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
+func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	
 	# Do damage and cause knockback
-	unit.take_damage(proj_damage)
+	unit.take_damage(proj_damage, break_damage)
 	knockback += proj_knockback
 	
 	# Cancel any ongoing action
@@ -241,9 +238,10 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	move_and_slide()
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
-	if hit_stun_duration > 0.0:  # interrupt an attack if hit stun occurs
-		return
 	if is_attacking or unit.attacking_duration_left > 0.0:
+		if hit_stun_duration > 0.0:  
+			unit.early_exit()  # intterupt the attack and also cancel it so it does not resume after the stun has passed.
+			return
 		
 		# force loadout switch?
 		unit.update_loadout_status()
@@ -259,7 +257,8 @@ func is_backpedaling(move_direction: Vector2, face_direction: Vector2) -> bool:
 	# condition: if movement direction is not within 180 degrees of ring indicator direction
 	# (could also make it proportional, if you want)
 	var angle: float = abs((face_direction).angle_to(move_direction))
-	return angle > PI / 2
+	# so, you are backpedaling if the angle is greater, i.e. the angle between the pointer and the movement vector is too large
+	return angle > Coeff.full_speed_angle_gate
 
 func adjust_indicators(where: Vector2, delta: float):
 	# Changes the position of the ring indicator.
@@ -319,7 +318,7 @@ func _physics_process(delta: float) -> void:
 	var speed_value = speed
 	if is_boosting:
 		acceleration_value = boost_acceleration
-		speed_value *= boost_speed_mod
+		speed_value *= Coeff.boost_speed_mod
 	elif unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
 		speed_value *= unit.active_move.user_speed_mod
 	elif is_backpedaling(direction, ring_direction):

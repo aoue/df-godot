@@ -18,6 +18,7 @@ spawn_type = 1
 proj_spawn_offset = 1.0
 proj_damage = 0.15
 proj_damage_spread_percentage = 0.1
+proj_break_percentage = 0.1
 proj_knockback = 1.0
 proj_stun = 1.0
 proj_lifetime = 1.0

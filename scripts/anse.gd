@@ -32,8 +32,8 @@ func get_boost_input(direction: Vector2) -> bool:
 	if Input.is_action_pressed('boost') and boost_cooldown <= 0.0 and direction.length() > 0:  # start boosting
 		# Save current direction for our boost
 		boost_vector = direction
-		boost_duration = boost_full_duration
-		boost_cooldown = boost_full_cooldown + boost_full_duration  # wow that's pretty smart (it was my idea)
+		boost_duration = Coeff.boost_full_duration
+		boost_cooldown = Coeff.boost_full_cooldown + Coeff.boost_full_duration  # wow that's pretty smart (it was my idea)
 		return true
 	return false
 

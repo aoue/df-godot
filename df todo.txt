@@ -1,17 +1,18 @@
 commit notes:
--added stops relating to hit stun mechanic for combat feel/flow
--overhauled collision layers for clarity, potential future growth, and to fix a bug where melee projectiles were disappearing like ranged projectiles when hitting obstacles
+-toned down boost and made full speed movement angle gate smaller from 180 to 135 degrees.
+-tweaked snapswing timings
+-fixed bug where units resumed fire after hit stun if the move's timer was still ongoing (by forcing early exit)
 
 ======= NOTES
 collision layers/masks notes:
+	layer: others can tell when they hit you
+	mask: you can tell when you hit others
 	- 1: everything related to units moving and hitting world border or obstacles.
 	- 9: everything related to RANGED ANTI-ENEMY projectiles hitting units and obstacles.
 	- 10: everything related to MELEE ANTI-ENEMY projectiles
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
-	remember:
-	layer: others can tell when they hit you
-	mask: you can tell when you hit others
+	
 
 ======= TODO: combat feeling
 
@@ -29,53 +30,55 @@ a. distinct target position and movement position for strafing----[DONE]
 5. around unit ui-------------------------------------------------[DONE]
 6. hit stun mechanic and timing-----------------------------------[DONE]
 a. melee projectiles disappearing against obstacles bug-----------[DONE]
-7. breaking mechanic (stun expanded)------------------------------[]
-
-
-- break mechanic:
-	- when a unit is hit in the middle of an attack, any ongoing attack should be canceled.
-	- then they should also be unable to attack for a quick moment
-	this essential rhythm to the game is very important, so spend some time getting it to feel exactly right
-	you can't move on until you get it
-
-	remember, this is the feeling/flow we want:
-	- hit enemy, giving an opening for the rest of the 3 move combo to be done safely
-	- a short moment afterward where the enemy recovers--
-	  but they can act before we finish switching loadouts!
-	- we retreat as the enemy attacks
-
-- enemy ai:
-	- the player is encouraged to use moves in a burst of 3
-	- the ai is not. they just use them as it pleases them.
-	- should we add a mechanic to try to force ai units to use moves in a true combo?
-	as in, some kind of timer after beginning a move in the loadout whereupon they are forced to use the next?
-	well, no. you can instead design their loadouts to lead into natural combos.
-
-- break mechanic:
-	when hitting a unit, their (displayed %) stun meter goes up, capping at 100%:
-	- a projectile deals a move-specific amount of damage on hit, sometimes more, sometimes less, etc.
-	there exists a 'breaking move' that a unit can use with RMB:
-	- longer recharge time. used outside of loadout system. various ones exist.
-	- only the breaking move can send a unit from 100% meter to broken state
-	- when a unit is in broken state, the player does not suffer loadout swap timer when hitting them?
-	so it's like a reward. you've created an opening and now take all the time you can to just slam into the enemy
-	as fast as you can.
-	- broken state fades after some time, too. naturally.
-	what happens when player stun hits 100%?
-	enemy have to use a special break move?
-	- this mechanic is still not great
+b. break percentage damage hit proper implementation--------------[DONE]
+c. tweak boosting mechanic to be subtler--------------------------[DONE]
+d. resume fire after hit stun bug---------------------------------[DONE]
+e. enemy ai standoff/surrounding motivation-----------------------[]
+7. add ability to use break move----------------------------------[]
+8. breaking mechanic (stun expanded)------------------------------[]
+9. consider 'flight mode'  mechanic; should we?-------------------[]
 
 - adelie unit visual overhaul
 	- update the spritesheet
 
-- basic enemy ai:
-	WE WILL KNOW THIS IS DONE WHEN:
-	-anse and an enemy are spawned in
-	-the enemy lunges for anse, but he dodges
-	-then, anse dives in and hits them, also stunning them and hitting a full combo
-	-after the combo, the enemy recovers and preps to hit us again
-	-we use that moment to fall back and dodge their next move
-	then the whole system basically repeats
+- enemy ai standoff:
+	- let's make enemy units spread out a little bit amongst themselves to avoid clumping
+	(incentivize them to create distance from each other)
+	to test that this works properly:
+	- add 2 enemies that start near each other and are targeting the player
+	- they don't just go straight for the player, they spread out a little bit during their approach
+	but they still make sure to straight on approach them
+
+- break move mechanic:
+	- (change get attack input to only respond to left click)
+	- a move the player can use when pressing right click
+	- the move itself can be swapped out, but for now a single one is fine.
+	the move 
+	
+- break mechanic:
+	there exists a 'breaking move' that a unit can use with RMB:
+	- longer recharge time. used outside of loadout system. various ones exist.
+	- only the breaking move can send a unit from 100% meter to broken state
+	- on break, show [BREAK] text or similar, through floating damage text
+	- when a unit is in broken state, the player does not suffer loadout swap timer when hitting them?
+
+- map border collision:
+	super unreliable, units often just move right through with no issue. Why's that?
+	- because the unit's collider is too small? try increasing it and see what happens.
+	- but if it's too big the unit is more likely to get stuck while pathfinding.
+
+
+
+
+
+
+
+- ally unit:
+	- create one for testing ai target picking (scarecrow is fine at first)
+	- also just to make sure that larger scale fights work
+
+- enemy ai:
+	- enemy units are encouraged to spread out and attack different targets to avoid clumping	
 
 - combat feeling:
 	- it's not enough to work, it must also feel right.
@@ -86,9 +89,8 @@ a. melee projectiles disappearing against obstacles bug-----------[DONE]
 - snow effect:
 	- when you change direction or come to a stop, pop us a snow effect?
 
-- change melee on-ring projectiles:
-	- they should be more like arcs or arrows on the ring, covering a larger area along the length of it
-	looks cooler and is easier to hit
+- weather effect:
+	- snow or rain particle effects on screen, at varying intensity.
 
 - system to fire projectiles in multiple directions
 	of course we want moves that are able to shoot in every direction.
@@ -117,6 +119,9 @@ a. melee projectiles disappearing against obstacles bug-----------[DONE]
 - camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
+
+- create proper loadouts:
+	- see paper notes about this
 
 - flow mechanic:
 	-some moves generate 'flow'
@@ -161,6 +166,11 @@ a. melee projectiles disappearing against obstacles bug-----------[DONE]
 
 start of battle animation:
 	-if would be cool if there was an animation with all the rings coming on as the fight began
+
+- loadout system:
+	- a simple and elegant way to determine which loadout you're switching to next
+	rather than just going through them all in a preset order.
+	(for the beginning, we only have 2 loadouts so we can ignore it for now.)
 
 == vn don't forget
 
