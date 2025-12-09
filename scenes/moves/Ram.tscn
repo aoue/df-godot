@@ -15,4 +15,5 @@ animation_type = 0
 proj_speed = 0.0
 proj_damage = 0.15
 proj_lifetime = 1.0
+proj_passthrough = true
 proj_scene = ExtResource("2_dlk62")

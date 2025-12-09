@@ -30,6 +30,8 @@ var set_attack_anim : bool = false
 var scored_hit: bool = false
 var summon_all_green: bool = false
 var recoil : Vector2
+var recoil_moment: int
+var recoil_knockback: int
 
 # Loadouts and moves
 @export var all_loadouts : Array[Loadout]
@@ -127,6 +129,11 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	move_boost_duration_left = active_move.move_speed_add_duration
 	projectile_counter = 0
 	can_attack_cooldown = attacking_duration_left + active_move.summon_duration + Coeff.move_cooldown
+	
+	# set recoil vars
+	recoil_moment = active_move.recoil_moment
+	recoil_knockback = active_move.recoil_knockback
+	
 	# set flags
 	set_attack_anim = true
 	can_attack = false
@@ -147,7 +154,7 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	#print("proj spawn loc relative = " + str(temp))
 	
 	# calculate recoil too
-	if active_move.recoil_moment == 1:
+	if recoil_moment == 1:
 		recoil = spawn_direction * active_move.recoil_knockback * Coeff.knockback
 	
 	# instantiate projectile 'proj'
@@ -162,14 +169,16 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 
 func report_hit(hit_body_position : Vector2) -> void:
 	# Called by projectile when it scores a hit to let the unit know what's happened.
+	# (This is for when the unit's projectile hits something, not when the unit is hit.)
 	#print("Scored hit!")
 	scored_hit = true
 	
-	# report knockback too, if 'on_hit' type
-	if active_move and active_move.recoil_moment == 2:
+	# report knockback, if 'on_hit' type
+	if recoil_moment == 2:
 		var recoil_angle : float = get_parent().global_position.angle_to_point(hit_body_position)
-		var recoil_scalar : float = active_move.recoil_knockback * Coeff.knockback
+		var recoil_scalar : float = recoil_knockback * Coeff.knockback
 		recoil = Vector2(cos(recoil_angle), sin(recoil_angle)).normalized() * recoil_scalar
+		print("report_hit()!, setting recoil: " + str(recoil))
 
 func _process(delta):
 	# manage attack cooldown

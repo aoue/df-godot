@@ -17,14 +17,14 @@ var proj_spawn_offset : int = 50  # to prevent facehugging, it seems.
 var loadout_cooldown: float = 2.0  # time it takes to switch to the next loadout
 var move_cooldown: float = 0.25  # time between using moves
 var rotation_speed: int = 20  # speed at which indicators rotate
-var hit_stun_rotation_speed: int = 0  # at 0, cannot rotate when hit.
 var speed: int = 5000  # speed at which units move across the map
 var acceleration: float = 0.08  # acceleration at which units increase speed
 var hp: int = 1000  # base hp value
 var damage: int = 1000  # base damage value
 var knockback: float = 200  # base knockback value
-var hit_stun_duration: float = 1.0  # base duration (s) of move hit stun
+var hit_stun_duration: float = 1.5  # base duration (s) of move hit stun
 var stun_shield_duration: float = 1.0  # duration (s) of stun immunity after being stunned
+var hit_stun_rotation_speed: int = 0  # at 0, cannot rotate when hit.
 
 """Movement Constants"""
 var boost_speed_mod: float = 1.25  # how much of a speedup boost gives

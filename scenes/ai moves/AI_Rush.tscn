@@ -5,7 +5,7 @@
 
 [node name="AiRush" type="Node2D"]
 script = ExtResource("1_6hptx")
-action_timer = 1.0
+cooldown_after_using = 2.0
 min_range = 0.1
 standoff_distance = 1.0
 max_range = 3.0

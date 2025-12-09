@@ -17,8 +17,8 @@ Adelie = ExtResource("4_4r8bx")
 
 [node name="ProjectileMother" parent="." instance=ExtResource("4_r851w")]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(911, 2335)
+[node name="red circle" type="Sprite2D" parent="."]
+position = Vector2(2000, -1000)
 scale = Vector2(5, 5)
 texture = ExtResource("6_v3l5k")
 

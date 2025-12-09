@@ -90,7 +90,7 @@ func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stu
 	if stun > 0 and hit_stun_shield == 0:
 		hit_stun_duration = stun
 		# try ignoring stun shield for now. 
-		#hit_stun_shield = stun + Coeff.stun_shield_duration  
+		hit_stun_shield = stun + Coeff.stun_shield_duration  
 	
 	if unit.is_defeated():
 		start_being_defeated()
@@ -301,7 +301,6 @@ func pass_duration(delta : float) -> void:
 	boost_duration = max(0, boost_duration - delta)
 	boost_cooldown = max(0, boost_cooldown - delta)
 	hit_stun_duration = max(0, hit_stun_duration - delta)
-	#hit_stun_duration = 1
 	hit_stun_shield = max(0, hit_stun_shield - delta)
 	
 	knockback = lerp(knockback, Vector2.ZERO, 0.1)

@@ -1,5 +1,8 @@
 commit notes:
 -removed rmb and space from old attack input settings, restricting now to solely lmb.
+-adjusted melee moves recoil against multiple targets
+-adjusted melee moves passthrough for hitting multiple targets
+-added ai move cooldown timer
 
 ======= NOTES
 collision layers/masks notes:
@@ -17,20 +20,28 @@ collision layers/masks notes:
 immediate notes:
 -
 
-1. enemy ai standoff/surrounding motivation----------------------[]
+1. adjusted melee moves behavior against multiple targets--------[DONE]
+2. enemy ai standoff/surrounding motivation----------------------[]
 ...
 . determine exactly what happens when a unit breaks--------------[]
 . implement dummy system where units break at 100% break---------[]
 . add ability to use break move----------------------------------[]
 
-. absolutely complete adelie spritesheet gate--------------------[]
+. [gate] absolutely complete adelie spritesheet------------------[]
 
 . add ally scarecrow unit----------------------------------------[]
 . add enemy ai target selection system---------------------------[]
 
-. think more 'flight mode' mechanic------------------------------[]
+. think more about 'flight mode' mechanic------------------------[]
 
+(long term goal)
+. fully asseted up, encounter at scale---------------------------[]
 
+- so hard to safely attack an enemy without being counter attacked:
+	- maybe the hit stun delay is too short?
+	- increase action delay?
+	actually, action delay timer doesn't seem to be working. seems like ability to attack overrides it.
+	=> separate movement timer and attack timer, then. I guess.
 
 - enemy ai standoff:
 	- let's make enemy units spread out a little bit amongst themselves to avoid clumping
@@ -39,8 +50,13 @@ immediate notes:
 	- add 2 enemies that start near each other and are targeting the player
 	- they don't just go straight for the player, they spread out a little bit during their approach
 	but they still make sure to straight on approach them.
+	
+	method to do this:
+	- when setting movement target position, it's gotta be this, right?
+	- first, pick target position based on target's position and move standoff
+	- then, find the position of the (2?) nearest ally unit to you (check through villains)
+	- calculate a new position based on that.
 
-	something like, approach the target while also making distance between yourself and closest ally above a certain value, but only while practical, of course. How to actually do this is a bit trickier, but i know you can do it.
 
 - adelie unit visual overhaul
 	- update the spritesheet

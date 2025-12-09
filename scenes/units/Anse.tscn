@@ -1,9 +1,8 @@
-[gd_scene load_steps=37 format=3 uid="uid://bheobjlecy41s"]
+[gd_scene load_steps=36 format=3 uid="uid://bheobjlecy41s"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_8i7ei"]
 [ext_resource type="Script" path="res://scripts/anse.gd" id="2_uger1"]
 [ext_resource type="PackedScene" uid="uid://bg324cc2cyi5h" path="res://scenes/moves/Rifle.tscn" id="3_nhue4"]
-[ext_resource type="PackedScene" uid="uid://c34vmtosa8veg" path="res://scenes/moves/Snap_swing.tscn" id="3_oldn2"]
 [ext_resource type="PackedScene" uid="uid://7o4ppb3nmby7" path="res://scenes/moves/Ram.tscn" id="4_1tntk"]
 [ext_resource type="PackedScene" uid="uid://bsv1rx2hbytve" path="res://scenes/moves/Pandora.tscn" id="5_8dghd"]
 [ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="5_lwr15"]
@@ -286,12 +285,12 @@ unitName = "Anse"
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("3_nhue4")
 slot1 = ExtResource("4_1tntk")
-slot2 = ExtResource("3_oldn2")
+slot2 = ExtResource("5_8dghd")
 
 [node name="Loadout1" parent="Unit" index="1"]
-slot0 = ExtResource("3_oldn2")
-slot1 = ExtResource("5_8dghd")
-slot2 = ExtResource("3_nhue4")
+slot0 = ExtResource("4_1tntk")
+slot1 = ExtResource("3_nhue4")
+slot2 = ExtResource("5_8dghd")
 
 [node name="CharacterAnim" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
