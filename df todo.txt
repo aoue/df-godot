@@ -1,8 +1,5 @@
 commit notes:
--removed rmb and space from old attack input settings, restricting now to solely lmb.
--adjusted melee moves recoil against multiple targets
--adjusted melee moves passthrough for hitting multiple targets
--added ai move cooldown timer
+-implemented basic system to encourage units not to clump together
 
 ======= NOTES
 collision layers/masks notes:
@@ -21,7 +18,7 @@ immediate notes:
 -
 
 1. adjusted melee moves behavior against multiple targets--------[DONE]
-2. enemy ai standoff/surrounding motivation----------------------[]
+2. enemy ai standoff/surrounding motivation----------------------[DONE]
 ...
 . determine exactly what happens when a unit breaks--------------[]
 . implement dummy system where units break at 100% break---------[]
@@ -37,11 +34,6 @@ immediate notes:
 (long term goal)
 . fully asseted up, encounter at scale---------------------------[]
 
-- so hard to safely attack an enemy without being counter attacked:
-	- maybe the hit stun delay is too short?
-	- increase action delay?
-	actually, action delay timer doesn't seem to be working. seems like ability to attack overrides it.
-	=> separate movement timer and attack timer, then. I guess.
 
 - enemy ai standoff:
 	- let's make enemy units spread out a little bit amongst themselves to avoid clumping
@@ -55,6 +47,12 @@ immediate notes:
 	- when setting movement target position, it's gotta be this, right?
 	- first, pick target position based on target's position and move standoff
 	- then, find the position of the (2?) nearest ally unit to you (check through villains)
+	- add a positon offset in the direction opposite of their position.
+		e.g. 
+		my position = 100, 100
+		original target position = 50, 50
+		ally position = 125, 125
+		i calculate my desired position to be (50, 50) + (100-125, 100-125)
 	- calculate a new position based on that.
 
 

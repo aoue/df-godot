@@ -14,6 +14,7 @@ How the AI works:
 @export var nav: NavigationAgent2D
 @export var delay_between_actions: float  # Changes how quick to respond the enemy is, very influential variable.
 @export var desired_attackers_on_target: int
+@export var desire_to_distance_from_allies: float
 
 # AI_Move variables that determine how the unit acts while it tries to use the loaded action.
 var hold_timer: float = 0.0  # The time remaining on the current action. Will reselect an action when it expires.
@@ -96,7 +97,18 @@ func decide_to_attack() -> void:
 """ Action Calculation """
 func pick_dest_helper() -> void:
 	movement_target_position = target_unit.position
-	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance)
+	
+	# adjust position for swarming
+	# impact is proportional to closeness; the closer they are, the more we care.
+	var closest_villain_position: Vector2 = GameMother.get_closest_villain_position(unit.combat_id, position)
+	var closest_villain_mag: float = (global_position - closest_villain_position).length() * desire_to_distance_from_allies * Coeff.distance_from_allies_mod
+	var direction_away: Vector2 = global_position.direction_to(closest_villain_position)
+	# rotate by 90
+	var direction_away_rotated: Vector2 = direction_away.rotated(PI/2)
+	
+	
+	# calculate position with respect to target's position, move standoff, and closeness to allies
+	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance) + (direction_away_rotated * closest_villain_mag)
 	action_timer = delay_between_actions * Coeff.ai_action_timer
 	set_movement_target(adjusted_position)
 	

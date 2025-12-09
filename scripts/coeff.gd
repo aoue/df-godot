@@ -36,6 +36,7 @@ var full_speed_angle_gate: float = PI / (8.0 / 3)  # how large the angle between
 var ai_action_timer: float = 1.0  # base timer between ai units selecting actions
 var standoff: float = -1000.0  # base distance ai units want between themselves and their targets
 var move_range: float = 1000.0  # base value for min range and max range of ai moves
+var distance_from_allies_mod: float = 1.0
 
 """Purely Visual"""
 var damage_text_slowdown: float = 0.01  # affects the short continued moving effect of damage text on hit
