@@ -41,5 +41,6 @@ func get_next_move() -> PackedScene:
 	return to_return
 
 func peek_next_move() -> PackedScene:
+	print(slot_pointer)
 	return slot_links[slot_pointer]
 	

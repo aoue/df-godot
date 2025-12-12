@@ -1,5 +1,6 @@
 commit notes:
--implemented basic system to encourage units not to clump together
+-added immediate attack cancellation on hit stun to avoid units trading damage and encourage more precision.
+-fixed bug where summon type moves were not canceled after hit stun
 
 ======= NOTES
 collision layers/masks notes:
@@ -20,9 +21,7 @@ immediate notes:
 1. adjusted melee moves behavior against multiple targets--------[DONE]
 2. enemy ai standoff/surrounding motivation----------------------[DONE]
 ...
-. determine exactly what happens when a unit breaks--------------[]
-. implement dummy system where units break at 100% break---------[]
-. add ability to use break move----------------------------------[]
+. think about break mechanic-------------------------------------[]
 
 . [gate] absolutely complete adelie spritesheet------------------[]
 
@@ -35,27 +34,6 @@ immediate notes:
 . fully asseted up, encounter at scale---------------------------[]
 
 
-- enemy ai standoff:
-	- let's make enemy units spread out a little bit amongst themselves to avoid clumping
-	(incentivize them to create distance from each other)
-	to test that this works properly:
-	- add 2 enemies that start near each other and are targeting the player
-	- they don't just go straight for the player, they spread out a little bit during their approach
-	but they still make sure to straight on approach them.
-	
-	method to do this:
-	- when setting movement target position, it's gotta be this, right?
-	- first, pick target position based on target's position and move standoff
-	- then, find the position of the (2?) nearest ally unit to you (check through villains)
-	- add a positon offset in the direction opposite of their position.
-		e.g. 
-		my position = 100, 100
-		original target position = 50, 50
-		ally position = 125, 125
-		i calculate my desired position to be (50, 50) + (100-125, 100-125)
-	- calculate a new position based on that.
-
-
 - adelie unit visual overhaul
 	- update the spritesheet
 
@@ -65,7 +43,6 @@ immediate notes:
 	- (change get attack input to only respond to left click)
 	- a move the player can use when pressing right click
 	- the move itself can be swapped out, but for now a single one is fine.
-	the move 
 	
 - break mechanic:
 	simple version:
@@ -94,10 +71,6 @@ immediate notes:
 - ally unit:
 	- create one for testing ai target picking (scarecrow is fine at first)
 	- also just to make sure that larger scale fights work
-
-- enemy ai:
-	- enemy units are encouraged to spread out and attack different targets to avoid clumping
-	(this is to do with their target selection function.)
 
 - combat feeling:
 	- it's not enough to work, it must also feel right.
@@ -130,10 +103,6 @@ immediate notes:
 	- maybe, but you still have to get closer yourself too, you know.
 	- also, you could still do that in baldr sky, but game still slapped.
 	- our method of forcing different weapon sets to be equipped should combat that, right?
-
-- point of fire problem:
-	- if an enemy is too close, you could fire past them. and the player could facehug enemies too.
-	this is undesirable, so we need a solution.
 
 - camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
@@ -182,6 +151,9 @@ immediate notes:
 	-there is an encounter manager which helps with:
 		-coordination, so they don't all attack the same target
 		-spawning reinforcements, etc
+
+- enemy ai standoff:
+	- should this be initialized to a random value in a given range upon combat start?
 
 start of battle animation:
 	-if would be cool if there was an animation with all the rings coming on as the fight began

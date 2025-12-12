@@ -32,6 +32,7 @@ var summon_all_green: bool = false
 var recoil : Vector2
 var recoil_moment: int
 var recoil_knockback: int
+var cancel_attack : bool = false
 
 # Loadouts and moves
 @export var all_loadouts : Array[Loadout]
@@ -62,6 +63,9 @@ func is_defeated() -> bool:
 		return true
 	return false
 
+func abort_summon_move() -> void:
+	pass
+
 func summon_period_over() -> bool:
 	return (active_move.spawn_type == 2 and attacking_duration_left <= active_move.move_duration)
 
@@ -69,6 +73,18 @@ func summon_waiting_for_2nd_click() -> bool:
 	return active_move and active_move.spawn_type == 2 and not summon_all_green
 
 # Attacking
+func emergency_exit() -> void:
+	# immediately ends the attack. Prevents damage trading in melee attacks.
+	# this should also hide projectiles, too.
+	if active_move and (active_move.spawn_type == 1 or active_move.spawn_type == 2):
+		cancel_attack = true
+		attacking_duration_left = 0.0
+		can_attack_cooldown = Coeff.move_cooldown
+		move_boost_duration_left = 0.0
+		#attacking_duration_left = Coeff.move_cooldown
+		#can_attack_cooldown = Coeff.move_cooldown
+		#move_boost_duration_left = Coeff.move_cooldown
+
 func early_exit() -> void:
 	if early_exit_taken:  # idempotent
 		return
@@ -136,6 +152,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	
 	# set flags
 	set_attack_anim = true
+	cancel_attack = false
 	can_attack = false
 	scored_hit = false
 	summon_all_green = false
@@ -178,7 +195,7 @@ func report_hit(hit_body_position : Vector2) -> void:
 		var recoil_angle : float = get_parent().global_position.angle_to_point(hit_body_position)
 		var recoil_scalar : float = recoil_knockback * Coeff.knockback
 		recoil = Vector2(cos(recoil_angle), sin(recoil_angle)).normalized() * recoil_scalar
-		print("report_hit()!, setting recoil: " + str(recoil))
+		#print("report_hit()!, setting recoil: " + str(recoil))
 
 func _process(delta):
 	# manage attack cooldown

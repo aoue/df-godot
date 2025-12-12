@@ -56,6 +56,11 @@ func _ready() -> void:
 	summon_indicator.self_modulate = unit_colour
 
 """ Input """
+func get_direction_input_helper() -> Vector2:
+	if hit_stun_duration > 0.0:
+		return Vector2.ZERO
+	return get_direction_input()
+	
 func get_direction_input() -> Vector2:
 	return Vector2.ZERO
 	
@@ -84,14 +89,15 @@ func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stu
 	knockback += proj_knockback
 	
 	# Cancel any ongoing action
-	# or rather, being hit is a timer based flag that stops them from triggering.
+	# immediately cancel the unit's attack as well, if that is ongoing.
+	unit.emergency_exit()
 	
-	# Affect sprite
-	if stun > 0 and hit_stun_shield == 0:
+	# Stun
+	if stun > 0 and stun > hit_stun_duration and hit_stun_shield <= 0:
 		hit_stun_duration = stun
-		# try ignoring stun shield for now. 
-		hit_stun_shield = stun + Coeff.stun_shield_duration  
+		#hit_stun_shield = stun + Coeff.stun_shield_duration
 	
+	# Die
 	if unit.is_defeated():
 		start_being_defeated()
 
@@ -239,7 +245,7 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:
-		if hit_stun_duration > 0.0:  
+		if hit_stun_duration > 0.0:
 			unit.early_exit()  # intterupt the attack and also cancel it so it does not resume after the stun has passed.
 			return
 		
@@ -307,7 +313,7 @@ func pass_duration(delta : float) -> void:
 	unit.recoil = lerp(unit.recoil, Vector2.ZERO, 0.25)
 
 func _physics_process(delta: float) -> void:
-	var direction: Vector2 = get_direction_input()
+	var direction: Vector2 = get_direction_input_helper()
 	var ring_direction: Vector2 = get_ring_indicator_vector()
 	var is_attacking: bool = get_attack_input_helper()
 	var target_pos: Vector2 = get_target_position()
@@ -322,6 +328,7 @@ func _physics_process(delta: float) -> void:
 		speed_value *= unit.active_move.user_speed_mod
 	elif is_backpedaling(direction, ring_direction):
 		speed_value /= 2
+	
 	if unit.move_boost_duration_left > 0.0:
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)

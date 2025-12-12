@@ -79,13 +79,13 @@ region = Rect2(900, 2700, 900, 900)
 atlas = ExtResource("3_lgy3h")
 region = Rect2(1800, 2700, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gp1fk"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ir4ll"]
 atlas = ExtResource("3_lgy3h")
-region = Rect2(0, 2700, 900, 900)
+region = Rect2(3600, 2700, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0ucfo"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_88mlo"]
 atlas = ExtResource("3_lgy3h")
-region = Rect2(900, 2700, 900, 900)
+region = Rect2(3600, 3600, 900, 900)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8i183"]
 atlas = ExtResource("3_lgy3h")
@@ -184,10 +184,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gp1fk")
+"texture": SubResource("AtlasTexture_ir4ll")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0ucfo")
+"texture": SubResource("AtlasTexture_88mlo")
 }],
 "loop": false,
 "name": &"9_being_hit",
@@ -218,9 +218,7 @@ allegiance = 2
 all_loadouts = [NodePath("Loadout0")]
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("3_6jkg4")
-slot1 = ExtResource("3_743jk")
-slot2 = ExtResource("3_743jk")
+slot0 = ExtResource("3_743jk")
 
 [node name="Loadout1" parent="Unit" index="1"]
 visible = false
@@ -229,7 +227,7 @@ slot0 = ExtResource("3_6jkg4")
 [node name="CharacterAnim" parent="." index="1"]
 position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_id33x")
-animation = &"0_side_rest"
+animation = &"9_being_hit"
 autoplay = ""
 
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="0"]

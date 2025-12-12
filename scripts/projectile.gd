@@ -49,13 +49,19 @@ func flip_direction() -> void:
 	direction = -direction
 
 func _on_body_entered(_body) -> void:
-	# This should trigger when hitting a border or projectile, because those have bodies.
+	# This should trigger when hitting a border or obstacle, because those have bodies. (units have areas)
 	# So on collision, betray and destroy yourself.
 	lifetime = 0.0
 		
 func _on_area_entered(area) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
+	
+	# check if the attack has been canceled (e.g., the unit was hit-stunned and wants to cancel its stuff.)
+	if user.cancel_attack:
+		queue_free()
+		return
+	
 	hit_something = true
 	
 	# Let the target know they've been hit (we trust them to handle this on their end.)
@@ -63,6 +69,7 @@ func _on_area_entered(area) -> void:
 	for reporter in overlapping_areas:
 		if reporter.get_unit_id() in hit_set:
 			continue
+		#print("struck one person with user id = " + str(reporter.get_unit_id()))
 		hit_set.append(reporter.get_unit_id())
 		
 		reporter.report_hit(damage, break_damage, knockback, stun)
@@ -98,7 +105,7 @@ func _on_area_entered(area) -> void:
 func _process(delta: float) -> void:
 	# Check to despawn (lifetime)
 	lifetime -= delta
-	if lifetime <= 0.0:
+	if (user and user.cancel_attack) or lifetime <= 0.0:
 		queue_free()
 	
 	# Control movement
