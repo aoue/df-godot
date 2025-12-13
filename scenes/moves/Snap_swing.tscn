@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Hero_half_arc_projectile.tscn" id="2_5h65b"]
 
 [node name="Move (Snap swing)" instance=ExtResource("1_l34j8")]
-fire_table = Array[float]([0.75])
+fire_table = Array[float]([0.4])
 accuracy_deviation_label = 0
 user_speed_mod = 0.75
 user_rotation_mod = 0.2
@@ -15,7 +15,7 @@ spawn_type = 1
 animation_type = 0
 proj_spawn_offset = 1.25
 proj_speed = 0.0
-proj_damage = 0.3
+proj_damage = 0.4
 proj_damage_spread_percentage = 0.05
 proj_lifetime = 1.5
 proj_passthrough = true

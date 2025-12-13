@@ -22,6 +22,8 @@ var combat_id : int  # assigned each battle. Value doesn't matter, as long as it
 var move_boost_duration_left : float = 0.0
 
 # Attack variables
+var prep_time : float = 0.0
+
 var attacking_duration_left : float = 0.0
 var projectile_counter : int = 0
 var can_attack : bool = true
@@ -76,8 +78,8 @@ func summon_waiting_for_2nd_click() -> bool:
 func emergency_exit() -> void:
 	# immediately ends the attack. Prevents damage trading in melee attacks.
 	# this should also hide projectiles, too.
+	cancel_attack = true
 	if active_move and (active_move.spawn_type == 1 or active_move.spawn_type == 2):
-		cancel_attack = true
 		attacking_duration_left = 0.0
 		can_attack_cooldown = Coeff.move_cooldown
 		move_boost_duration_left = 0.0
@@ -111,6 +113,10 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	# This function is called like all the time when you are in an attack; as soon as you click to attack.
 	# If we are not attacking but are eligible too, then we switch the active move and start it.
 	# If we are already in the middle of using a move, then we check against fire times and call fire() if appropriate
+	
+	if prep_time > 0.0:
+		return
+	
 	if attacking_duration_left > 0.0:
 		# summon conditions: if you are a summon move then:
 		#	-you may not fire if still in the summon period
@@ -124,8 +130,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 			projectile_counter += 1
 			fire(unit_pos, ring_indicator_vector, ring_indicator_obj)
 			
-		#  try :combo incentive?
-		# if the move has hit, then you can immediately finish it after the last projectile has been fired
+		# if the move has hit, then you can immediately finish it after the last projectile has been fired (combo incentive)
 		elif projectile_counter == len(active_move.fire_table) and scored_hit and not early_exit_taken:
 			early_exit()
 		return
@@ -140,7 +145,11 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	
 	# enter 'new active move' state
 	active_move = next_move.instantiate()
+	
+	
+	
 	# set timers
+	prep_time = active_move.move_prep_duration
 	attacking_duration_left = active_move.move_duration + active_move.summon_duration
 	move_boost_duration_left = active_move.move_speed_add_duration
 	projectile_counter = 0
@@ -199,24 +208,27 @@ func report_hit(hit_body_position : Vector2) -> void:
 
 func _process(delta):
 	# manage attack cooldown
-	if attacking_duration_left > 0.0:
-		if summon_waiting_for_2nd_click():
-			attacking_duration_left = max(active_move.move_duration, attacking_duration_left - delta)
-		else:
-			attacking_duration_left = max(0, attacking_duration_left - delta)
+	if prep_time > 0.0:
+		prep_time = max(0, prep_time - delta)
 	else:
-		if active_move:
-			active_move.queue_free()
-		active_move = null
-		can_attack_cooldown = max(0, can_attack_cooldown - delta)
-		if can_attack_cooldown == 0.0:
-			can_attack = true
+		if attacking_duration_left > 0.0:
+			if summon_waiting_for_2nd_click():
+				attacking_duration_left = max(active_move.move_duration, attacking_duration_left - delta)
+			else:
+				attacking_duration_left = max(0, attacking_duration_left - delta)
+		else:
+			if active_move:
+				active_move.queue_free()
+			active_move = null
+			can_attack_cooldown = max(0, can_attack_cooldown - delta)
+			if can_attack_cooldown == 0.0:
+				can_attack = true
 	
-	# manage move speed effect
-	if move_boost_duration_left > 0.0:
-		move_boost_duration_left = max(0, move_boost_duration_left - delta)
-		
-	# manage loadout switch
-	if loadout_gate_time > 0.0:
-		loadout_gate_time = max(0, loadout_gate_time - delta)
+		# manage move speed effect
+		if move_boost_duration_left > 0.0:
+			move_boost_duration_left = max(0, move_boost_duration_left - delta)
+			
+		# manage loadout switch
+		if loadout_gate_time > 0.0:
+			loadout_gate_time = max(0, loadout_gate_time - delta)
 

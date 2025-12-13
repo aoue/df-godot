@@ -29,6 +29,7 @@ var movement_target_position: Vector2  # where the unit wants to move to
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
 var action_timer: float = 0.0  # will be true when the unit thinks it is in a position ready to attack
 var attack_cooldown_timer: float = 1.0
+var in_stun: bool = false
 
 #func _ready():
 	#super()
@@ -100,12 +101,15 @@ func pick_dest_helper() -> void:
 	
 	# adjust position for swarming
 	# impact is proportional to closeness; the closer they are, the more we care.
+	var closest_villain_mag: float = 0.0
+	var direction_away: Vector2 = Vector2.ZERO
+	var direction_away_rotated: Vector2 = Vector2.ZERO
 	var closest_villain_position: Vector2 = GameMother.get_closest_villain_position(unit.combat_id, position)
-	var closest_villain_mag: float = (global_position - closest_villain_position).length() * desire_to_distance_from_allies * Coeff.distance_from_allies_mod
-	var direction_away: Vector2 = global_position.direction_to(closest_villain_position)
-	# rotate by 90
-	var direction_away_rotated: Vector2 = direction_away.rotated(PI/2)
-	
+	if closest_villain_position != Vector2.ZERO:
+		closest_villain_mag = (global_position - closest_villain_position).length() * desire_to_distance_from_allies * Coeff.distance_from_allies_mod
+		direction_away = global_position.direction_to(closest_villain_position)
+		# rotate by 90
+		direction_away_rotated = direction_away.rotated(PI/2)
 	
 	# calculate position with respect to target's position, move standoff, and closeness to allies
 	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance) + (direction_away_rotated * closest_villain_mag)
@@ -116,7 +120,7 @@ func pick_destination() -> void:
 	if nav.is_navigation_finished() or action_timer < 0.0:
 		pick_dest_helper()
 
-""" Physics Process Helpers """
+""" Helpers """
 func get_direction_input() -> Vector2:	
 	# update if nav is finished or action timer elapsed
 	if nav.is_navigation_finished() or action_timer < 0.0:
@@ -145,6 +149,9 @@ func get_target_position() -> Vector2:
 	else:
 		return nav.get_next_path_position()
 
+func being_hit_ai() -> void:
+	in_stun = true
+
 """ Movement """
 func set_movement_target(movement_target: Vector2):
 	nav.target_position = movement_target
@@ -157,5 +164,9 @@ func _physics_process(delta):
 	if hit_stun_duration <= 0.0:
 		attack_cooldown_timer -= delta
 		action_timer -= delta
+		if in_stun:
+			in_stun = false
+			attack_cooldown_timer = delay_between_actions
+
 	super(delta)
 	

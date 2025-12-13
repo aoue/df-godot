@@ -16,6 +16,7 @@ enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
 @export var move_speed_add : float  # negate this value to move backwards
 @export var user_speed_mod : float
 @export var user_rotation_mod : float
+@export var move_prep_duration : float
 @export var move_duration : float
 @export var summon_duration : float
 

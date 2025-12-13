@@ -1,6 +1,8 @@
 commit notes:
--added immediate attack cancellation on hit stun to avoid units trading damage and encourage more precision.
--fixed bug where summon type moves were not canceled after hit stun
+-adjusted ai action timer when leaving stun, and stun timing
+-adjusted summon type moves to apply speed mod during summon portion as well
+-added prep time mechanic, which could be situationally useful for creating certain move behavior (e.g. charging up before doing something)
+-fixed bug where hit trading was still occurring
 
 ======= NOTES
 collision layers/masks notes:
@@ -16,67 +18,85 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
--
+-try adding a pre-delay phase to every move.
+-ramp up boost speed over time? current max speed feels undodgeable sometimes.
+-little extra speed bump when a boost move hits. this shouldn't happen.
 
 1. adjusted melee moves behavior against multiple targets--------[DONE]
 2. enemy ai standoff/surrounding motivation----------------------[DONE]
-...
-. think about break mechanic-------------------------------------[]
+3. hit stun system and mechanics tweaking------------------------[DONE]
+4. experiment with summon mechanic-------------------------------[DONE]
+5. experiment with move pre-delay--------------------------------[DONE]
+6. [gate] absolutely complete adelie spritesheet-----------------[]
+7. [gate] combat effect visual overhaul--------------------------[] 
 
-. [gate] absolutely complete adelie spritesheet------------------[]
+. border movement collision does not stop consistently-----------[]
 
-. add ally scarecrow unit----------------------------------------[]
-. add enemy ai target selection system---------------------------[]
+. add allied friday unit-----------------------------------------[]
+. add ai target selection system---------------------------------[]
 
 . think more about 'flight mode' mechanic------------------------[]
+. think about break/special mechanic-----------------------------[]
 
 (long term goal)
 . fully asseted up, encounter at scale---------------------------[]
+. group encounter feels good-------------------------------------[]
+. encounter against a boss feels good----------------------------[]
+. review---------------------------------------------------------[]
 
 
 - adelie unit visual overhaul
 	- update the spritesheet
 
-... honestly, i still feel unsure about the break move mechanic. i don't really believe that it is good.
-
-- break move mechanic:
-	- (change get attack input to only respond to left click)
-	- a move the player can use when pressing right click
-	- the move itself can be swapped out, but for now a single one is fine.
-	
-- break mechanic:
-	simple version:
-	- no such thing as a break move. Instead, when a unit's break reaches 100 naturally, they break.
-	- in this case, it's just something that happens.
-	for now, let's go with this simple version.
-
-	breaking move version:
-	there exists a 'breaking move' that a unit can use with RMB:
-	- longer recharge time. used outside of loadout system. various ones exist.
-	- only the breaking move can send a unit from 100% meter to broken state
-	- on break, show [BREAK] text or similar, through floating damage text
-	- when a unit is in broken state, the player does not suffer loadout swap timer when hitting them?
-	
-	
+- combat effect overhaul:
+	- change projectile sprites to match the thick lines of the other art
+	- change summon icon to match thick lines too. And make it a circle or something.
 
 - map border collision:
 	super unreliable, units often just move right through with no issue. Why's that?
 	- because the unit's collider is too small? try increasing it and see what happens.
 	- but if it's too big the unit is more likely to get stuck while pathfinding.
-
-
-
-
+	read about this, look up tutorial on how to do it and see if we did it differently.
 
 - ally unit:
 	- create one for testing ai target picking (scarecrow is fine at first)
 	- also just to make sure that larger scale fights work
+	(does ally spread out from player, do enemies target ally and player in a balanced way, etc)
 
-- combat feeling:
-	- it's not enough to work, it must also feel right.
+- combat feeling review:
+	- it's not enough to just work, it must also feel right.
 	we will be able to judge it feels right if we're in a situation where:
 	- we have a scene in a pretty encounter map with anse + Friday vs like 4 adelie.
-	(of course this is something we aren't just 1 step away from)
+	- also test a scene against a more boss-like enemy. Faster to react, does combos, etc
+	do these feel good?
+	
+	important things:
+	- does it feel clean? like you know what's happening? what's going on?
+	- moves should have weight behind them. it should feel like: Bang! to bang! to bang!
+	each thing you do, you're doing on purpose, and the game clearly reacts to you doing it.
+
+	-more intentional hard hitting combat: make all moves require a setup timer.
+	- so you can't just click and use it, they all have a longer prep phase.
+	- well we can already do this by shifting the fire times (or using a timer before them, etc.)
+	- and then the virtue of comboing would be that you can skip the prep phase of the move?
+
+
+================
+
+- break vs. hit stun:
+	simply, hit stun is what happens every time you land a hit.
+	- it's short and sweet and gives you just enough time to get your next move in.
+	what is break on the other hand?
+	- the idea was that it was something that, by scoring many hits against a target, you would finally do.
+	- and that once broken, you could do something extra special to the target.
+	however, maybe this is a little bit silly though. it doesn't seem to have a place in game.
+	- or idk, maybe it does. Maybe it's just a longer term stun, where you can get in a lot of hits.
+	- it's kind of like the 'special move' of the game.
+	- oh and also, to actually push a unit into break, you would have to hit them with your break move.
+	let's streamline this mechanic.
+	- let's turn the break move into a kind of special move.
+	the effects of that move could be a longer stun or whatever you want. and the move charged on hits.
+
 
 - snow effect:
 	- when you change direction or come to a stop, pop us a snow effect?

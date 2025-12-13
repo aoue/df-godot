@@ -81,12 +81,17 @@ func get_target_position() -> Vector2:
 """ Reacting """
 func take_recoil(recoil_amount: Vector2):
 	knockback += recoil_amount
+
+func being_hit_ai() -> void:
+	pass
 	
 func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stun: float) -> void:
-	
 	# Do damage and cause knockback
 	unit.take_damage(proj_damage, break_damage)
 	knockback += proj_knockback
+	
+	# Give the unit's ai the chance to react to this.
+	being_hit_ai()
 	
 	# Cancel any ongoing action
 	# immediately cancel the unit's attack as well, if that is ongoing.
@@ -95,7 +100,7 @@ func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stu
 	# Stun
 	if stun > 0 and stun > hit_stun_duration and hit_stun_shield <= 0:
 		hit_stun_duration = stun
-		#hit_stun_shield = stun + Coeff.stun_shield_duration
+		hit_stun_shield = stun + Coeff.stun_shield_duration
 	
 	# Die
 	if unit.is_defeated():
@@ -232,7 +237,11 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	if direction_input.length() > 0:
 		velocity = velocity.lerp(direction_input * speed_input, acceleration_input)
 	else:
-		velocity = velocity.lerp(Vector2.ZERO, acceleration_input)	
+		velocity = velocity.lerp(Vector2.ZERO, acceleration_input)
+		
+	# Sets recoil
+	knockback = lerp(knockback, Vector2.ZERO, 0.1)
+	unit.recoil = lerp(unit.recoil, Vector2.ZERO, 0.25)
 		
 	# unaffected by move slowdowns
 	var speed_compensation_value : float = 1
@@ -308,9 +317,6 @@ func pass_duration(delta : float) -> void:
 	boost_cooldown = max(0, boost_cooldown - delta)
 	hit_stun_duration = max(0, hit_stun_duration - delta)
 	hit_stun_shield = max(0, hit_stun_shield - delta)
-	
-	knockback = lerp(knockback, Vector2.ZERO, 0.1)
-	unit.recoil = lerp(unit.recoil, Vector2.ZERO, 0.25)
 
 func _physics_process(delta: float) -> void:
 	var direction: Vector2 = get_direction_input_helper()
@@ -324,12 +330,13 @@ func _physics_process(delta: float) -> void:
 	if is_boosting:
 		acceleration_value = boost_acceleration
 		speed_value *= Coeff.boost_speed_mod
-	elif unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
+	#elif unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
+	elif unit.attacking_duration_left > 0.0:
 		speed_value *= unit.active_move.user_speed_mod
 	elif is_backpedaling(direction, ring_direction):
 		speed_value /= 2
 	
-	if unit.move_boost_duration_left > 0.0:
+	if unit.prep_time <= 0.0 and unit.move_boost_duration_left > 0.0:
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
 		direction = ring_direction

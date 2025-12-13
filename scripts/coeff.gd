@@ -20,10 +20,10 @@ var rotation_speed: int = 20  # speed at which indicators rotate
 var speed: int = 5000  # speed at which units move across the map
 var acceleration: float = 0.08  # acceleration at which units increase speed
 var hp: int = 1000  # base hp value
-var damage: int = 1000  # base damage value
+var damage: int = 100  # base damage value
 var knockback: float = 200  # base knockback value
-var hit_stun_duration: float = 1.5  # base duration (s) of move hit stun
-var stun_shield_duration: float = 1.0  # duration (s) of stun immunity after being stunned
+var hit_stun_duration: float = 1.0  # base duration (s) of move hit stun
+var stun_shield_duration: float = 0.5  # duration (s) of stun immunity after being stunned
 var hit_stun_rotation_speed: int = 0  # at 0, cannot rotate when hit.
 
 """Movement Constants"""
