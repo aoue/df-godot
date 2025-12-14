@@ -295,7 +295,7 @@ slot2 = ExtResource("5_8dghd")
 
 [node name="CharacterAnim" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
-animation = &"3_front_mov"
+animation = &"9_being_hit"
 autoplay = ""
 
 [node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim" index="0"]

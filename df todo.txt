@@ -1,8 +1,5 @@
 commit notes:
--adjusted ai action timer when leaving stun, and stun timing
--adjusted summon type moves to apply speed mod during summon portion as well
--added prep time mechanic, which could be situationally useful for creating certain move behavior (e.g. charging up before doing something)
--fixed bug where hit trading was still occurring
+-imported and tested adelie sprite sheet (soo cute omg)
 
 ======= NOTES
 collision layers/masks notes:
@@ -27,7 +24,7 @@ immediate notes:
 3. hit stun system and mechanics tweaking------------------------[DONE]
 4. experiment with summon mechanic-------------------------------[DONE]
 5. experiment with move pre-delay--------------------------------[DONE]
-6. [gate] absolutely complete adelie spritesheet-----------------[]
+6. [gate] absolutely complete adelie spritesheet-----------------[DONE]
 7. [gate] combat effect visual overhaul--------------------------[] 
 
 . border movement collision does not stop consistently-----------[]

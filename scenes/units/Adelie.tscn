@@ -1,10 +1,10 @@
-[gd_scene load_steps=29 format=3 uid="uid://c2ibc55iafa7i"]
+[gd_scene load_steps=27 format=3 uid="uid://c2ibc55iafa7i"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_ixxd5"]
 [ext_resource type="Script" path="res://scripts/adelie.gd" id="2_opqaw"]
 [ext_resource type="PackedScene" uid="uid://ds57vrog0ydj8" path="res://scenes/ai moves/AI_Rifle.tscn" id="3_6jkg4"]
 [ext_resource type="PackedScene" uid="uid://c2h231n81s8rr" path="res://scenes/ai moves/AI_Rush.tscn" id="3_743jk"]
-[ext_resource type="Texture2D" uid="uid://lbyjfxsskwhc" path="res://assets/anims/adelie spritesheet.png" id="3_lgy3h"]
+[ext_resource type="Texture2D" uid="uid://cplm3x2dsd6ho" path="res://assets/anims/adelie spritesheet.png" id="3_lgy3h"]
 [ext_resource type="Texture2D" uid="uid://c6sn4nvljn1ib" path="res://assets/ui/ring indicator coloured red.png" id="6_31ylr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_57xry"]
@@ -19,13 +19,13 @@ region = Rect2(900, 0, 900, 900)
 atlas = ExtResource("3_lgy3h")
 region = Rect2(1800, 0, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_opdim"]
-atlas = ExtResource("3_lgy3h")
-region = Rect2(2700, 0, 900, 900)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_xuxdm"]
 atlas = ExtResource("3_lgy3h")
 region = Rect2(3600, 0, 900, 900)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opdim"]
+atlas = ExtResource("3_lgy3h")
+region = Rect2(2700, 0, 900, 900)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4v84k"]
 atlas = ExtResource("3_lgy3h")
@@ -43,10 +43,6 @@ region = Rect2(1800, 900, 900, 900)
 atlas = ExtResource("3_lgy3h")
 region = Rect2(2700, 900, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1m5jf"]
-atlas = ExtResource("3_lgy3h")
-region = Rect2(3600, 900, 900, 900)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_2kvwq"]
 atlas = ExtResource("3_lgy3h")
 region = Rect2(0, 1800, 900, 900)
@@ -63,10 +59,6 @@ region = Rect2(1800, 1800, 900, 900)
 atlas = ExtResource("3_lgy3h")
 region = Rect2(2700, 1800, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5f1su"]
-atlas = ExtResource("3_lgy3h")
-region = Rect2(3600, 1800, 900, 900)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_rfh3o"]
 atlas = ExtResource("3_lgy3h")
 region = Rect2(0, 2700, 900, 900)
@@ -75,17 +67,17 @@ region = Rect2(0, 2700, 900, 900)
 atlas = ExtResource("3_lgy3h")
 region = Rect2(900, 2700, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nyf5v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_phne4"]
 atlas = ExtResource("3_lgy3h")
 region = Rect2(1800, 2700, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ir4ll"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5dby"]
 atlas = ExtResource("3_lgy3h")
-region = Rect2(3600, 2700, 900, 900)
+region = Rect2(1800, 4500, 900, 900)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_88mlo"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_12uci"]
 atlas = ExtResource("3_lgy3h")
-region = Rect2(3600, 3600, 900, 900)
+region = Rect2(2700, 4500, 900, 900)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8i183"]
 atlas = ExtResource("3_lgy3h")
@@ -102,11 +94,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"0_side_rest",
-"speed": 4.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6bd34")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xuxdm")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_opdim")
@@ -116,7 +111,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"1_side_mov",
-"speed": 6.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -127,7 +122,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"2_front_rest",
-"speed": 4.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -135,13 +130,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1yv5d")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1m5jf")
 }],
 "loop": true,
 "name": &"3_front_mov",
-"speed": 6.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -152,7 +144,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"4_back_rest",
-"speed": 4.0
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -160,13 +152,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_utssv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5f1su")
 }],
 "loop": true,
 "name": &"5_back_mov",
-"speed": 6.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -174,24 +163,29 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cmr25")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nyf5v")
 }],
 "loop": false,
 "name": &"6_melee",
-"speed": 6.0
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ir4ll")
+"texture": SubResource("AtlasTexture_phne4")
+}],
+"loop": false,
+"name": &"6b_melee_finisher",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5dby")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_88mlo")
+"texture": SubResource("AtlasTexture_12uci")
 }],
 "loop": false,
 "name": &"9_being_hit",
-"speed": 4.0
+"speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -199,7 +193,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"9b_defeated",
-"speed": 5.0
+"speed": 1.0
 }]
 
 [node name="Adelie" node_paths=PackedStringArray("nav") instance=ExtResource("1_ixxd5")]
@@ -227,7 +221,7 @@ slot0 = ExtResource("3_6jkg4")
 [node name="CharacterAnim" parent="." index="1"]
 position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_id33x")
-animation = &"9_being_hit"
+animation = &"9b_defeated"
 autoplay = ""
 
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="0"]

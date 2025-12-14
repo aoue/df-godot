@@ -39,15 +39,15 @@ func create_world() -> void:
 	add_child(adelie_in_world)
 	GameMother.add_villain(adelie_in_world)
 	
-	adelie_in_world2 = Adelie.instantiate()
-	adelie_in_world2.position = Vector2(2000, -1000)
-	add_child(adelie_in_world2)
-	GameMother.add_villain(adelie_in_world2)
-	
-	adelie_in_world3 = Adelie.instantiate()
-	adelie_in_world3.position = Vector2(1500, -1500)
-	add_child(adelie_in_world3)
-	GameMother.add_villain(adelie_in_world3)
+	#adelie_in_world2 = Adelie.instantiate()
+	#adelie_in_world2.position = Vector2(2000, -1000)
+	#add_child(adelie_in_world2)
+	#GameMother.add_villain(adelie_in_world2)
+	#
+	#adelie_in_world3 = Adelie.instantiate()
+	#adelie_in_world3.position = Vector2(1500, -1500)
+	#add_child(adelie_in_world3)
+	#GameMother.add_villain(adelie_in_world3)
 	
 	# Once all units are created. Necessary for proper hit register.
 	GameMother.assign_combat_ids()
