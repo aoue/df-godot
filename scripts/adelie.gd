@@ -28,8 +28,8 @@ var target_unit: UnitBody
 var movement_target_position: Vector2  # where the unit wants to move to
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
 var action_timer: float = 0.0  # will be true when the unit thinks it is in a position ready to attack
-var attack_cooldown_timer: float = 1.0
 var in_stun: bool = false
+var attack_cooldown_timer: float  # How long the enemy must wait after one attack before beginning the next.
 
 #func _ready():
 	#super()
@@ -151,6 +151,9 @@ func get_target_position() -> Vector2:
 
 func being_hit_ai() -> void:
 	in_stun = true
+func get_delay_between_actions() -> float:
+	return action_timer
+	return attack_cooldown_timer
 
 """ Movement """
 func set_movement_target(movement_target: Vector2):

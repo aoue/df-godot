@@ -6,9 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://c34vmtosa8veg" path="res://scenes/moves/Snap_swing.tscn" id="4_1iada"]
 [ext_resource type="PackedScene" uid="uid://7o4ppb3nmby7" path="res://scenes/moves/Ram.tscn" id="4_1tntk"]
 [ext_resource type="PackedScene" uid="uid://bsv1rx2hbytve" path="res://scenes/moves/Pandora.tscn" id="5_8dghd"]
-[ext_resource type="Texture2D" uid="uid://bxftyv0tuwfcf" path="res://assets/effects/boost f1.png" id="5_lwr15"]
-[ext_resource type="Texture2D" uid="uid://b7dpde3o7mn3k" path="res://assets/effects/boost f2.png" id="6_71na4"]
+[ext_resource type="Texture2D" uid="uid://csa27au8q331y" path="res://assets/effects/boost2.png" id="8_tt7gh"]
 [ext_resource type="Texture2D" uid="uid://bq0o3rykxs4xg" path="res://assets/anims/anse spritesheet.png" id="8_yo6gp"]
+[ext_resource type="Texture2D" uid="uid://dlikei8n0e77y" path="res://assets/effects/boost.png" id="9_4ic6w"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1q3np"]
 atlas = ExtResource("8_yo6gp")
@@ -261,10 +261,10 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("5_lwr15")
+"texture": ExtResource("8_tt7gh")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_71na4")
+"texture": ExtResource("9_4ic6w")
 }],
 "loop": true,
 "name": &"boost",
@@ -284,7 +284,7 @@ position_smoothing_enabled = true
 unitName = "Anse"
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("4_1tntk")
+slot0 = ExtResource("3_nhue4")
 slot1 = ExtResource("4_1iada")
 slot2 = ExtResource("5_8dghd")
 
@@ -299,9 +299,10 @@ animation = &"9_being_hit"
 autoplay = ""
 
 [node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim" index="0"]
-scale = Vector2(2.5, 2.631)
 sprite_frames = SubResource("SpriteFrames_kvmtv")
 animation = &"boost"
+frame = 1
+frame_progress = 0.422746
 
 [node name="AreaHitbox" parent="." index="4"]
 collision_layer = 196608

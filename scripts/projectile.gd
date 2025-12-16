@@ -67,8 +67,13 @@ func _on_area_entered(area) -> void:
 	# Let the target know they've been hit (we trust them to handle this on their end.)
 	var overlapping_areas = get_overlapping_areas()
 	for reporter in overlapping_areas:
+		# no double hit
 		if reporter.get_unit_id() in hit_set:
 			continue
+		# miss if target is in boost shield
+		if reporter.bodyChief.boost_shield > 0.0:
+			continue
+			
 		#print("struck one person with user id = " + str(reporter.get_unit_id()))
 		hit_set.append(reporter.get_unit_id())
 		

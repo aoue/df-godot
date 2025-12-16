@@ -1,5 +1,8 @@
 commit notes:
--imported and tested adelie sprite sheet (soo cute omg)
+-added boost shield mechanic for pseudo parrying
+-hid break system visual indicators, as system is currently unused/on-hold
+-updated ai unit's timing indicator to show delay between actions for more predicable behavior
+-first draft of a visual overhaul
 
 ======= NOTES
 collision layers/masks notes:
@@ -15,9 +18,7 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
--try adding a pre-delay phase to every move.
--ramp up boost speed over time? current max speed feels undodgeable sometimes.
--little extra speed bump when a boost move hits. this shouldn't happen.
+
 
 1. adjusted melee moves behavior against multiple targets--------[DONE]
 2. enemy ai standoff/surrounding motivation----------------------[DONE]
@@ -25,9 +26,8 @@ immediate notes:
 4. experiment with summon mechanic-------------------------------[DONE]
 5. experiment with move pre-delay--------------------------------[DONE]
 6. [gate] absolutely complete adelie spritesheet-----------------[DONE]
-7. [gate] combat effect visual overhaul--------------------------[] 
-
-. border movement collision does not stop consistently-----------[]
+7. [gate] effect visual overhaul---------------------------------[]
+8. border movement collision does not stop consistently----------[]
 
 . add allied friday unit-----------------------------------------[]
 . add ai target selection system---------------------------------[]
@@ -42,12 +42,10 @@ immediate notes:
 . review---------------------------------------------------------[]
 
 
-- adelie unit visual overhaul
-	- update the spritesheet
-
 - combat effect overhaul:
-	- change projectile sprites to match the thick lines of the other art
-	- change summon icon to match thick lines too. And make it a circle or something.
+	- projectiles (melee, border?)...........................[]
+		- something, but it's a bit hard to place
+		- a border seems to out of place because of the size
 
 - map border collision:
 	super unreliable, units often just move right through with no issue. Why's that?
@@ -59,6 +57,23 @@ immediate notes:
 	- create one for testing ai target picking (scarecrow is fine at first)
 	- also just to make sure that larger scale fights work
 	(does ally spread out from player, do enemies target ally and player in a balanced way, etc)
+	their version of friendly standoff:
+	- partner up with a unit and stick together? within a certain distance, etc, keep that sweetspot.
+	- idk, maybe
+
+- ai dodging:
+	- more advanced units (allies or enemies) need to be able to dodge at least a little
+	could start with something as simple as:
+	- wherever it is you want to be, if you feel you are under threat
+		- you want distance but enemy close, or you want close but enemy distant (but not too distant)
+		- and you are not too close already to target position
+	- if you can, then use your boost in the direction you want to go
+	this will naturally help units either close distance or make distance
+
+- ai delay between actions as range:
+	for some enemies, to make them more unpredictable:
+	- delay between actions can become a range and stuff.
+	
 
 - combat feeling review:
 	- it's not enough to just work, it must also feel right.
@@ -72,28 +87,26 @@ immediate notes:
 	- moves should have weight behind them. it should feel like: Bang! to bang! to bang!
 	each thing you do, you're doing on purpose, and the game clearly reacts to you doing it.
 
-	-more intentional hard hitting combat: make all moves require a setup timer.
-	- so you can't just click and use it, they all have a longer prep phase.
-	- well we can already do this by shifting the fire times (or using a timer before them, etc.)
-	- and then the virtue of comboing would be that you can skip the prep phase of the move?
-
 
 ================
 
-- break vs. hit stun:
-	simply, hit stun is what happens every time you land a hit.
-	- it's short and sweet and gives you just enough time to get your next move in.
-	what is break on the other hand?
-	- the idea was that it was something that, by scoring many hits against a target, you would finally do.
-	- and that once broken, you could do something extra special to the target.
-	however, maybe this is a little bit silly though. it doesn't seem to have a place in game.
-	- or idk, maybe it does. Maybe it's just a longer term stun, where you can get in a lot of hits.
-	- it's kind of like the 'special move' of the game.
-	- oh and also, to actually push a unit into break, you would have to hit them with your break move.
-	let's streamline this mechanic.
-	- let's turn the break move into a kind of special move.
-	the effects of that move could be a longer stun or whatever you want. and the move charged on hits.
+- some kind of natural counter mechanic:
+	some ideas:
+	- if the unit is in the middle of an attack when hit, take extra damage
+	- when the player uses a move, they are protected for 0.x seconds? 
+	something about using a move right before you get hit, lets your move protect you.
+	and so instead you will hit the bad guy.
+	but this would be uncool for the enemy to use, i think.
 
+	OR, like, the last one to actually commit to using the move has precedence or something.
+	so like, hold off on it, but if you time it right you can cancel their combo.
+	i feel like there needs to be a better way to tell who will get hit when two units are lunging.
+	and maybe this action shield for a split second after you hit would be it?
+
+- if there is some kind of special move:
+	it would be to skip the loadout timer swap and immediately go to the next one.
+	- break accumulates on units normally, when a unit is broken, though:
+	- no loadout skip on switch
 
 - snow effect:
 	- when you change direction or come to a stop, pop us a snow effect?

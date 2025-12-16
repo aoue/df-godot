@@ -3,8 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Hero_projectile.tscn" id="1_fpc85"]
 [ext_resource type="Texture2D" uid="uid://gdyc14v5oq2" path="res://assets/projectile/proj half arc.png" id="2_50vef"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_othab"]
-size = Vector2(601.167, 1252)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i13mj"]
+radius = 356.333
+height = 1170.0
 
 [node name="Large Projectile" instance=ExtResource("1_fpc85")]
 collision_mask = 131072
@@ -13,5 +14,5 @@ collision_mask = 131072
 texture = ExtResource("2_50vef")
 
 [node name="Projectile Collider" parent="." index="1"]
-position = Vector2(308.667, -15)
-shape = SubResource("RectangleShape2D_othab")
+position = Vector2(260, -4)
+shape = SubResource("CapsuleShape2D_i13mj")

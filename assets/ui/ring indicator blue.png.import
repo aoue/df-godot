@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ct8unmymjcyr5"
-path="res://.godot/imported/utility bar fill.png-09acae72ebaf4bdd8e7d9fc40c7b1e15.ctex"
+uid="uid://t756x0x1sbjf"
+path="res://.godot/imported/ring indicator blue.png-9d29db9ae2da8fe26755b8871d498e9d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/utility bar fill.png"
-dest_files=["res://.godot/imported/utility bar fill.png-09acae72ebaf4bdd8e7d9fc40c7b1e15.ctex"]
+source_file="res://assets/ui/ring indicator blue.png"
+dest_files=["res://.godot/imported/ring indicator blue.png-9d29db9ae2da8fe26755b8871d498e9d.ctex"]
 
 [params]
 

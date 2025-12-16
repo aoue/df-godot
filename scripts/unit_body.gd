@@ -28,6 +28,7 @@ var acceleration: float
 var knockback: Vector2
 
 # Boost variables
+var boost_shield: float = 0.0
 var boost_acceleration: float
 var boost_vector: Vector2
 var boost_duration: float = 0.0
@@ -112,6 +113,9 @@ func start_being_defeated() -> void:
 	#queue_free()
 	pass
 
+func get_delay_between_actions() -> float:
+	return 0.0
+
 func update_timing_bar(delta: float) -> void:
 	# first: discover value we should be comparing:
 	
@@ -136,8 +140,11 @@ func update_timing_bar(delta: float) -> void:
 		new_value = unit.attacking_duration_left
 	# case 2: in cooldown
 	elif unit.can_attack_cooldown > 0.0:
-		new_max_value = Coeff.move_cooldown
-		new_value = unit.can_attack_cooldown
+		# for an ai unit, show delay between actions as well
+		#var action_delay: float = 0.0
+		var action_delay: float = get_delay_between_actions()
+		new_max_value = Coeff.move_cooldown + action_delay
+		new_value = unit.can_attack_cooldown + action_delay
 	# case 3: switching loadouts
 	elif unit.loadout_gate_time > 0.0:
 		new_max_value = Coeff.loadout_cooldown
@@ -150,7 +157,6 @@ func update_timing_bar(delta: float) -> void:
 	if timing_bar.value > new_value:
 		timing_bar.value -= Coeff.hp_bar_update_speed * delta
 	elif timing_bar.value < new_value:
-		#timing_bar.value += Coeff.hp_bar_update_speed * delta
 		timing_bar.value = new_value
 		
 func update_hp_bar(new_value: int, delta: float) -> void:
@@ -313,6 +319,7 @@ func get_ring_indicator_vector() -> Vector2:
 	return Vector2(x_component, y_component)
 
 func pass_duration(delta : float) -> void:
+	boost_shield = max(0, boost_shield - delta)
 	boost_duration = max(0, boost_duration - delta)
 	boost_cooldown = max(0, boost_cooldown - delta)
 	hit_stun_duration = max(0, hit_stun_duration - delta)

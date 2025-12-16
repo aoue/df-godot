@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dot0uocagrdjj"
-path="res://.godot/imported/proj min.png-cdac1a93c2ef3f19e35571f2cc7dc2bb.ctex"
+uid="uid://csa27au8q331y"
+path="res://.godot/imported/boost2.png-b70d962bde3809e5a552d27cf4a3d9e4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/projectile/proj min.png"
-dest_files=["res://.godot/imported/proj min.png-cdac1a93c2ef3f19e35571f2cc7dc2bb.ctex"]
+source_file="res://assets/effects/boost2.png"
+dest_files=["res://.godot/imported/boost2.png-b70d962bde3809e5a552d27cf4a3d9e4.ctex"]
 
 [params]
 

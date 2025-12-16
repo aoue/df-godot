@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6sn4nvljn1ib"
-path="res://.godot/imported/ring indicator coloured red.png-8541de72cb69edcf1a4c4d3eac3863ad.ctex"
+uid="uid://cw088nbskon86"
+path="res://.godot/imported/ring indicator white.png-0ccb73c23b82a2c015a73dcf569ce41b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/ring indicator coloured red.png"
-dest_files=["res://.godot/imported/ring indicator coloured red.png-8541de72cb69edcf1a4c4d3eac3863ad.ctex"]
+source_file="res://assets/ui/ring indicator white.png"
+dest_files=["res://.godot/imported/ring indicator white.png-0ccb73c23b82a2c015a73dcf569ce41b.ctex"]
 
 [params]
 

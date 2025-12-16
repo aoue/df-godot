@@ -28,7 +28,8 @@ var hit_stun_rotation_speed: int = 0  # at 0, cannot rotate when hit.
 
 """Movement Constants"""
 var boost_speed_mod: float = 1.25  # how much of a speedup boost gives
-var boost_full_duration: float = 0.2  # how long the boost lasts
+var boost_full_duration: float = 0.25  # how long the boost lasts
+var boost_shield_full_duration: float = boost_full_duration
 var boost_full_cooldown: float = 1.5  # how long until you may boost again
 var full_speed_angle_gate: float = PI / (8.0 / 3)  # how large the angle between the indicator and the movement input may be while the unit still moves at full speed
 
