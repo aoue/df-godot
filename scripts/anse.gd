@@ -62,7 +62,5 @@ func set_anim_plus(isBoosting: bool) -> void:
 	else:
 		boost_anim.hide()
 
-#func go_attack(unit_pos: Vector2, mouse_input: Vector2) -> void:
-	#if attack_input:
-		#unit.use_move1(unit_pos, mouse_input)
+
 

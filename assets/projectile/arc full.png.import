@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnkja1kjq0ey2"
-path="res://.godot/imported/ring indicator white.png-0ccb73c23b82a2c015a73dcf569ce41b.ctex"
+uid="uid://dri0farcc7tr8"
+path="res://.godot/imported/arc full.png-3771092db27a7e962efe7ce434386887.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/ring indicator white.png"
-dest_files=["res://.godot/imported/ring indicator white.png-0ccb73c23b82a2c015a73dcf569ce41b.ctex"]
+source_file="res://assets/projectile/arc full.png"
+dest_files=["res://.godot/imported/arc full.png-3771092db27a7e962efe7ce434386887.ctex"]
 
 [params]
 

@@ -1,8 +1,5 @@
 commit notes:
--added boost shield mechanic for pseudo parrying
--hid break system visual indicators, as system is currently unused/on-hold
--updated ai unit's timing indicator to show delay between actions for more predicable behavior
--first draft of a visual overhaul
+-finished combat visual effect overhaul for now
 
 ======= NOTES
 collision layers/masks notes:
@@ -18,7 +15,7 @@ collision layers/masks notes:
 ======= TODO: combat feeling
 
 immediate notes:
-
+-
 
 1. adjusted melee moves behavior against multiple targets--------[DONE]
 2. enemy ai standoff/surrounding motivation----------------------[DONE]
@@ -26,11 +23,15 @@ immediate notes:
 4. experiment with summon mechanic-------------------------------[DONE]
 5. experiment with move pre-delay--------------------------------[DONE]
 6. [gate] absolutely complete adelie spritesheet-----------------[DONE]
-7. [gate] effect visual overhaul---------------------------------[]
-8. border movement collision does not stop consistently----------[]
+7. [gate] effect visual overhaul---------------------------------[DONE]
+
+. units being defeated-------------------------------------------[]
+. border movement collision does not stop consistently-----------[]
+
 
 . add allied friday unit-----------------------------------------[]
 . add ai target selection system---------------------------------[]
+. [gate] Friday spritesheet--------------------------------------[]
 
 . think more about 'flight mode' mechanic------------------------[]
 . think about break/special mechanic-----------------------------[]
@@ -41,11 +42,13 @@ immediate notes:
 . encounter against a boss feels good----------------------------[]
 . review---------------------------------------------------------[]
 
+- find the place that's printing all those 0s:
+	- related to printing unit id i think, for hit colliding? unit reporter? game mother?
 
-- combat effect overhaul:
-	- projectiles (melee, border?)...........................[]
-		- something, but it's a bit hard to place
-		- a border seems to out of place because of the size
+- units being defeated:
+	- check after finishing being hit, when a unit's hp reaches 0.
+	- then after playing the being hit anim, play the defeated anim instead.
+	- try leaving the body on the field, but disable all its colliders and stuff.
 
 - map border collision:
 	super unreliable, units often just move right through with no issue. Why's that?

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dxua7bcx2r31i"]
 
 [ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Hero_projectile.tscn" id="1_fpc85"]
-[ext_resource type="Texture2D" uid="uid://gdyc14v5oq2" path="res://assets/projectile/proj half arc.png" id="2_50vef"]
+[ext_resource type="Texture2D" uid="uid://dri0farcc7tr8" path="res://assets/projectile/arc full.png" id="2_g40pj"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i13mj"]
 radius = 356.333
@@ -11,7 +11,7 @@ height = 1170.0
 collision_mask = 131072
 
 [node name="Projectile Sprite" parent="." index="0"]
-texture = ExtResource("2_50vef")
+texture = ExtResource("2_g40pj")
 
 [node name="Projectile Collider" parent="." index="1"]
 position = Vector2(260, -4)

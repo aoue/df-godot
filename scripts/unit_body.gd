@@ -296,9 +296,10 @@ func adjust_indicators(where: Vector2, delta: float):
 	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
 
 	# Adjust summon indicator too
-	var offset = 700
-	var v = get_ring_indicator_vector()
-	summon_indicator.position = Vector2(offset * v.x, offset * v.y)
+	#var offset = 700
+	#var v = get_ring_indicator_vector()
+	#summon_indicator.position = Vector2(offset * v.x, offset * v.y)
+	summon_indicator.rotation = rotate_toward(summon_indicator.rotation, wanted_rotation_angle, rotation_weight)
 	# or, angle between self and ring indicator * 725?
 	
 	# adjust stat labels too (still in progress)

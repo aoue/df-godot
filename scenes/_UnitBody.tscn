@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://btw1q13535y1" path="res://assets/ui/hp bar fill.png" id="3_44yiu"]
 [ext_resource type="Texture2D" uid="uid://crs0dp0xvrbs0" path="res://assets/ui/ring image.png" id="4_pvg52"]
 [ext_resource type="Texture2D" uid="uid://cq4xjtkurikxd" path="res://assets/ui/summon indicator.png" id="6_rlaow"]
-[ext_resource type="Texture2D" uid="uid://cw088nbskon86" path="res://assets/ui/ring indicator white.png" id="6_ym7ra"]
+[ext_resource type="Texture2D" uid="uid://dnkja1kjq0ey2" path="res://assets/ui/ring indicator white.png" id="6_ym7ra"]
 [ext_resource type="Texture2D" uid="uid://t756x0x1sbjf" path="res://assets/ui/ring indicator blue.png" id="7_ngfjm"]
 [ext_resource type="Script" path="res://scripts/hit_reporter.gd" id="8_5clpj"]
 
@@ -52,8 +52,9 @@ scale = Vector2(1.25, 1.25)
 texture = ExtResource("4_pvg52")
 
 [node name="SummonIndicator" type="Sprite2D" parent="RingAnim"]
-position = Vector2(725, 0)
+rotation = 6.28319
 texture = ExtResource("6_rlaow")
+offset = Vector2(650, 0)
 
 [node name="RingIndicator" type="Sprite2D" parent="RingAnim"]
 rotation = 6.28319
@@ -64,8 +65,8 @@ offset_left = 512.799
 offset_top = -128.002
 offset_right = 768.799
 offset_bottom = 127.998
-texture_under = ExtResource("6_ym7ra")
-texture_progress = ExtResource("7_ngfjm")
+texture_under = ExtResource("7_ngfjm")
+texture_progress = ExtResource("6_ym7ra")
 
 [node name="AreaHitbox" type="Area2D" parent="." node_paths=PackedStringArray("bodyChief")]
 scale = Vector2(1, 0.990325)

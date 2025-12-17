@@ -225,7 +225,7 @@ animation = &"9b_defeated"
 autoplay = ""
 
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="0"]
-texture_progress = ExtResource("6_23lvc")
+texture_under = ExtResource("6_23lvc")
 
 [node name="AreaHitbox" parent="." index="3"]
 collision_layer = 768
