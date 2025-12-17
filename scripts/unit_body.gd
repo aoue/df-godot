@@ -26,6 +26,7 @@ class_name UnitBody
 var speed: float
 var acceleration: float
 var knockback: Vector2
+var defeated: bool = false
 
 # Boost variables
 var boost_shield: float = 0.0
@@ -69,7 +70,7 @@ func get_boost_input(direction: Vector2) -> bool:
 	return false
 
 func get_attack_input_helper() -> bool:
-	if hit_stun_duration > 0.0:
+	if hit_stun_duration > 0.0 or hit_stun_shield > 0.0:
 		return false
 	return get_attack_input()
 func get_attack_input() -> bool:
@@ -98,20 +99,20 @@ func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stu
 	# immediately cancel the unit's attack as well, if that is ongoing.
 	unit.emergency_exit()
 	
-	# Stun
+	# Be stunned, if appropriate
 	if stun > 0 and stun > hit_stun_duration and hit_stun_shield <= 0:
 		hit_stun_duration = stun
 		hit_stun_shield = stun + Coeff.stun_shield_duration
 	
-	# Die
+	# Die, if appropriate
 	if unit.is_defeated():
-		start_being_defeated()
+		go_be_defeated()
 
-func start_being_defeated() -> void:
-	# does some stuff when the unit is defeated
-	# probably has a dying animation and timer, then also leaves a body behind
-	#queue_free()
-	pass
+func go_be_defeated() -> void:
+	# few things to do:
+	# you can never act again, so set that flag
+	defeated = true
+	character_anim.play("9b_defeated")
 
 func get_delay_between_actions() -> float:
 	return 0.0
@@ -124,8 +125,10 @@ func update_timing_bar(delta: float) -> void:
 	
 	# case -1: we are stunned:
 	if hit_stun_duration > 0.0:
-		new_max_value = Coeff.hit_stun_duration
-		new_value = hit_stun_duration
+		#new_max_value = Coeff.hit_stun_duration
+		#new_value = hit_stun_duration
+		new_max_value = Coeff.hit_stun_duration + Coeff.stun_shield_duration
+		new_value = hit_stun_shield
 	# case 0: we are in summon
 	elif unit.attacking_duration_left > 0.0 and unit.active_move.spawn_type == 2 and not unit.summon_period_over():
 		# attacking_duration_left <= active_move.move_duration
@@ -140,11 +143,8 @@ func update_timing_bar(delta: float) -> void:
 		new_value = unit.attacking_duration_left
 	# case 2: in cooldown
 	elif unit.can_attack_cooldown > 0.0:
-		# for an ai unit, show delay between actions as well
-		#var action_delay: float = 0.0
-		var action_delay: float = get_delay_between_actions()
-		new_max_value = Coeff.move_cooldown + action_delay
-		new_value = unit.can_attack_cooldown + action_delay
+		new_max_value = Coeff.move_cooldown
+		new_value = unit.can_attack_cooldown
 	# case 3: switching loadouts
 	elif unit.loadout_gate_time > 0.0:
 		new_max_value = Coeff.loadout_cooldown
@@ -327,6 +327,9 @@ func pass_duration(delta : float) -> void:
 	hit_stun_shield = max(0, hit_stun_shield - delta)
 
 func _physics_process(delta: float) -> void:
+	if defeated:
+		return
+	
 	var direction: Vector2 = get_direction_input_helper()
 	var ring_direction: Vector2 = get_ring_indicator_vector()
 	var is_attacking: bool = get_attack_input_helper()

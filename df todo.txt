@@ -1,5 +1,9 @@
 commit notes:
--finished combat visual effect overhaul for now
+-added attack priority mechanic which gives precedence to attacks that fired (but not necessarily begun) most recently; this helps to avoid being hit unexpectedly after dodge countering.
+-tidied up a bit, tracked down a lost errant print statement
+-integrated ai move cooldown timer system into unit attack cooldown system for simplicity and fixed bug with visual representation in ring indicator timing
+-made it so that units may not attack during hit stun shield as well (escape the combo, don't interrupt it)
+-made it so that units can no longer collide with each other
 
 ======= NOTES
 collision layers/masks notes:
@@ -24,10 +28,11 @@ immediate notes:
 5. experiment with move pre-delay--------------------------------[DONE]
 6. [gate] absolutely complete adelie spritesheet-----------------[DONE]
 7. [gate] effect visual overhaul---------------------------------[DONE]
-
-. units being defeated-------------------------------------------[]
-. border movement collision does not stop consistently-----------[]
-
+a. attack priority system----------------------------------------[DONE]
+b. clean up that errant print statement wherever it is-----------[DONE]
+c. tweak and fine-tune a whole bunch of systems------------------[DONE]
+8. units being defeated------------------------------------------[]
+9. border movement collision does not stop consistently----------[]
 
 . add allied friday unit-----------------------------------------[]
 . add ai target selection system---------------------------------[]
@@ -42,13 +47,14 @@ immediate notes:
 . encounter against a boss feels good----------------------------[]
 . review---------------------------------------------------------[]
 
-- find the place that's printing all those 0s:
-	- related to printing unit id i think, for hit colliding? unit reporter? game mother?
 
 - units being defeated:
-	- check after finishing being hit, when a unit's hp reaches 0.
-	- then after playing the being hit anim, play the defeated anim instead.
-	- try leaving the body on the field, but disable all its colliders and stuff.
+	on death, make sure to:
+	- hide hpbar
+	- ring ring and indicator
+	- stop the unit from being hit again (done)
+	- turn off collision (both for movement and projectiles)
+	- slowly fade the unit out into the background
 
 - map border collision:
 	super unreliable, units often just move right through with no issue. Why's that?
@@ -57,6 +63,13 @@ immediate notes:
 	read about this, look up tutorial on how to do it and see if we did it differently.
 
 - ally unit:
+	keep this system generalized:
+	- generalize the ai unit class
+	- recreate the enemy adelie penguin unit
+	- create an allied adelie penguin 
+	make it so that all that changes is the unit's target selection and closeness selection
+	(this should all be controlled by the unit's 'allegiance' flag)
+
 	- create one for testing ai target picking (scarecrow is fine at first)
 	- also just to make sure that larger scale fights work
 	(does ally spread out from player, do enemies target ally and player in a balanced way, etc)

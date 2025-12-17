@@ -18,6 +18,7 @@ height = 27.3418
 size = Vector2(48, 48)
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "summon_indicator", "stat_labels", "stun_label", "utility_label", "speed_label")]
+collision_layer = 0
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")

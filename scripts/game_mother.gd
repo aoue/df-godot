@@ -14,6 +14,7 @@ Also holds gamerules and stuff like that too.
 var heroes : Array[UnitBody] = []  # Anse and friends
 var villains : Array[UnitBody] = []  # Opponents to Anse and friends
 #var thirds : Array[UnitBody]  # enemies of all
+var attack_priority_counter: int = 0
 
 """ Encounter Setup Functions """
 func setup_UI() -> void:
@@ -38,6 +39,10 @@ func assign_combat_ids() -> void:
 		id_value += 1
 
 """ Managing Functions """
+func assign_attack_priority() -> int:
+	attack_priority_counter += 1
+	return attack_priority_counter
+
 func get_closest_villain_position(my_combat_id: int, my_pos: Vector2) -> Vector2:
 	# Return the min distance to any villain unit that is not this unit
 	# (does not have the same combat_id)

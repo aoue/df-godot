@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c2ibc55iafa7i"]
+[gd_scene load_steps=29 format=3 uid="uid://c2ibc55iafa7i"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_ixxd5"]
 [ext_resource type="Script" path="res://scripts/adelie.gd" id="2_opqaw"]
@@ -76,6 +76,14 @@ atlas = ExtResource("3_lgy3h")
 region = Rect2(1800, 4500, 900, 900)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_12uci"]
+atlas = ExtResource("3_lgy3h")
+region = Rect2(2700, 4500, 900, 900)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7vx50"]
+atlas = ExtResource("3_lgy3h")
+region = Rect2(1800, 4500, 900, 900)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nqpjy"]
 atlas = ExtResource("3_lgy3h")
 region = Rect2(2700, 4500, 900, 900)
 
@@ -189,11 +197,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_7vx50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nqpjy")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_8i183")
 }],
 "loop": false,
 "name": &"9b_defeated",
-"speed": 1.0
+"speed": 2.0
 }]
 
 [node name="Adelie" node_paths=PackedStringArray("nav") instance=ExtResource("1_ixxd5")]
@@ -202,7 +216,6 @@ nav = NodePath("NavigationAgent2D")
 delay_between_actions = 1.0
 desired_attackers_on_target = 0
 desire_to_distance_from_allies = 1.0
-HP_max_coeff = 0.25
 speed_coeff = 0.25
 acceleration_coeff = 0.75
 
@@ -213,9 +226,10 @@ all_loadouts = [NodePath("Loadout0")]
 
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("3_743jk")
+slot1 = ExtResource("3_743jk")
+slot2 = ExtResource("3_6jkg4")
 
 [node name="Loadout1" parent="Unit" index="1"]
-visible = false
 slot0 = ExtResource("3_6jkg4")
 
 [node name="CharacterAnim" parent="." index="1"]

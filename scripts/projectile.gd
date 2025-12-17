@@ -6,6 +6,7 @@ extends Area2D
 
 # Stats variables (will be set by move)
 var direction: Vector2 = Vector2.ZERO
+var attack_priority: int = 0
 var speed: int = 0
 var damage: int = 0
 var break_damage: int = 0
@@ -21,11 +22,13 @@ var hit_something : bool = false
 var hit_set : Array
 
 # Collisions
-func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_break_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_allegiance: int, arg_user: Unit) -> void:
+func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_break_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
 	look_at(arg_position + arg_direction)
+	
+	attack_priority = arg_priority
 	
 	# Record stats information
 	speed = arg_speed * Coeff.speed
@@ -52,7 +55,22 @@ func _on_body_entered(_body) -> void:
 	# This should trigger when hitting a border or obstacle, because those have bodies. (units have areas)
 	# So on collision, betray and destroy yourself.
 	lifetime = 0.0
-		
+
+func is_hit_invalid(reporter) -> bool:
+	# no double hit
+	if reporter.get_unit_id() in hit_set:
+		return true
+	# not if dead
+	if reporter.bodyChief.defeated:
+		return true
+	# miss if target is in boost shield
+	if reporter.bodyChief.boost_shield > 0.0:
+		return true
+	# miss if lower attack priority
+	if reporter.bodyChief.unit.attack_priority > attack_priority:
+		return true
+	return false
+
 func _on_area_entered(area) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
@@ -67,13 +85,9 @@ func _on_area_entered(area) -> void:
 	# Let the target know they've been hit (we trust them to handle this on their end.)
 	var overlapping_areas = get_overlapping_areas()
 	for reporter in overlapping_areas:
-		# no double hit
-		if reporter.get_unit_id() in hit_set:
+		if is_hit_invalid(reporter):
 			continue
-		# miss if target is in boost shield
-		if reporter.bodyChief.boost_shield > 0.0:
-			continue
-			
+		
 		#print("struck one person with user id = " + str(reporter.get_unit_id()))
 		hit_set.append(reporter.get_unit_id())
 		

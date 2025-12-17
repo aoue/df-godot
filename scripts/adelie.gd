@@ -29,7 +29,6 @@ var movement_target_position: Vector2  # where the unit wants to move to
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
 var action_timer: float = 0.0  # will be true when the unit thinks it is in a position ready to attack
 var in_stun: bool = false
-var attack_cooldown_timer: float  # How long the enemy must wait after one attack before beginning the next.
 
 #func _ready():
 	#super()
@@ -77,7 +76,7 @@ func decide_on_target() -> void:
 """ Action Selection """
 func decide_to_attack() -> void:
 	# if target is close enough, then decide to attack (mark 'can_attack' as true)
-	if not unit.can_attack or attack_cooldown_timer > 0.0:
+	if not unit.can_attack:
 		return
 	
 	# also, do not attack if we are not looking within like 30 degrees of the target
@@ -93,7 +92,6 @@ func decide_to_attack() -> void:
 		# and permission to fire is granted.
 		attack_ready = true
 		action_timer = hold_timer  # move duration time
-		attack_cooldown_timer = cooldown_timer 
 
 """ Action Calculation """
 func pick_dest_helper() -> void:
@@ -151,9 +149,6 @@ func get_target_position() -> Vector2:
 
 func being_hit_ai() -> void:
 	in_stun = true
-func get_delay_between_actions() -> float:
-	return action_timer
-	return attack_cooldown_timer
 
 """ Movement """
 func set_movement_target(movement_target: Vector2):
@@ -165,11 +160,11 @@ func _physics_process(delta):
 	## This is because it is only concerned with execution.
 	#return
 	if hit_stun_duration <= 0.0:
-		attack_cooldown_timer -= delta
 		action_timer -= delta
 		if in_stun:
 			in_stun = false
-			attack_cooldown_timer = delay_between_actions
+			# set unit.can_attack_cooldown to action delay, cannot act for this long after being stunned
+			unit.can_attack_cooldown = delay_between_actions
 
 	super(delta)
 	
