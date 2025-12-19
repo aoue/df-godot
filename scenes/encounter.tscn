@@ -1,14 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://dk3veiqccd2ah"]
+[gd_scene load_steps=7 format=3 uid="uid://dk3veiqccd2ah"]
 
 [ext_resource type="Script" path="res://scripts/encounter.gd" id="1_kqml8"]
 [ext_resource type="PackedScene" uid="uid://bheobjlecy41s" path="res://scenes/units/Anse.tscn" id="2_aaoje"]
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
 [ext_resource type="PackedScene" uid="uid://by800qhg41i6u" path="res://scenes/ProjectileMother.tscn" id="4_r851w"]
 [ext_resource type="PackedScene" uid="uid://cweuj6pt4a0p8" path="res://scenes/Geography.tscn" id="5_1ojfr"]
-[ext_resource type="Texture2D" uid="uid://ftw51jn7m7ou" path="res://assets/ui/encounter_cursor.png" id="6_v3l5k"]
 [ext_resource type="Script" path="res://scripts/game_mother.gd" id="7_7msjs"]
 
 [node name="Encounter" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_kqml8")
 Anse = ExtResource("2_aaoje")
 Adelie = ExtResource("4_4r8bx")
@@ -16,11 +16,6 @@ Adelie = ExtResource("4_4r8bx")
 [node name="Geography" parent="." instance=ExtResource("5_1ojfr")]
 
 [node name="ProjectileMother" parent="." instance=ExtResource("4_r851w")]
-
-[node name="red circle" type="Sprite2D" parent="."]
-position = Vector2(2000, -1000)
-scale = Vector2(5, 5)
-texture = ExtResource("6_v3l5k")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="."]
 

@@ -1,9 +1,7 @@
 commit notes:
--added attack priority mechanic which gives precedence to attacks that fired (but not necessarily begun) most recently; this helps to avoid being hit unexpectedly after dodge countering.
--tidied up a bit, tracked down a lost errant print statement
--integrated ai move cooldown timer system into unit attack cooldown system for simplicity and fixed bug with visual representation in ring indicator timing
--made it so that units may not attack during hit stun shield as well (escape the combo, don't interrupt it)
--made it so that units can no longer collide with each other
+-changed ranged projectile sprite to the same style as melee projectiles.
+-finished code that plays when a unit is defeated to gracefully remove them from the field
+-partially done y ordering, but still need to update unit bodies to match true y values
 
 ======= NOTES
 collision layers/masks notes:
@@ -31,7 +29,10 @@ immediate notes:
 a. attack priority system----------------------------------------[DONE]
 b. clean up that errant print statement wherever it is-----------[DONE]
 c. tweak and fine-tune a whole bunch of systems------------------[DONE]
-8. units being defeated------------------------------------------[]
+d. tweaks to projectile visuals and hitboxes---------------------[DONE]
+8. units being defeated------------------------------------------[DONE]
+a. y ordering of units and obstacles-----------------------------[DONE]
+b. adjust unit positions for y ordering--------------------------[]
 9. border movement collision does not stop consistently----------[]
 
 . add allied friday unit-----------------------------------------[]
@@ -48,13 +49,9 @@ c. tweak and fine-tune a whole bunch of systems------------------[DONE]
 . review---------------------------------------------------------[]
 
 
-- units being defeated:
-	on death, make sure to:
-	- hide hpbar
-	- ring ring and indicator
-	- stop the unit from being hit again (done)
-	- turn off collision (both for movement and projectiles)
-	- slowly fade the unit out into the background
+- y ordering:
+	- working now, but the units are offset internally in a way that makes y ordering misbehave
+	to fix this, try going into their 2D worlds and making their butts flat on y=0 visually
 
 - map border collision:
 	super unreliable, units often just move right through with no issue. Why's that?
@@ -106,18 +103,10 @@ c. tweak and fine-tune a whole bunch of systems------------------[DONE]
 
 ================
 
-- some kind of natural counter mechanic:
-	some ideas:
-	- if the unit is in the middle of an attack when hit, take extra damage
-	- when the player uses a move, they are protected for 0.x seconds? 
-	something about using a move right before you get hit, lets your move protect you.
-	and so instead you will hit the bad guy.
-	but this would be uncool for the enemy to use, i think.
-
-	OR, like, the last one to actually commit to using the move has precedence or something.
-	so like, hold off on it, but if you time it right you can cancel their combo.
-	i feel like there needs to be a better way to tell who will get hit when two units are lunging.
-	and maybe this action shield for a split second after you hit would be it?
+- art overhaul:
+	- the spritesheet for anse will need to be redone at some point. Probably by adding his hair and changing colours to the brown/tan of his coat.
+	Here's a general idea. For generic FSes, they can wear full hoods.
+	But for important characters, they should have their hair visible somewhere.
 
 - if there is some kind of special move:
 	it would be to skip the loadout timer swap and immediately go to the next one.
@@ -129,6 +118,10 @@ c. tweak and fine-tune a whole bunch of systems------------------[DONE]
 
 - weather effect:
 	- snow or rain particle effects on screen, at varying intensity.
+
+- debris effect:
+	- when a unit is defeated, create some relevant debris on the ground near them
+	ferra leave parts, Friday will leave her coat, etc.
 
 - system to fire projectiles in multiple directions
 	of course we want moves that are able to shoot in every direction.

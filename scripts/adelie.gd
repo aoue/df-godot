@@ -133,6 +133,7 @@ func get_boost_input(direction: Vector2) -> bool:
 func get_attack_input() -> bool:
 	# returns true if the unit is displaying intention to attack.
 	# for now, let's just say yes.
+	
 	if attack_ready and unit.can_attack:
 		attack_ready = false
 		return true
@@ -158,7 +159,7 @@ func set_movement_target(movement_target: Vector2):
 func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
 	## This is because it is only concerned with execution.
-	#return
+	return
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

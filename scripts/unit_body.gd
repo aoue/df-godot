@@ -26,7 +26,10 @@ class_name UnitBody
 var speed: float
 var acceleration: float
 var knockback: Vector2
+
+# Die beautifully
 var defeated: bool = false
+var defeated_disappear_timer: float = 5.0
 
 # Boost variables
 var boost_shield: float = 0.0
@@ -113,6 +116,10 @@ func go_be_defeated() -> void:
 	# you can never act again, so set that flag
 	defeated = true
 	character_anim.play("9b_defeated")
+	# hide hpbar and ring stuff
+	ring.hide()
+	hp_bar.hide()
+	# turn off collision for movement and projectiles
 
 func get_delay_between_actions() -> float:
 	return 0.0
@@ -328,6 +335,13 @@ func pass_duration(delta : float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if defeated:
+		defeated_disappear_timer -= delta
+		# start fading out as well
+		# function, do nothing for 1 second, then fade out at a constant rate over 5 seconds
+		var color_alpha: Color = Color(Color.WHITE, 0.2 * defeated_disappear_timer)
+		modulate = color_alpha
+		if defeated_disappear_timer < 0.05:
+			queue_free()
 		return
 	
 	var direction: Vector2 = get_direction_input_helper()

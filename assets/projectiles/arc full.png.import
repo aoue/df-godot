@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxklxsj64xqoh"
-path="res://.godot/imported/proj small.png-f65cfb754a121b5d84fa009e720cc8dc.ctex"
+uid="uid://dri0farcc7tr8"
+path="res://.godot/imported/arc full.png-740b892753a7f424c4fcb0edcef58375.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/projectile/proj small.png"
-dest_files=["res://.godot/imported/proj small.png-f65cfb754a121b5d84fa009e720cc8dc.ctex"]
+source_file="res://assets/projectiles/arc full.png"
+dest_files=["res://.godot/imported/arc full.png-740b892753a7f424c4fcb0edcef58375.ctex"]
 
 [params]
 

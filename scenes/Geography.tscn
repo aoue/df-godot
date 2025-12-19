@@ -10,6 +10,7 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-290, -74, 516, -606, 1
 source_geometry_group_name = &"navigation_polygon_source_group"
 
 [node name="Geography" type="Node2D"]
+z_index = -1
 scale = Vector2(4, 4)
 
 [node name="SpriteMat" type="Sprite2D" parent="."]

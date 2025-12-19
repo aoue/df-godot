@@ -23,9 +23,11 @@ func setup_UI() -> void:
 
 func add_hero(unit: UnitBody) -> void:
 	heroes.append(unit)
+	#add_child(unit)
 	
 func add_villain(unit: UnitBody) -> void:
 	villains.append(unit)
+	#add_child(unit)
 
 func assign_combat_ids() -> void:
 	# given all the heroes and villains, assigns unique combat ids to all of them.
@@ -48,7 +50,7 @@ func get_closest_villain_position(my_combat_id: int, my_pos: Vector2) -> Vector2
 	# (does not have the same combat_id)
 	var closest_position: Vector2 = Vector2.ZERO
 	for villain in villains:
-		if my_combat_id != villain.unit.combat_id:
+		if villain and my_combat_id != villain.unit.combat_id:
 			var diff: float = (my_pos - villain.position).length()
 			if closest_position == Vector2.ZERO or diff < (my_pos - closest_position).length():
 				closest_position = villain.position
