@@ -35,6 +35,7 @@ a. y ordering of units and obstacles-----------------------------[DONE]
 b. adjust unit positions for y ordering--------------------------[]
 9. border movement collision does not stop consistently----------[]
 
+. add allied adelie unit-----------------------------------------[]
 . add allied friday unit-----------------------------------------[]
 . add ai target selection system---------------------------------[]
 . [gate] Friday spritesheet--------------------------------------[]
