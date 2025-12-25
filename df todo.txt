@@ -1,8 +1,5 @@
 commit notes:
--adjusted y-ordering display bug, still imperfect.
--expanded size of unit collision, stops them from going through map borders.
--created basic allied ai unit that can walk and attack properly.
--adjusted unit colouring
+-
 
 ======= NOTES
 collision layers/masks notes:
@@ -19,6 +16,7 @@ collision layers/masks notes:
 halfway: 54, thu@2pm
 3 quarters: 81, fri@5pm
 end: 108, sat@8pm
+checkout at 11am, flight at 3pm
 
 ======= TODO: combat feeling
 
@@ -49,28 +47,35 @@ b. adjust unit positions for y ordering--------------------------[DONE]
 . think more about 'flight mode' mechanic------------------------[]
 . think about break/special mechanic-----------------------------[]
 
-(long term goal)
+[gate] (long term goal)
 . fully asset-ed up, encounter at scale---------------------------[]
 . group encounter feels good-------------------------------------[]
 . encounter against a boss feels good----------------------------[]
 . review---------------------------------------------------------[]
 
+
 immediate notes:
+- fixed(?) bug where units were not being properly removed from memory on defeat. Needs testing still.
+
 
 - ai unit targeting:
-	- right now, units just pick first target
 	add the proper logic to this instead. We care about:
 	- distance to target...................................[DONE]
-	- other people also targeting the unit.................[]
-	
-	target counting is managed by the game manager.
-	- when a unit marks a target for itself, it also tells the game manager.
-	- it sends in its unit_id and target_unit_id.
-	- the game manager uses its unit_id to decrement from who it was previously targeting, then uses the target_unit_id to increment who it is currently targeting.
+	- other people also targeting the unit.................[DONE]
 
-- Friday ai unit:
-	we care about things like:
-	- spacing from player. (player should be able to see them, but they shouldn't get in the way. Fight next to each other, kind of thing.)
+	weights:
+	- how much distance is equal to targeting, etc.
+
+	order of targeting:
+	multiple ways you could do this. Could do:
+	- distance to the closest opp.
+	- 
+
+	
+- Friday unit:
+	- object
+	- spritesheet
+	- moveset
 
 - ai dodging:
 	- more advanced units (allies or enemies) need to be able to dodge at least a little
@@ -79,13 +84,13 @@ immediate notes:
 		- you want distance but enemy close, or you want close but enemy distant (but not too distant)
 		- and you are not too close already to target position
 	- if you can, then use your boost in the direction you want to go
-	this will naturally help units either close distance or make distance
+	this will naturally help units either close distance or make distance.
+	remember, boost is already implemented in unit body, so just have to do flags.
 
 - ai delay between actions as range:
 	for some enemies, to make them more unpredictable:
 	- delay between actions can become a range and stuff.
 	
-
 - combat feeling review:
 	- it's not enough to just work, it must also feel right.
 	we will be able to judge it feels right if we're in a situation where:
@@ -94,15 +99,17 @@ immediate notes:
 	do these feel good?
 	
 	important things:
-	- does it feel clean? like you know what's happening? what's going on?
+	- does it feel slick? like you know what's happening? what's going on?
 	- moves should have weight behind them. it should feel like: Bang! to bang! to bang!
 	each thing you do, you're doing on purpose, and the game clearly reacts to you doing it.
 
+sound overhaul:
 
 ================
 
 - art overhaul:
 	- the spritesheet for anse will need to be redone at some point. Probably by adding his hair and changing colours to the brown/tan of his coat.
+		- maybe could do something like tall lined collar but no hood; go back to big collared anse. symbolic, etc, after all.
 	Here's a general idea. For generic FSes, they can wear full hoods.
 	But for important characters, they should have their hair visible somewhere.
 
@@ -111,7 +118,7 @@ immediate notes:
 	- break accumulates on units normally, when a unit is broken, though:
 	- no loadout skip on switch
 
-- snow effect:
+- grounded snow effect:
 	- when you change direction or come to a stop, pop us a snow effect?
 
 - weather effect:
@@ -152,6 +159,8 @@ immediate notes:
 	-some moves generate 'flow'
 	-some moves can consume 'flow' to change their effect
 	just a little something for players to think about when building a combo, that's it.
+	-losing flow: if you get hit? if you miss a move?
+	-showing flow: something around the player, visually. Like orbs or lines?
 
 - encounter scene expansion:
 	a given encounter will be made up of the following:
@@ -175,37 +184,36 @@ immediate notes:
 - red line tracer
 	- should we draw a line between mouse position and player to help with aiming?
 
-- remember to create the combat ai in such a way to allow 3-way battles.
-
-- some stuff is broken with multiple enemies here, btw. I think the issue is that they are not being instantiated separately. It's almost certainly this, but make sure before doing any more.
-	-pass to encounter manager and have it instantiate them from there
-	should fix any issues
-
-- build loadouts properly:
-	-see paper notes for movesets. we'll need 2 for anse.
+- fill loadouts properly:
+	-see paper notes for movesets for prologue units.
 
 - encounter ai:
 	-there is an encounter manager which helps with:
-		-coordination, so they don't all attack the same target
-		-spawning reinforcements, etc
-
-- enemy ai standoff:
-	- should this be initialized to a random value in a given range upon combat start?
+		-spawning reinforcements, timing, objectives, ending on death/victory.
 
 start of battle animation:
-	-if would be cool if there was an animation with all the rings coming on as the fight began
+	-if would be cool if there was an animation with all the rings coming on as the fight began. Like a bootup. Like, rapidly increase the ring's scale from 0 to 1 over a time window.
 
 - loadout system:
 	- a simple and elegant way to determine which loadout you're switching to next
 	rather than just going through them all in a preset order.
 	(for the beginning, we only have 2 loadouts so we can ignore it for now.)
-	(mousewhell scroll could be a winner for this; or pressing a bound key could also.)
+	(mousewhell scroll?)
+	(or pressing 1/2/3/4?) <-- fav so far, because it lets you choose any cleanly.
+	(or leftclick/rightclick to select either prev or former loadout?)
+	the idea is that, although you can't choose a particular move for any situation, you can choose the perfect loadout for the given moment. So it's a bit higher level.
 
 == vn don't forget
-
-
 
 -visuals (to consider)
 	-lip sync
 	-blinking
 	-breath
+	-pose changing (like sideview, or back.)
+	-small window (for anse's hands, the box, e.g. a necklace, etc)
+	-being able to animate while speaking.
+	-variable text bubble location, like near the speaker.
+	-weather
+
+
+

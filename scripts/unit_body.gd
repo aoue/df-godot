@@ -341,8 +341,8 @@ func _physics_process(delta: float) -> void:
 		var color_alpha: Color = Color(Color.WHITE, 0.2 * defeated_disappear_timer)
 		modulate = color_alpha
 		if defeated_disappear_timer < 0.05:
-			pass
-			#queue_free()
+			GameMother.free_unit(unit.allegiance, self)
+			queue_free()
 		return
 	
 	var direction: Vector2 = get_direction_input_helper()

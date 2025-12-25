@@ -71,15 +71,19 @@ func decide_on_target() -> void:
 	var check_target_score: float = 0.0
 	var check_target: UnitBody
 	for opp in GameMother.get_opponents(unit.allegiance):		
-		# score should be higher the closer the target is to self.
-		# so you use the reciprocal*c
-		if not opp:
-			continue
-		var temp_score: float = 10 / position.distance_to(opp.position)
+		# score based on proximity to target (closer is a higher score)
+		var dist_score: float = 1 / position.distance_to(opp.position)
+
+		# score based on the number of other units already targeting target
+		var cotargeter_count: int = GameMother.get_cotargeter_count(opp)
+
+		var temp_score: float = (10*dist_score) + (5*cotargeter_count)
+
 		if temp_score > check_target_score:
 			check_target_score = temp_score
 			check_target = opp
-					
+	
+	update_cotargeting(target_unit, check_target)
 	target_unit = check_target
 
 """ Action Selection """
