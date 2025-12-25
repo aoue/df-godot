@@ -1,7 +1,7 @@
 [gd_scene load_steps=36 format=3 uid="uid://bheobjlecy41s"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_8i7ei"]
-[ext_resource type="Script" path="res://scripts/anse.gd" id="2_uger1"]
+[ext_resource type="Script" uid="uid://bimatxb4m50eb" path="res://scripts/anse.gd" id="2_uger1"]
 [ext_resource type="PackedScene" uid="uid://bg324cc2cyi5h" path="res://scenes/moves/Rifle.tscn" id="3_nhue4"]
 [ext_resource type="PackedScene" uid="uid://7o4ppb3nmby7" path="res://scenes/moves/Ram.tscn" id="4_1tntk"]
 [ext_resource type="PackedScene" uid="uid://bsv1rx2hbytve" path="res://scenes/moves/Pandora.tscn" id="5_8dghd"]
@@ -271,6 +271,7 @@ animations = [{
 }]
 
 [node name="Anse" node_paths=PackedStringArray("boost_anim") instance=ExtResource("1_8i7ei")]
+position = Vector2(0, -451)
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
 
@@ -294,7 +295,7 @@ slot2 = ExtResource("5_8dghd")
 
 [node name="CharacterAnim" parent="." index="2"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
-animation = &"9b_defeated"
+animation = &"0_side_rest"
 autoplay = ""
 
 [node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim" index="0"]
@@ -305,3 +306,6 @@ frame_progress = 0.422746
 
 [node name="AreaHitbox" parent="." index="4"]
 collision_layer = 196608
+
+[node name="MovementHitbox" parent="." index="5"]
+position = Vector2(0, 400)

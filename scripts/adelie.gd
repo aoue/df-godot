@@ -29,6 +29,7 @@ var movement_target_position: Vector2  # where the unit wants to move to
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
 var action_timer: float = 0.0  # will be true when the unit thinks it is in a position ready to attack
 var in_stun: bool = false
+var rng = RandomNumberGenerator.new()
 
 #func _ready():
 	#super()
@@ -66,11 +67,19 @@ func decide_on_target() -> void:
 	# 2. [friendlies already attacking target] compared to [desired_attackers_on_target] 
 	#	 (this information should be reported and updated to GameMother as it changes)
 	
-	# for now just choose to target the first unit in Heroes. Save a vector2D.
+	# for now just choose to target the first unit in opponents.	
+	var check_target_score: float = 0.0
 	var check_target: UnitBody
-	for hero in GameMother.get_heroes():
-		check_target = hero
-		break
+	for opp in GameMother.get_opponents(unit.allegiance):		
+		# score should be higher the closer the target is to self.
+		# so you use the reciprocal*c
+		if not opp:
+			continue
+		var temp_score: float = 10 / position.distance_to(opp.position)
+		if temp_score > check_target_score:
+			check_target_score = temp_score
+			check_target = opp
+					
 	target_unit = check_target
 
 """ Action Selection """
@@ -99,18 +108,18 @@ func pick_dest_helper() -> void:
 	
 	# adjust position for swarming
 	# impact is proportional to closeness; the closer they are, the more we care.
-	var closest_villain_mag: float = 0.0
+	var closest_friendly_mag: float = 0.0
 	var direction_away: Vector2 = Vector2.ZERO
 	var direction_away_rotated: Vector2 = Vector2.ZERO
-	var closest_villain_position: Vector2 = GameMother.get_closest_villain_position(unit.combat_id, position)
-	if closest_villain_position != Vector2.ZERO:
-		closest_villain_mag = (global_position - closest_villain_position).length() * desire_to_distance_from_allies * Coeff.distance_from_allies_mod
-		direction_away = global_position.direction_to(closest_villain_position)
+	var closest_friendly_position: Vector2 = GameMother.get_closest_friendly_position(unit.allegiance, unit.combat_id, position)
+	if closest_friendly_position != Vector2.ZERO:
+		closest_friendly_mag = (global_position - closest_friendly_position).length() * desire_to_distance_from_allies * Coeff.distance_from_allies_mod
+		direction_away = global_position.direction_to(closest_friendly_position)
 		# rotate by 90
 		direction_away_rotated = direction_away.rotated(PI/2)
 	
 	# calculate position with respect to target's position, move standoff, and closeness to allies
-	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance) + (direction_away_rotated * closest_villain_mag)
+	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance) + (direction_away_rotated * closest_friendly_mag)
 	action_timer = delay_between_actions * Coeff.ai_action_timer
 	set_movement_target(adjusted_position)
 	
@@ -130,6 +139,7 @@ func get_direction_input() -> Vector2:
 	
 func get_boost_input(direction: Vector2) -> bool:
 	return false
+	
 func get_attack_input() -> bool:
 	# returns true if the unit is displaying intention to attack.
 	# for now, let's just say yes.
@@ -138,6 +148,7 @@ func get_attack_input() -> bool:
 		attack_ready = false
 		return true
 	return false
+	
 func get_target_position() -> Vector2:
 	# Returns the position that the unitBody wants to look at.
 	# if capable of attacking a target, then look at it.
@@ -159,7 +170,13 @@ func set_movement_target(movement_target: Vector2):
 func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
 	## This is because it is only concerned with execution.
-	return
+	
+	 #return
+	
+	# stop enemies but not allies from acting
+	#if unit.allegiance == 2:
+		#return
+	
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

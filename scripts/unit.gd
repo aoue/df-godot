@@ -229,4 +229,3 @@ func _process(delta):
 		# manage loadout switch
 		if loadout_gate_time > 0.0:
 			loadout_gate_time = max(0, loadout_gate_time - delta)
-

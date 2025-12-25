@@ -1,7 +1,8 @@
 commit notes:
--changed ranged projectile sprite to the same style as melee projectiles.
--finished code that plays when a unit is defeated to gracefully remove them from the field
--partially done y ordering, but still need to update unit bodies to match true y values
+-adjusted y-ordering display bug, still imperfect.
+-expanded size of unit collision, stops them from going through map borders.
+-created basic allied ai unit that can walk and attack properly.
+-adjusted unit colouring
 
 ======= NOTES
 collision layers/masks notes:
@@ -12,7 +13,12 @@ collision layers/masks notes:
 	- 10: everything related to MELEE ANTI-ENEMY projectiles
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
-	
+
+108 total 
+1 quarter: 27, wed@11am
+halfway: 54, thu@2pm
+3 quarters: 81, fri@5pm
+end: 108, sat@8pm
 
 ======= TODO: combat feeling
 
@@ -32,48 +38,39 @@ c. tweak and fine-tune a whole bunch of systems------------------[DONE]
 d. tweaks to projectile visuals and hitboxes---------------------[DONE]
 8. units being defeated------------------------------------------[DONE]
 a. y ordering of units and obstacles-----------------------------[DONE]
-b. adjust unit positions for y ordering--------------------------[]
-9. border movement collision does not stop consistently----------[]
+b. adjust unit positions for y ordering--------------------------[DONE]
+9. border movement collision does not stop consistently----------[DONE]
+10. add allied adelie unit---------------------------------------[DONE]
+11. add ai target selection system-------------------------------[prog]
 
-. add allied adelie unit-----------------------------------------[]
 . add allied friday unit-----------------------------------------[]
-. add ai target selection system---------------------------------[]
 . [gate] Friday spritesheet--------------------------------------[]
 
 . think more about 'flight mode' mechanic------------------------[]
 . think about break/special mechanic-----------------------------[]
 
 (long term goal)
-. fully asseted up, encounter at scale---------------------------[]
+. fully asset-ed up, encounter at scale---------------------------[]
 . group encounter feels good-------------------------------------[]
 . encounter against a boss feels good----------------------------[]
 . review---------------------------------------------------------[]
 
+immediate notes:
 
-- y ordering:
-	- working now, but the units are offset internally in a way that makes y ordering misbehave
-	to fix this, try going into their 2D worlds and making their butts flat on y=0 visually
+- ai unit targeting:
+	- right now, units just pick first target
+	add the proper logic to this instead. We care about:
+	- distance to target...................................[DONE]
+	- other people also targeting the unit.................[]
+	
+	target counting is managed by the game manager.
+	- when a unit marks a target for itself, it also tells the game manager.
+	- it sends in its unit_id and target_unit_id.
+	- the game manager uses its unit_id to decrement from who it was previously targeting, then uses the target_unit_id to increment who it is currently targeting.
 
-- map border collision:
-	super unreliable, units often just move right through with no issue. Why's that?
-	- because the unit's collider is too small? try increasing it and see what happens.
-	- but if it's too big the unit is more likely to get stuck while pathfinding.
-	read about this, look up tutorial on how to do it and see if we did it differently.
-
-- ally unit:
-	keep this system generalized:
-	- generalize the ai unit class
-	- recreate the enemy adelie penguin unit
-	- create an allied adelie penguin 
-	make it so that all that changes is the unit's target selection and closeness selection
-	(this should all be controlled by the unit's 'allegiance' flag)
-
-	- create one for testing ai target picking (scarecrow is fine at first)
-	- also just to make sure that larger scale fights work
-	(does ally spread out from player, do enemies target ally and player in a balanced way, etc)
-	their version of friendly standoff:
-	- partner up with a unit and stick together? within a certain distance, etc, keep that sweetspot.
-	- idk, maybe
+- Friday ai unit:
+	we care about things like:
+	- spacing from player. (player should be able to see them, but they shouldn't get in the way. Fight next to each other, kind of thing.)
 
 - ai dodging:
 	- more advanced units (allies or enemies) need to be able to dodge at least a little

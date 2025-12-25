@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c4txrstopix4w" path="res://assets/maps/obstacles/test obstacle.png" id="1_127k4"]
 
 [node name="Obstacle" type="Node2D"]
+position = Vector2(0, -123)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_127k4")
@@ -16,4 +17,5 @@ position = Vector2(-256, 89)
 polygon = PackedVector2Array(-51, 33, 92, -159, 410, -232, 551, -71.0001, 480, 41)
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+radius = 307.34
 vertices = PackedVector2Array(-271, 105, -150, -56, 136, -123, 261, 17, 212, 110)

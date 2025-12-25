@@ -43,14 +43,11 @@ var distance_from_allies_mod: float = 1.0
 var damage_text_slowdown: float = 0.01  # affects the short continued moving effect of damage text on hit
 var hp_bar_update_speed: int = 500  # affects the speed at which the hp bar updates
 var attack_colour_dict = {	# colours projectiles and damage numbers according to user.
-	0: Color.ROYAL_BLUE,	# used by player.
-	1: Color.GREEN_YELLOW,	# used by ally.
+	0: Color.DARK_BLUE, 	# used by player.
+	1: Color.CORNFLOWER_BLUE,	# used by ally.
 	2: Color.RED		# used by enemy.
 }
 
 """Move Animation Helper"""
 enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Move_Spawn_Type {FIRED, ON_RING, SUMMON}
-
-
-

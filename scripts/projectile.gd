@@ -136,4 +136,3 @@ func _process(delta: float) -> void:
 	if not hit_something or passthrough:
 		position = position + (speed * direction * delta)
 	
-
