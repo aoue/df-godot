@@ -1,5 +1,5 @@
 commit notes:
--
+-fixed bug with unit behaviour when no  would cause problems when no opponents remained.
 
 ======= NOTES
 collision layers/masks notes:
@@ -11,12 +11,12 @@ collision layers/masks notes:
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
 
-108 total 
-1 quarter: 27, wed@11am
-halfway: 54, thu@2pm
-3 quarters: 81, fri@5pm
-end: 108, sat@8pm
-checkout at 11am, flight at 3pm
+1/1: 108 total
+1/4: 27, wed@11am
+1/2: 54, thu@2pm
+3/4 quarters: 81, fri@5pm
+4/4: 108, sat@8pm
+11am,3pm
 
 ======= TODO: combat feeling
 
@@ -57,20 +57,8 @@ b. adjust unit positions for y ordering--------------------------[DONE]
 immediate notes:
 - fixed(?) bug where units were not being properly removed from memory on defeat. Needs testing still.
 
-
 - ai unit targeting:
-	add the proper logic to this instead. We care about:
-	- distance to target...................................[DONE]
-	- other people also targeting the unit.................[DONE]
-
-	weights:
-	- how much distance is equal to targeting, etc.
-
-	order of targeting:
-	multiple ways you could do this. Could do:
-	- distance to the closest opp.
-	- 
-
+	- test weights.
 	
 - Friday unit:
 	- object

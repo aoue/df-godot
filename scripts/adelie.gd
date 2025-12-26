@@ -30,6 +30,7 @@ var attack_ready: bool = false  # will be true when the unit thinks it is in a p
 var action_timer: float = 0.0  # will be true when the unit thinks it is in a position ready to attack
 var in_stun: bool = false
 var rng = RandomNumberGenerator.new()
+var stop: bool = false
 
 #func _ready():
 	#super()
@@ -43,6 +44,10 @@ func ponder() -> void:
 	# 3. Finally, if you're in an appropriate position to use the move, do so.
 	read_in_move_ai_parameters()  # read in ai attributes based on the loaded move
 	decide_on_target()  # pick positon to move too based on read-in ai target
+	
+	if stop:
+		return
+	
 	pick_destination()  # move closer to your desires
 	decide_to_attack()  # pick if you are in a position you can attack in
 
@@ -69,21 +74,32 @@ func decide_on_target() -> void:
 	
 	# for now just choose to target the first unit in opponents.	
 	var check_target_score: float = 0.0
-	var check_target: UnitBody
-	for opp in GameMother.get_opponents(unit.allegiance):		
+	var check_target: UnitBody = null
+	for opp in GameMother.get_opponents(unit.allegiance):
+		if opp.defeated:
+			continue
 		# score based on proximity to target (closer is a higher score)
+		# 1/dist=5 = 0.2 ; 1/dist=10 = 0.1 | so lower dist is higher score.
 		var dist_score: float = 1 / position.distance_to(opp.position)
 
 		# score based on the number of other units already targeting target
-		var cotargeter_count: int = GameMother.get_cotargeter_count(opp)
+		# 1/count=2 = 0.5 ; 1/count=5 = 0.2 | so lower count is higher score.
+		var cotargeter_count: float = GameMother.get_cotargeter_count(opp)
+		if cotargeter_count > 0:
+			cotargeter_count = 1 / cotargeter_count
 
-		var temp_score: float = (10*dist_score) + (5*cotargeter_count)
+		var temp_score: float = (5*dist_score) + (10*cotargeter_count)
 
 		if temp_score > check_target_score:
 			check_target_score = temp_score
 			check_target = opp
 	
-	update_cotargeting(target_unit, check_target)
+	# no more enemies, then do what?
+	if check_target == null:
+		# sit pretty. the battle will end.
+		stop = true
+		
+	GameMother.update_cotargeting(target_unit, check_target)
 	target_unit = check_target
 
 """ Action Selection """
@@ -108,6 +124,8 @@ func decide_to_attack() -> void:
 
 """ Action Calculation """
 func pick_dest_helper() -> void:
+	if not target_unit:
+		ponder()
 	movement_target_position = target_unit.position
 	
 	# adjust position for swarming
@@ -157,6 +175,13 @@ func get_target_position() -> Vector2:
 	# Returns the position that the unitBody wants to look at.
 	# if capable of attacking a target, then look at it.
 	# if incapable, then look in the direction you're moving.
+	
+	# if the unit has been defeated, then abandon what you're doing.
+	if not target_unit:  # testing this part
+		ponder()
+		if stop:
+			return Vector2.ZERO
+	
 	var abs_distance_to_target = abs(target_unit.position.distance_to(global_position))
 	if abs_distance_to_target > min_range and abs_distance_to_target < max_range:
 		return target_unit.position
@@ -180,7 +205,7 @@ func _physics_process(delta):
 	# stop enemies but not allies from acting
 	#if unit.allegiance == 2:
 		#return
-	
+
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

@@ -54,10 +54,10 @@ func free_unit(flag: int, unit_to_remove: UnitBody) -> void:
 	else:
 		heroes.erase(unit_to_remove)
 
-func update_cotargeting(old_unitbody: int, new_unitbody: int) -> void:
+func update_cotargeting(old_unitbody: UnitBody, new_unitbody: UnitBody) -> void:
 	# remove a targeting occurrence
 	if old_unitbody:
-		var old_unit_id: int = old_unit_id.unit.combat_id
+		var old_unit_id: int = old_unitbody.unit.combat_id
 		if old_unit_id in cotargeting_dict:
 			cotargeting_dict[old_unit_id] -= 1
 		else:
@@ -69,9 +69,9 @@ func update_cotargeting(old_unitbody: int, new_unitbody: int) -> void:
 		if new_unit_id in cotargeting_dict:
 			cotargeting_dict[new_unit_id] += 1
 		else:
-			cotargeting_dict[old_unit_id] = 1
+			cotargeting_dict[new_unit_id] = 1
 
-func get_cotargeter_count(some_unitbody: int) -> int:
+func get_cotargeter_count(some_unitbody: UnitBody) -> int:
 	# when asked about 'receiver_unit_id', gives the number of units targeting it.
 	# -1 if you yourself are also targeting them.
 	if some_unitbody:
@@ -79,6 +79,7 @@ func get_cotargeter_count(some_unitbody: int) -> int:
 		if unit_id not in cotargeting_dict:
 			return 0
 		return cotargeting_dict[unit_id]
+	return 1
 
 func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
 	# Return the min distance to any villain unit that is not this unit

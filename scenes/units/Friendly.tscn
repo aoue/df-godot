@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cbwpvao6rac5" path="res://scenes/friendly moves/AI_Rifle.tscn" id="3_dinlk"]
 
 [node name="Friendly" instance=ExtResource("1_o4cfy")]
-desire_to_distance_from_allies = 2.0
+desire_to_distance_from_allies = 0.5
 HP_max_coeff = 1.0
 
 [node name="Unit" parent="." index="0"]
