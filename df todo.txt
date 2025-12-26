@@ -1,5 +1,5 @@
 commit notes:
--fixed bug with unit behaviour when no  would cause problems when no opponents remained.
+-adjusted weights for better considered targeting
 
 ======= NOTES
 collision layers/masks notes:
@@ -39,7 +39,7 @@ a. y ordering of units and obstacles-----------------------------[DONE]
 b. adjust unit positions for y ordering--------------------------[DONE]
 9. border movement collision does not stop consistently----------[DONE]
 10. add allied adelie unit---------------------------------------[DONE]
-11. add ai target selection system-------------------------------[prog]
+11. add ai target selection system-------------------------------[DONE]
 
 . add allied friday unit-----------------------------------------[]
 . [gate] Friday spritesheet--------------------------------------[]
@@ -53,9 +53,8 @@ b. adjust unit positions for y ordering--------------------------[DONE]
 . encounter against a boss feels good----------------------------[]
 . review---------------------------------------------------------[]
 
-
 immediate notes:
-- fixed(?) bug where units were not being properly removed from memory on defeat. Needs testing still.
+-
 
 - ai unit targeting:
 	- test weights.

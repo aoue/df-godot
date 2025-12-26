@@ -13,9 +13,9 @@ var cursor_sprite = load("res://assets/ui/encounter_cursor.png")
 """ Testing """
 var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
-var adelie_in_world : UnitBody
-var adelie_in_world2 : UnitBody
-var adelie_in_world3 : UnitBody
+
+var enemy_group : Array[UnitBody] = []
+var enemy_count: int = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -33,7 +33,7 @@ func create_world() -> void:
 	GameMother.setup_UI()
 	
 	friendly_in_world = Friendly.instantiate()
-	friendly_in_world.position = Vector2(-750, 0)
+	friendly_in_world.position = Vector2(-1750, 0)
 	add_child(friendly_in_world)
 	GameMother.add_hero(friendly_in_world)
 	
@@ -41,20 +41,13 @@ func create_world() -> void:
 	add_child(anse_in_world)
 	GameMother.add_hero(anse_in_world)
 	
-	adelie_in_world = Adelie.instantiate()
-	adelie_in_world.position = Vector2(3000, 0)
-	add_child(adelie_in_world)
-	GameMother.add_villain(adelie_in_world)
-	
-	adelie_in_world2 = Adelie.instantiate()
-	adelie_in_world2.position = Vector2(2000, -1000)
-	add_child(adelie_in_world2)
-	GameMother.add_villain(adelie_in_world2)
-	
-	adelie_in_world3 = Adelie.instantiate()
-	adelie_in_world3.position = Vector2(1500, -1500)
-	add_child(adelie_in_world3)
-	GameMother.add_villain(adelie_in_world3)
+	var spawn_offset: int = 0
+	for i in range(0, enemy_count):
+		var adelie_in_world: UnitBody = Adelie.instantiate()
+		adelie_in_world.position = Vector2(3000, spawn_offset)
+		add_child(adelie_in_world)
+		GameMother.add_villain(adelie_in_world)
+		spawn_offset += 500
 	
 	# Once all units are created. Necessary for proper hit register.
 	GameMother.assign_combat_ids()

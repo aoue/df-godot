@@ -84,11 +84,9 @@ func decide_on_target() -> void:
 
 		# score based on the number of other units already targeting target
 		# 1/count=2 = 0.5 ; 1/count=5 = 0.2 | so lower count is higher score.
-		var cotargeter_count: float = GameMother.get_cotargeter_count(opp)
-		if cotargeter_count > 0:
-			cotargeter_count = 1 / cotargeter_count
+		var cotargeter_count: float = 1.0 / (GameMother.get_cotargeter_count(opp) + 1)
 
-		var temp_score: float = (5*dist_score) + (10*cotargeter_count)
+		var temp_score: float = (dist_score) + (10*cotargeter_count)
 
 		if temp_score > check_target_score:
 			check_target_score = temp_score
@@ -205,7 +203,6 @@ func _physics_process(delta):
 	# stop enemies but not allies from acting
 	#if unit.allegiance == 2:
 		#return
-
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

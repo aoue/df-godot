@@ -79,7 +79,7 @@ func get_cotargeter_count(some_unitbody: UnitBody) -> int:
 		if unit_id not in cotargeting_dict:
 			return 0
 		return cotargeting_dict[unit_id]
-	return 1
+	return 0
 
 func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
 	# Return the min distance to any villain unit that is not this unit
