@@ -21,4 +21,5 @@ proj_break_percentage = 0.1
 proj_knockback = 1.0
 proj_stun = 1.0
 proj_lifetime = 1.0
+proj_passthrough = true
 proj_scene = ExtResource("2_tp3it")

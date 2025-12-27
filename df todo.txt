@@ -1,5 +1,7 @@
 commit notes:
--adjusted weights for better considered targeting
+-removed support for outdated pw stat.
+-fixed bug where no knockback was occurring with on ring projectiles.
+-fixed bug where on ring projectile was sometimes reflected across the y axis.
 
 ======= NOTES
 collision layers/masks notes:
@@ -10,13 +12,6 @@ collision layers/masks notes:
 	- 10: everything related to MELEE ANTI-ENEMY projectiles
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
-
-1/1: 108 total
-1/4: 27, wed@11am
-1/2: 54, thu@2pm
-3/4 quarters: 81, fri@5pm
-4/4: 108, sat@8pm
-11am,3pm
 
 ======= TODO: combat feeling
 
@@ -40,6 +35,7 @@ b. adjust unit positions for y ordering--------------------------[DONE]
 9. border movement collision does not stop consistently----------[DONE]
 10. add allied adelie unit---------------------------------------[DONE]
 11. add ai target selection system-------------------------------[DONE]
+12. combat feeling concerns--------------------------------------[]
 
 . add allied friday unit-----------------------------------------[]
 . [gate] Friday spritesheet--------------------------------------[]
@@ -56,9 +52,38 @@ b. adjust unit positions for y ordering--------------------------[DONE]
 immediate notes:
 -
 
-- ai unit targeting:
-	- test weights.
+- balancing stuff:
+	- create a branch and delete a bunch of stuff to go into this clean.
+	well, some things feel a bit off.
+	doesn't play very technical.
+	main concerns:
+	- combat feels light and attacks don't hit hard.
+	- you don't feel the meaning or weight of landing an attack or being hit.
+	- getting hit once often leads to getting dogpiled.
 	
+	ideas to change this:
+	1) simple HP and damage calcs, so every hit can be clearly understood. Like, single digit hp and damage hits.
+	2) more committed attacks, while still being responsive. Using the right move rewards you, but using the wrong move or failing during execution will see you punished. 
+	a) attacks have more movement, have longer duration, smaller turn window, more bullets fired. This creates the commitment and impact we're looking for. Once a unit begins the action, they're locked in for longer leaving an opening to be hit during.
+	b) reduce the half arc projectile to a quarter arc, a half arc is just too big.
+	3) more downtime after actions, so you are committed to the mistake. so increase time between when the last projectile is fired/last hitbox fades away and when the move has released its hold on you.
+	4) increase knockback of some moves to add rhythm to combat and protect you from being dogpiled.
+	
+	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
+	remember:
+	- each move should feel significant.
+	- play should feel technical.
+	- enemies should feel like they have clear openings.
+		(ex1: adelie dive attack: start, move in line, recover standing still for a moment; lock movement while recovering. uses standing.)
+		(ex2: unit fires projectiles in line, slowly banking but not enough. We move around it and it finishes; lock movement while recovering. then we hit in that window.)
+	maybe i need to carefully study the behaviour of a baldr sky enemy.
+
+
+- art notes:
+	- consider increasing sprite size to like 1200x or 1500x to allow for more detailed drawings. Also leads to better horror too.
+	- and place emphasis on backpacks/engines and hip jets.
+	- named characters have hair poking through and unique designs.
+
 - Friday unit:
 	- object
 	- spritesheet

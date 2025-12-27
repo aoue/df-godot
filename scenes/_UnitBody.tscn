@@ -32,7 +32,6 @@ stun_label = NodePath("Stat Labels/Stun Label")
 utility_label = NodePath("Stat Labels/Utility Label")
 speed_label = NodePath("Stat Labels/Speed Label")
 HP_max_coeff = 1.0
-PW_max_coeff = 1.0
 speed_coeff = 1.0
 acceleration_coeff = 1.0
 

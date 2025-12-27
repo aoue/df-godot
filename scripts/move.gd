@@ -50,7 +50,7 @@ var accuracy_table = {
 	5: 0.75
 }
 
-func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance: int, priority: int, user: Unit):
+func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, knockback_direction : Vector2, allegiance: int, priority: int, user: Unit):
 	# return projectiles according to the move's specs.
 	var proj : Object = proj_scene.instantiate()
 	
@@ -63,6 +63,6 @@ func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, allegiance
 	#print("===")
 	var proj_damage_roll: float = randf_range(proj_damage * (1 + proj_damage_spread_percentage/2), proj_damage * (1 - proj_damage_spread_percentage/2)) 
 	
-	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), proj_speed, proj_damage_roll, proj_break_percentage, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, priority, allegiance, user)
+	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), knockback_direction, proj_speed, proj_damage_roll, proj_break_percentage, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, priority, allegiance, user)
 	
 	return proj

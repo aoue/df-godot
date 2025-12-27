@@ -31,6 +31,7 @@ var action_timer: float = 0.0  # will be true when the unit thinks it is in a po
 var in_stun: bool = false
 var rng = RandomNumberGenerator.new()
 var stop: bool = false
+var attack_lock: float = 0.0
 
 #func _ready():
 	#super()
@@ -86,7 +87,7 @@ func decide_on_target() -> void:
 		# 1/count=2 = 0.5 ; 1/count=5 = 0.2 | so lower count is higher score.
 		var cotargeter_count: float = 1.0 / (GameMother.get_cotargeter_count(opp) + 1)
 
-		var temp_score: float = (dist_score) + (10*cotargeter_count)
+		var temp_score: float = (dist_score) + (50*cotargeter_count)
 
 		if temp_score > check_target_score:
 			check_target_score = temp_score
@@ -103,7 +104,7 @@ func decide_on_target() -> void:
 """ Action Selection """
 func decide_to_attack() -> void:
 	# if target is close enough, then decide to attack (mark 'can_attack' as true)
-	if not unit.can_attack:
+	if not unit.can_attack or attack_lock > 0:
 		return
 	
 	# also, do not attack if we are not looking within like 30 degrees of the target
@@ -119,6 +120,7 @@ func decide_to_attack() -> void:
 		# and permission to fire is granted.
 		attack_ready = true
 		action_timer = hold_timer  # move duration time
+		
 
 """ Action Calculation """
 func pick_dest_helper() -> void:
@@ -203,12 +205,14 @@ func _physics_process(delta):
 	# stop enemies but not allies from acting
 	#if unit.allegiance == 2:
 		#return
+	attack_lock = max(0, attack_lock-delta)
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:
 			in_stun = false
 			# set unit.can_attack_cooldown to action delay, cannot act for this long after being stunned
-			unit.can_attack_cooldown = delay_between_actions
+			#unit.can_attack_cooldown = delay_between_actions * Coeff.ai_action_timer
+			attack_lock = delay_between_actions * Coeff.ai_action_timer
 
 	super(delta)
 	

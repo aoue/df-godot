@@ -20,7 +20,6 @@ class_name UnitBody
 @export_group("Stat Coeffs")
 # Basic movement variables
 @export var HP_max_coeff: float
-@export var PW_max_coeff: float
 @export var speed_coeff: float
 @export var acceleration_coeff: float
 var speed: float
@@ -47,7 +46,7 @@ var hit_stun_shield: float = 0.0  # time after being stunned before you can be s
 
 """ Setup """
 func _ready() -> void:
-	unit.refresh(HP_max_coeff, PW_max_coeff)
+	unit.refresh(HP_max_coeff)
 	hp_bar.max_value = unit.HP_max
 	hp_bar.value = unit.HP_max
 	speed = speed_coeff * Coeff.speed

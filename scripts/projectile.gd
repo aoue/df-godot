@@ -22,7 +22,7 @@ var hit_something : bool = false
 var hit_set : Array
 
 # Collisions
-func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_damage: float, arg_break_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
+func setup(arg_position: Vector2, arg_direction: Vector2, arg_knockback_direction : Vector2, arg_speed: float, arg_damage: float, arg_break_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
@@ -34,7 +34,7 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	speed = arg_speed * Coeff.speed
 	damage = arg_damage * Coeff.damage
 	break_damage = damage * arg_break_damage
-	knockback = arg_direction * arg_knockback * Coeff.knockback
+	knockback = arg_knockback_direction * arg_knockback * Coeff.knockback
 	stun = arg_stun * Coeff.hit_stun_duration
 	lifetime = arg_lifetime
 	passthrough = arg_passthrough
@@ -46,7 +46,6 @@ func setup(arg_position: Vector2, arg_direction: Vector2, arg_speed: float, arg_
 	#	2. to set its collision settings (i.e. don't collides with friendlies)
 	damage_colour = Coeff.attack_colour_dict[arg_allegiance]
 	projectile_sprite.self_modulate = damage_colour
-	# set collision parameters: 
 
 func flip_direction() -> void:
 	direction = -direction

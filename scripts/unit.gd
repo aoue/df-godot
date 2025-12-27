@@ -12,8 +12,6 @@ enum flag {PLAYER, ALLY, ENEMY}
 @export var unitName : String
 var HP_max : int
 var HP_cur : int
-var PW_max : int
-var PW_cur : int
 var stun_cur : int
 @export var allegiance : flag
 var combat_id : int  # assigned each battle. Value doesn't matter, as long as it is unique. Used for hit reporting.
@@ -45,12 +43,10 @@ var loadout_gate_time : float
 var active_move : Move
 var early_exit_taken : bool = false
 
-func refresh(HP_max_coeff: float, PW_max_coeff: float):
+func refresh(HP_max_coeff: float):
 	# sets the unit's stats to their initial state
 	HP_max = HP_max_coeff * Coeff.hp
 	HP_cur = HP_max
-	PW_max = PW_max_coeff * Coeff.hp
-	PW_cur = PW_max
 	
 	loadout_pointer = 0
 	loadout_gate_time = 0.0
@@ -172,6 +168,9 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 		spawn_direction = ((unit_pos + offset * ring_indicator_vector) - unit_pos).normalized()
 	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * offset)
 	
+	# bug with knockback and spawn_direction
+	# problem: spawn direction is used to specify the direction of knockback as well.
+	
 	#var temp = unit_pos - proj_spawn_loc
 	#print("proj spawn loc relative = " + str(temp))
 	
@@ -181,7 +180,7 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	
 	# instantiate projectile 'proj'
 	attack_priority = GameMother.assign_attack_priority()
-	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, allegiance, attack_priority, self)
+	var proj : Object = active_move.spawn_projectiles(proj_spawn_loc, spawn_direction, ring_indicator_vector.normalized(), allegiance, attack_priority, self)
 	if active_move.spawn_type == 1:  # 'on ring'
 		proj.position = Vector2(offset, 0)
 		ring_indicator_obj.add_child(proj)

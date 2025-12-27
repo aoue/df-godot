@@ -274,6 +274,7 @@ animations = [{
 position = Vector2(0, -451)
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
+HP_max_coeff = 0.15
 
 [node name="Camera2D" type="Camera2D" parent="." index="0"]
 scale = Vector2(1.33333, 1.33333)
@@ -284,7 +285,7 @@ position_smoothing_enabled = true
 unitName = "Anse"
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("3_nhue4")
+slot0 = ExtResource("4_1tntk")
 slot1 = ExtResource("4_1tntk")
 slot2 = ExtResource("5_8dghd")
 
