@@ -61,6 +61,3 @@ func set_anim_plus(isBoosting: bool) -> void:
 		boost_anim.show()
 	else:
 		boost_anim.hide()
-
-
-

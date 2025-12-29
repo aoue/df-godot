@@ -29,4 +29,3 @@ func get_min_range() -> float:
 	
 func get_max_range() -> float:
 	return max_range * Coeff.move_range
-

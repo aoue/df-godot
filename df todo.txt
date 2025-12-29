@@ -1,7 +1,5 @@
 commit notes:
--removed support for outdated pw stat.
--fixed bug where no knockback was occurring with on ring projectiles.
--fixed bug where on ring projectile was sometimes reflected across the y axis.
+-
 
 ======= NOTES
 collision layers/masks notes:
@@ -18,40 +16,33 @@ collision layers/masks notes:
 immediate notes:
 -
 
-1. adjusted melee moves behavior against multiple targets--------[DONE]
-2. enemy ai standoff/surrounding motivation----------------------[DONE]
-3. hit stun system and mechanics tweaking------------------------[DONE]
-4. experiment with summon mechanic-------------------------------[DONE]
-5. experiment with move pre-delay--------------------------------[DONE]
-6. [gate] absolutely complete adelie spritesheet-----------------[DONE]
-7. [gate] effect visual overhaul---------------------------------[DONE]
-a. attack priority system----------------------------------------[DONE]
-b. clean up that errant print statement wherever it is-----------[DONE]
-c. tweak and fine-tune a whole bunch of systems------------------[DONE]
-d. tweaks to projectile visuals and hitboxes---------------------[DONE]
-8. units being defeated------------------------------------------[DONE]
-a. y ordering of units and obstacles-----------------------------[DONE]
-b. adjust unit positions for y ordering--------------------------[DONE]
-9. border movement collision does not stop consistently----------[DONE]
-10. add allied adelie unit---------------------------------------[DONE]
-11. add ai target selection system-------------------------------[DONE]
-a. bug with on ring knockback------------------------------------[DONE]
-12. address combat feeling concerns------------------------------[]
+1. iterate on art------------------------------------------------[]
+2. concerns on combat feeling -----------------------------------[]
 
-. add allied friday unit-----------------------------------------[]
+. make allied friday unit----------------------------------------[]
 . [gate] Friday spritesheet--------------------------------------[]
 
 . think more about 'flight mode' mechanic------------------------[]
 . think about break/special mechanic-----------------------------[]
 
 [gate] (long term goal)
-. fully asset-ed up, encounter at scale---------------------------[]
+. fully asset-ed up, encounter at scale--------------------------[]
 . group encounter feels good-------------------------------------[]
 . encounter against a boss feels good----------------------------[]
 . review---------------------------------------------------------[]
 
 immediate notes:
 -
+
+- iterating on art:
+	- look at sketchbook drawings 
+	- see if we can go for a more serious style (remember people are gonna die)
+	you can use Friday as the case study? or maybe anse, idk
+	
+	- consider increasing sprite size to like 1200x or 1500x to allow for more detailed drawings.
+	- and place emphasis on backpacks/engines and hip jets.
+	- named characters should have hair poking through and unique/strong/distinctive designs.
+
 
 - balancing stuff:
 	- create a branch and delete a bunch of stuff to go into this clean.
@@ -78,12 +69,6 @@ immediate notes:
 		(ex1: adelie dive attack: start, move in line, recover standing still for a moment; lock movement while recovering. uses standing.)
 		(ex2: unit fires projectiles in line, slowly banking but not enough. We move around it and it finishes; lock movement while recovering. then we hit in that window.)
 	maybe i need to carefully study the behaviour of a baldr sky enemy.
-
-
-- art notes:
-	- consider increasing sprite size to like 1200x or 1500x to allow for more detailed drawings. Also leads to better horror too.
-	- and place emphasis on backpacks/engines and hip jets.
-	- named characters have hair poking through and unique designs.
 
 - Friday unit:
 	- object
