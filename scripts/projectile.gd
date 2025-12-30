@@ -9,7 +9,6 @@ var direction: Vector2 = Vector2.ZERO
 var attack_priority: int = 0
 var speed: int = 0
 var damage: int = 0
-var break_damage: int = 0
 var knockback: Vector2 = Vector2.ZERO
 var stun: float = 0
 var lifetime: float = 0
@@ -22,18 +21,24 @@ var hit_something : bool = false
 var hit_set : Array
 
 # Collisions
-func setup(arg_position: Vector2, arg_direction: Vector2, arg_knockback_direction : Vector2, arg_speed: float, arg_damage: float, arg_break_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
+func setup(arg_position: Vector2, arg_direction: Vector2, arg_knockback_direction : Vector2, arg_speed: float, arg_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
 	look_at(arg_position + arg_direction)
+	
+	# set collision information based on allegiance
+	# 2 is enemy
+	if arg_allegiance == 2:
+		set_collision_mask_value(17, true)
+	else:
+		set_collision_mask_value(9, true)
 	
 	attack_priority = arg_priority
 	
 	# Record stats information
 	speed = arg_speed * Coeff.speed
 	damage = arg_damage * Coeff.damage
-	break_damage = damage * arg_break_damage
 	knockback = arg_knockback_direction * arg_knockback * Coeff.knockback
 	stun = arg_stun * Coeff.hit_stun_duration
 	lifetime = arg_lifetime
@@ -90,7 +95,7 @@ func _on_area_entered(area) -> void:
 		#print("struck one person with user id = " + str(reporter.get_unit_id()))
 		hit_set.append(reporter.get_unit_id())
 		
-		reporter.report_hit(damage, break_damage, knockback, stun)
+		reporter.report_hit(damage, knockback, stun)
 		GameMother.log_hit(damage, user.combat_id, reporter.get_unit_id())
 		
 		# show damage number

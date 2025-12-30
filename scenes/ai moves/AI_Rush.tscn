@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c2h231n81s8rr"]
 
 [ext_resource type="Script" uid="uid://drsntiqvdh3f5" path="res://scripts/ai_move.gd" id="1_6hptx"]
-[ext_resource type="PackedScene" uid="uid://dxua7bcx2r31i" path="res://scenes/projectiles/Villain_half_arc_projectile.tscn" id="2_3xtnj"]
+[ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Slim_arc_projectile.tscn" id="2_3xtnj"]
 
 [node name="AiRush" type="Node2D"]
 script = ExtResource("1_6hptx")
@@ -15,9 +15,7 @@ user_rotation_mod = 0.05
 move_duration = 1.0
 spawn_type = 1
 proj_spawn_offset = 1.0
-proj_damage = 0.15
-proj_damage_spread_percentage = 0.1
-proj_break_percentage = 0.1
+proj_damage = 2.0
 proj_knockback = 1.0
 proj_stun = 1.0
 proj_lifetime = 1.0

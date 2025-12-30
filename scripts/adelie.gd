@@ -212,7 +212,9 @@ func _physics_process(delta):
 			in_stun = false
 			# set unit.can_attack_cooldown to action delay, cannot act for this long after being stunned
 			#unit.can_attack_cooldown = delay_between_actions * Coeff.ai_action_timer
-			attack_lock = delay_between_actions * Coeff.ai_action_timer
+			
+			#attack_lock = delay_between_actions * Coeff.ai_action_timer
+			attack_lock = 0.0
 
 	super(delta)
 	

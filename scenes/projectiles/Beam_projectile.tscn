@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp3ugyhrj5qav"]
+
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Needle_projectile.tscn" id="1_k765p"]
+
+[node name="Projectile" instance=ExtResource("1_k765p")]
+
+[node name="Projectile Sprite" parent="." index="0"]
+position = Vector2(1623, 0)
+scale = Vector2(30, 15)
+
+[node name="Projectile Collider" parent="." index="1"]
+position = Vector2(1623.55, -1.5)
+scale = Vector2(30, 15)

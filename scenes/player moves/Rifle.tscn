@@ -7,4 +7,4 @@ fire_table = Array[float]([0.65, 0.55, 0.45])
 user_rotation_mod = 0.25
 recoil_moment = 1
 recoil_knockback = -1.0
-proj_damage = 0.09
+proj_damage = 1.0

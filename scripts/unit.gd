@@ -12,7 +12,6 @@ enum flag {PLAYER, ALLY, ENEMY}
 @export var unitName : String
 var HP_max : int
 var HP_cur : int
-var stun_cur : int
 @export var allegiance : flag
 var combat_id : int  # assigned each battle. Value doesn't matter, as long as it is unique. Used for hit reporting.
 
@@ -32,7 +31,7 @@ var scored_hit: bool = false
 var summon_all_green: bool = false
 var recoil : Vector2
 var recoil_moment: int
-var recoil_knockback: int
+var recoil_knockback: float
 var cancel_attack : bool = false
 
 # Loadouts and moves
@@ -45,6 +44,7 @@ var early_exit_taken : bool = false
 
 func refresh(HP_max_coeff: float):
 	# sets the unit's stats to their initial state
+	@warning_ignore("narrowing_conversion")
 	HP_max = HP_max_coeff * Coeff.hp
 	HP_cur = HP_max
 	
@@ -53,9 +53,8 @@ func refresh(HP_max_coeff: float):
 	update_loadout_status()
 	
 # Being Attacked
-func take_damage(damage : int, breakPer: int) -> void:
+func take_damage(damage : int) -> void:
 	HP_cur = clamp(HP_cur - damage, 0, HP_max)
-	stun_cur = clamp(stun_cur + breakPer, 0, 100)
 
 func is_defeated() -> bool:
 	if HP_cur == 0:
@@ -162,6 +161,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# find its spawn location (between player and mouse), offset
 	
+	@warning_ignore("narrowing_conversion")
 	var offset: int = Coeff.proj_spawn_offset * active_move.proj_spawn_offset
 	var spawn_direction : Vector2 = Vector2.ZERO
 	if active_move.spawn_type != 1:

@@ -53,6 +53,9 @@ func _ready() -> void:
 	acceleration = acceleration_coeff * Coeff.acceleration
 	boost_acceleration = 2.0 * Coeff.acceleration
 	
+	# Hitbox layers
+	#set_collision_mask_value(1, true)  # unnecessary, since all units have this property.
+		
 	# Colour ring
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
 	ring.self_modulate = unit_colour
@@ -89,9 +92,9 @@ func take_recoil(recoil_amount: Vector2):
 func being_hit_ai() -> void:
 	pass
 	
-func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stun: float) -> void:
+func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	# Do damage and cause knockback
-	unit.take_damage(proj_damage, break_damage)
+	unit.take_damage(proj_damage)
 	knockback += proj_knockback
 	
 	# Give the unit's ai the chance to react to this.
@@ -102,7 +105,7 @@ func being_hit(proj_damage: int, break_damage: int, proj_knockback: Vector2, stu
 	unit.emergency_exit()
 	
 	# Be stunned, if appropriate
-	if stun > 0 and stun > hit_stun_duration and hit_stun_shield <= 0:
+	if stun > 0 and hit_stun_shield <= 0:
 		hit_stun_duration = stun
 		hit_stun_shield = stun + Coeff.stun_shield_duration
 	
@@ -175,7 +178,8 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
 func update_labels(speed_value : float) -> void:
-	stun_label.text = str(unit.stun_cur) + "%"
+	pass
+	#stun_label.text = str(unit.stun_cur) + "%"
 	#utility_label.text = "UTL--" + str(timing_bar.value)
 	#speed_label.text = "SPD--" + str(speed_value)
 

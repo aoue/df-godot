@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c34vmtosa8veg"]
 
 [ext_resource type="PackedScene" uid="uid://b2aeu3y8q8qxh" path="res://scenes/Move.tscn" id="1_l34j8"]
-[ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Hero_half_arc_projectile.tscn" id="2_5h65b"]
+[ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Slim_arc_projectile.tscn" id="2_5h65b"]
 
 [node name="Move (Snap swing)" instance=ExtResource("1_l34j8")]
 fire_table = Array[float]([0.4])
@@ -15,8 +15,8 @@ spawn_type = 1
 animation_type = 0
 proj_spawn_offset = 1.25
 proj_speed = 0.0
-proj_damage = 0.4
-proj_damage_spread_percentage = 0.05
+proj_damage = 4.0
+proj_knockback = 5.0
 proj_lifetime = 1.5
 proj_passthrough = true
 proj_scene = ExtResource("2_5h65b")

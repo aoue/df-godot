@@ -10,6 +10,6 @@ recoil_moment = 1
 recoil_knockback = -1.0
 spawn_type = 2
 animation_type = 2
-proj_damage = 0.065
+proj_damage = 1.0
 proj_knockback = 1.25
 proj_lifetime = 1.0
