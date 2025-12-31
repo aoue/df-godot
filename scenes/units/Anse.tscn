@@ -280,7 +280,7 @@ HP_max_coeff = 7.0
 
 [node name="Camera2D" type="Camera2D" parent="." index="0"]
 scale = Vector2(1.33333, 1.33333)
-zoom = Vector2(0.2, 0.2)
+zoom = Vector2(0.15, 0.15)
 position_smoothing_enabled = true
 
 [node name="Unit" parent="." index="1"]

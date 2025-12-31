@@ -71,10 +71,10 @@ func get_direction_input_helper() -> Vector2:
 func get_direction_input() -> Vector2:
 	return Vector2.ZERO
 	
-func get_boost_input(direction: Vector2) -> bool:
+func get_boost_input(_direction: Vector2) -> bool:
 	return false
 
-func get_attack_input_helper() -> bool:
+func get_attack_input_helper() -> bool:	
 	if hit_stun_duration > 0.0 or hit_stun_shield > 0.0:
 		return false
 	return get_attack_input()

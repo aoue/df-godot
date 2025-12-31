@@ -104,7 +104,7 @@ func _on_area_entered(_area) -> void:
 		#print("struck one person with user id = " + str(reporter.get_unit_id()))
 		hit_set.append(reporter.get_unit_id())
 		
-		reporter.report_hit(damage, knockback, stun)
+		reporter.you_have_been_hit(damage, knockback, stun)
 		GameMother.log_hit(damage, user.combat_id, reporter.get_unit_id())
 		
 		# show damage number

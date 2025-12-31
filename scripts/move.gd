@@ -64,3 +64,6 @@ func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, knockback_
 	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), knockback_direction, proj_speed, proj_damage, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, proj_despawn_on_obstacle_hit, priority, allegiance, user)
 	
 	return proj
+
+func get_miss_delay() -> float:
+	return 0.0

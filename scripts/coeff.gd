@@ -12,12 +12,12 @@ The values are set here, and all stats are proportional to the coefficient value
 """
 
 """Combat Balance"""
-#var proj_spawn_offset : int = 750
-var proj_spawn_offset : int = 50  # to prevent facehugging, it seems.
 var loadout_cooldown: float = 2.0  # time it takes to switch to the next loadout
-var move_cooldown: float = 0.25  # time between using moves
+var move_cooldown: float = 0.1  # time between using moves
 var move_rotation_mod: float = 1.0 # affects speed of rotation when using a move.
 
+#var proj_spawn_offset : int = 750
+var proj_spawn_offset : int = 50  # to prevent facehugging, it seems.
 var rotation_speed: int = 20  # speed at which indicators rotate
 var speed: int = 5000  # speed at which units move across the map
 var acceleration: float = 0.08  # acceleration at which units increase speed

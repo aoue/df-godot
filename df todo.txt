@@ -1,10 +1,7 @@
 commit notes:
--adjusted turncap to be slower
--restricted attack priority interaction to be only between on-ring (i.e. melee) moves
--increase speed and reach of enemy rush move
--adjusted enemy parameters to get faster counterattack
--fixed oversight where loadout game time was beginning to count down during move execution, drastically reducing loadout swap time
--resized half arc projectile sprite and collider to slim arc
+-reduced mandatory move cooldown because there's really no reason making it anything other than super short
+-resized camera a little
+-added a whiff punish miss delay, we can get some use out of our still animations
 
 ======= NOTES
 collision layers/masks notes:
@@ -39,10 +36,20 @@ immediate notes:
 immediate notes:
 -
 
+
+- issue with dash effect:
+	- obnoxious little extra boost of speed in our dash moves? remove this.
+
 - change ram move:
 	- with passthrough, continues as it is now
 	- without passthrough (new), stops the movement after the first hit
 	- give it a bigger knockback. good opener move, but not the AoE it is now.
+
+- camera stuff:
+	some ideas:
+	- frame player and closest enemy
+	- frame player, closest enemy, and enemy with attack permission
+	
 
 - new mechanic idea, attack permission:
 	for fighting multiple enemies, so test it against 2,3,4 enemies

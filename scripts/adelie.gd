@@ -31,7 +31,6 @@ var action_timer: float = 0.0  # will be true when the unit thinks it is in a po
 var in_stun: bool = false
 var rng = RandomNumberGenerator.new()
 var stop: bool = false
-var attack_lock: float = 0.0
 
 #func _ready():
 	#super()
@@ -42,7 +41,7 @@ func ponder() -> void:
 	# AI units follow a pseudo loadout system just like the player does.
 	# 1. Read in the attributes of the loadout's move.
 	# 2. Based on that move's attributes, decide how to move.
-	# 3. Finally, if you're in an appropriate position to use the move, do so.
+	# 3. Finally, if you're in an appropriate position to use the move, do so.	
 	read_in_move_ai_parameters()  # read in ai attributes based on the loaded move
 	decide_on_target()  # pick positon to move too based on read-in ai target
 	
@@ -104,7 +103,7 @@ func decide_on_target() -> void:
 """ Action Selection """
 func decide_to_attack() -> void:
 	# if target is close enough, then decide to attack (mark 'can_attack' as true)
-	if not unit.can_attack or attack_lock > 0:
+	if not unit.can_attack:
 		return
 	
 	# also, do not attack if we are not looking within like 30 degrees of the target
@@ -145,27 +144,25 @@ func pick_dest_helper() -> void:
 	action_timer = delay_between_actions * Coeff.ai_action_timer
 	set_movement_target(adjusted_position)
 	
-func pick_destination() -> void:
+func pick_destination() -> void:	
 	if nav.is_navigation_finished() or action_timer < 0.0:
 		pick_dest_helper()
 
 """ Helpers """
 func get_direction_input() -> Vector2:	
 	# update if nav is finished or action timer elapsed
+	if unit.miss_attack_cooldown > 0.0:
+		
+		return Vector2.ZERO
 	if nav.is_navigation_finished() or action_timer < 0.0:
 		# probably do not immediately call destination, rather, start the whole selection idea.
 		ponder()
 
 	var current_agent_position: Vector2 = global_position
 	return current_agent_position.direction_to(nav.get_next_path_position())
-	
-func get_boost_input(direction: Vector2) -> bool:
-	return false
-	
+		
 func get_attack_input() -> bool:
-	# returns true if the unit is displaying intention to attack.
-	# for now, let's just say yes.
-	
+	# returns true if the unit has intention to attack and ability to attack.
 	if attack_ready and unit.can_attack:
 		attack_ready = false
 		return true
@@ -205,16 +202,12 @@ func _physics_process(delta):
 	# stop enemies but not allies from acting
 	#if unit.allegiance == 2:
 		#return
-	attack_lock = max(0, attack_lock-delta)
+	
+	
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:
 			in_stun = false
-			# set unit.can_attack_cooldown to action delay, cannot act for this long after being stunned
-			#unit.can_attack_cooldown = delay_between_actions * Coeff.ai_action_timer
 			
-			#attack_lock = delay_between_actions * Coeff.ai_action_timer
-			attack_lock = 0.0
-
 	super(delta)
 	
