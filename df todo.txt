@@ -1,9 +1,10 @@
 commit notes:
--removed deprecated move variables like break percentage and damage spread.
--created new beam move
--created process during setup to automatically set unit and projectile collision information on instantiation
--rebalanced hp and move numbers
--removed ai attack lock for immediate counters, a more dangerous opponent
+-adjusted turncap to be slower
+-restricted attack priority interaction to be only between on-ring (i.e. melee) moves
+-increase speed and reach of enemy rush move
+-adjusted enemy parameters to get faster counterattack
+-fixed oversight where loadout game time was beginning to count down during move execution, drastically reducing loadout swap time
+-resized half arc projectile sprite and collider to slim arc
 
 ======= NOTES
 collision layers/masks notes:
@@ -18,10 +19,10 @@ collision layers/masks notes:
 ======= THE BIG DEAL: combat feeling
 
 immediate notes:
--
+-small bug with attack priority i think
 
 1. iterate on art------------------------------------------------[]
-2. concerns on combat feeling -----------------------------------[]
+2. concerns on combat feeling -----------------------------------[in progress]
 
 . make allied friday unit----------------------------------------[]
 . [gate] Friday spritesheet--------------------------------------[]
@@ -36,45 +37,25 @@ immediate notes:
 . review---------------------------------------------------------[]
 
 immediate notes:
--just finished auto collision setup process
-
-- touch up slim arc projectile scene:
-	want this to be smaller, i think.
-	- remake image
-	- resize collider to match
-
-
-
-- enemy counterattacking:
-	- enemy should just always, always, always counterattack after our combo ends.
-	they should be able to act before our new move is available.
-	should really feel like zip -> bam,bam,bam -> counterattack! putting you under pressure to dodge.
-	- why is the unit waiting so long afterwards? adjust that. 
-	Instant counter!
+-
 
 - change ram move:
 	- with passthrough, continues as it is now
 	- without passthrough (new), stops the movement after the first hit
-	- give it a bigger knockback. good opener move, but not an AoE
+	- give it a bigger knockback. good opener move, but not the AoE it is now.
 
-- balancing stuff:
-	- create a branch and delete a bunch of stuff to go into this clean.
-	well, some things feel a bit off.
-	doesn't play very technical.
-	main concerns:
-	- combat feels light and attacks don't hit hard.
-	- you don't feel the meaning or weight of landing an attack or being hit.
-	- getting hit once often leads to getting dogpiled.
-	
-	ideas to change this:
-	1) simple HP and damage calcs, so every hit can be clearly understood. Like, single digit hp and damage hits.
-	2) more committed attacks, while still being responsive. Using the right move rewards you, but using the wrong move or failing during execution will see you punished. 
-	a) attacks have more movement, have longer duration, smaller turn window, more bullets fired. This creates the commitment and impact we're looking for. Once a unit begins the action, they're locked in for longer leaving an opening to be hit during.
-	b) reduce the half arc projectile to a quarter arc, a half arc is just too big.
-	c) move hurtboxes should disappear more quickly, making execution reqs. tighter.
-	3) more downtime after actions, so you are committed to the mistake. so increase time between when the last projectile is fired/last hitbox fades away and when the move has released its hold on you.
-	4) increase knockback of some moves to add rhythm to combat and protect you from being dogpiled.
-	
+- new mechanic idea, attack permission:
+	for fighting multiple enemies, so test it against 2,3,4 enemies
+	- anti dogpile/anti chaos mechanic. 
+	- Before executing your move, you need 'attack permission' from the game mother.
+	- maintains a dict of 'unit_id: permission time left'
+	- attack permission, when obtained, is a timer that lasts x time.
+	- when it's 0, game mother can give a new unit attack permission for the given target.
+	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
+	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
+
+
+- combat feel:
 	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
 	remember:
 	- each move should feel significant.
@@ -84,14 +65,7 @@ immediate notes:
 		(ex2: unit fires projectiles in line, slowly banking but not enough. We move around it and it finishes; lock movement while recovering. then we hit in that window.)
 	maybe i need to carefully study the behaviour of a baldr sky enemy.
 
-- new mechanic idea, attack permission:
-	- anti dogpile/anti chaos mechanic. 
-	- Before executing your move, you need 'attack permission' from the game mother.
-	- maintains a dict of 'unit_id: permission time left'
-	- attack permission, when obtained, is a timer that lasts x time.
-	- when it's 0, game mother can give a new unit attack permission for the given target.
-	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
-	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
+
 
 - new mechanic idea, slam:
 	- when a unit is in stun and hits a 2d collider, like a unit or obstacle unit, it is 'slammed'
@@ -101,6 +75,8 @@ immediate notes:
 ===== end of combat feel rebalance branch
 
 - iterating on art:
+	overall darker and more muted theme.
+	- new background too
 	- look at sketchbook drawings 
 	- see if we can go for a more serious style (remember people are gonna die)
 	you can use Friday as the case study? or maybe anse, idk
@@ -126,6 +102,7 @@ immediate notes:
 	- if you can, then use your boost in the direction you want to go
 	this will naturally help units either close distance or make distance.
 	remember, boost is already implemented in unit body, so just have to do flags.
+	summary: if enemy is near you, is attacking; then you dodge away from them.
 
 - ai delay between actions as range:
 	for some enemies, to make them more unpredictable:

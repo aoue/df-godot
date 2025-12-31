@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gdyc14v5oq2"
-path="res://.godot/imported/proj half arc.png-ebc7a7af27fb6f85c8596df3f292f3c3.ctex"
+uid="uid://crkwhnqoyyeov"
+path="res://.godot/imported/arc small.png-c0b25bf8fa29e667cfe4d900816440c9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/projectiles/proj half arc.png"
-dest_files=["res://.godot/imported/proj half arc.png-ebc7a7af27fb6f85c8596df3f292f3c3.ctex"]
+source_file="res://assets/projectiles/arc small.png"
+dest_files=["res://.godot/imported/arc small.png-c0b25bf8fa29e667cfe4d900816440c9.ctex"]
 
 [params]
 

@@ -107,7 +107,7 @@ func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	# Be stunned, if appropriate
 	if stun > 0 and hit_stun_shield <= 0:
 		hit_stun_duration = stun
-		hit_stun_shield = stun + Coeff.stun_shield_duration
+		# hit stun shield only activates when the unit's stun is about to expire.
 	
 	# Die, if appropriate
 	if unit.is_defeated():
@@ -136,7 +136,7 @@ func update_timing_bar(delta: float) -> void:
 	if hit_stun_duration > 0.0:
 		#new_max_value = Coeff.hit_stun_duration
 		#new_value = hit_stun_duration
-		new_max_value = Coeff.hit_stun_duration + Coeff.stun_shield_duration
+		new_max_value = Coeff.hit_stun_duration + Coeff.hit_stun_shield_duration
 		new_value = hit_stun_shield
 	# case 0: we are in summon
 	elif unit.attacking_duration_left > 0.0 and unit.active_move.spawn_type == 2 and not unit.summon_period_over():
@@ -299,7 +299,7 @@ func adjust_indicators(where: Vector2, delta: float):
 	var current_rotation: float = ring_indicator.rotation
 	var rotation_weight: float = delta * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
-		rotation_weight *= unit.active_move.user_rotation_mod
+		rotation_weight *= (unit.active_move.user_rotation_mod * Coeff.move_rotation_mod)
 	if hit_stun_duration > 0.0:
 		rotation_weight *= Coeff.hit_stun_rotation_speed
 
@@ -333,6 +333,9 @@ func pass_duration(delta : float) -> void:
 	boost_shield = max(0, boost_shield - delta)
 	boost_duration = max(0, boost_duration - delta)
 	boost_cooldown = max(0, boost_cooldown - delta)
+	
+	if 0.005 < hit_stun_duration and hit_stun_duration < 0.01:
+		hit_stun_shield = Coeff.hit_stun_shield_duration
 	hit_stun_duration = max(0, hit_stun_duration - delta)
 	hit_stun_shield = max(0, hit_stun_shield - delta)
 

@@ -37,6 +37,7 @@ enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
 @export var proj_stun : float
 @export var proj_lifetime : float
 @export var proj_passthrough : bool
+@export var proj_despawn_on_obstacle_hit : bool
 @export var proj_scene : PackedScene
 
 var accuracy_table = {
@@ -60,6 +61,6 @@ func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, knockback_
 	#print("post vector        = " + str((direction + misaccuracy_vector).normalized()))
 	#print("===")
 	
-	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), knockback_direction, proj_speed, proj_damage, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, priority, allegiance, user)
+	proj.setup(proj_spawn_loc, (direction + misaccuracy_vector).normalized(), knockback_direction, proj_speed, proj_damage, proj_knockback, proj_stun, proj_lifetime, proj_passthrough, proj_despawn_on_obstacle_hit, priority, allegiance, user)
 	
 	return proj

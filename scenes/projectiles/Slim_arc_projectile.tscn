@@ -1,17 +1,16 @@
 [gd_scene load_steps=4 format=3 uid="uid://cdwps6uouefeu"]
 
 [ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Needle_projectile.tscn" id="1_cme7i"]
-[ext_resource type="Texture2D" uid="uid://dri0farcc7tr8" path="res://assets/projectiles/arc full.png" id="2_075uc"]
+[ext_resource type="Texture2D" uid="uid://crkwhnqoyyeov" path="res://assets/projectiles/arc small.png" id="2_g4qul"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5bpgu"]
-radius = 344.0
-height = 1172.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_0wjyt"]
+radius = 355.069
 
 [node name="Large Projectile" instance=ExtResource("1_cme7i")]
 
 [node name="Projectile Sprite" parent="." index="0"]
-texture = ExtResource("2_075uc")
+texture = ExtResource("2_g4qul")
 
 [node name="Projectile Collider" parent="." index="1"]
-position = Vector2(277, 9)
-shape = SubResource("CapsuleShape2D_5bpgu")
+position = Vector2(277, -16)
+shape = SubResource("CircleShape2D_0wjyt")

@@ -13,3 +13,4 @@ animation_type = 2
 proj_damage = 1.0
 proj_knockback = 1.25
 proj_lifetime = 1.0
+proj_despawn_on_obstacle_hit = true
