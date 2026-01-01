@@ -9,13 +9,13 @@ class_name UnitBody
 @export var timing_bar: TextureProgressBar
 @export var ring: Node2D
 @export var ring_indicator: Node2D
-@export var summon_indicator: Node2D
 
-@export_group("Labels")
+@export_group("Display")
 @export var stat_labels : Node2D
 @export var stun_label : Label
 @export var utility_label : Label
 @export var speed_label : Label
+@export var floating_text : PackedScene
 
 @export_group("Stat Coeffs")
 # Basic movement variables
@@ -60,7 +60,6 @@ func _ready() -> void:
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
 	ring.self_modulate = unit_colour
 	ring_indicator.self_modulate = unit_colour
-	summon_indicator.self_modulate = unit_colour
 
 """ Input """
 func get_direction_input_helper() -> Vector2:
@@ -126,29 +125,22 @@ func go_be_defeated() -> void:
 func get_delay_between_actions() -> float:
 	return 0.0
 
+""" UI """
 func update_timing_bar(delta: float) -> void:
 	# first: discover value we should be comparing:
 	
 	var new_value : float = 0
 	var new_max_value : float = 1
 	
-	# case -1: we are stunned:
+	# case 0: we are stunned
 	if hit_stun_duration > 0.0:
 		#new_max_value = Coeff.hit_stun_duration
 		#new_value = hit_stun_duration
 		new_max_value = Coeff.hit_stun_duration + Coeff.hit_stun_shield_duration
 		new_value = hit_stun_shield
-	# case 0: we are in summon
-	elif unit.attacking_duration_left > 0.0 and unit.active_move.spawn_type == 2 and not unit.summon_period_over():
-		# attacking_duration_left <= active_move.move_duration
-		new_max_value = unit.active_move.summon_duration
-		new_value = unit.attacking_duration_left - unit.active_move.move_duration
-		
-		#new_max_value = unit.active_move.summon_duration
-		#new_value = (unit.active_move.move_duration + unit.active_move.summon_duration) - unit.attacking_duration_left
 	## case 1: we are attacking; update attack thing
 	elif unit.attacking_duration_left > 0.0:
-		new_max_value = unit.active_move.move_duration
+		new_max_value = unit.active_move.get_total_duration()
 		new_value = unit.attacking_duration_left
 	# case 2: in cooldown
 	elif unit.can_attack_cooldown > 0.0:
@@ -177,11 +169,23 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 	elif hp_bar.value < new_value:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
-func update_labels(speed_value : float) -> void:
+func update_labels(_speed_value : float) -> void:
 	pass
 	#stun_label.text = str(unit.stun_cur) + "%"
 	#utility_label.text = "UTL--" + str(timing_bar.value)
 	#speed_label.text = "SPD--" + str(speed_value)
+
+func show_loadout_swap() -> void:
+	# display a visual element thing when swapping loadouts for readability
+	var floating_loadout_swap_text = floating_text.instantiate()
+	var display_str: String = "LOAD"
+	var display_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
+	var display_noise: int = 650
+	
+	var display_bias_radians: float = ring_indicator.rotation
+	var display_bias: Vector2 = Vector2(cos(display_bias_radians), sin(display_bias_radians)).normalized()
+	floating_loadout_swap_text.display(display_str, display_colour, display_bias, display_noise)
+	add_child(floating_loadout_swap_text)
 
 """ Running """
 func set_anim(direction: Vector2) -> void:
@@ -239,7 +243,7 @@ func set_anim(direction: Vector2) -> void:
 		elif y_power < 0:
 			character_anim.play("5_back_mov")
 
-func set_anim_plus(isBoosting: bool) -> void:
+func set_anim_plus(_isBoosting: bool) -> void:
 	# To set animations supporting the unit, but not the character animations themselves.
 	pass
 
@@ -273,14 +277,8 @@ func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vec
 		if hit_stun_duration > 0.0:
 			unit.early_exit()  # intterupt the attack and also cancel it so it does not resume after the stun has passed.
 			return
-		
-		# force loadout switch?
+		# force loadout switch
 		unit.update_loadout_status()
-		
-		# track summon type clicks
-		# catch 1st click
-		if is_attacking and unit.active_move and unit.summon_period_over():
-			unit.summon_all_green = true
 		unit.use_active_move(unit_pos, ring_indicator_vector, ring_indicator)
 
 func is_backpedaling(move_direction: Vector2, face_direction: Vector2) -> bool:
@@ -298,32 +296,13 @@ func adjust_indicators(where: Vector2, delta: float):
 	var wanted_rotation_angle: float = position.angle_to_point(where)
 	var current_rotation: float = ring_indicator.rotation
 	var rotation_weight: float = delta * Coeff.rotation_speed
-	if unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
+	if unit.attacking_duration_left > 0.0:
 		rotation_weight *= (unit.active_move.user_rotation_mod * Coeff.move_rotation_mod)
 	if hit_stun_duration > 0.0:
 		rotation_weight *= Coeff.hit_stun_rotation_speed
 
 	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
-
-	# Adjust summon indicator too
-	#var offset = 700
-	#var v = get_ring_indicator_vector()
-	#summon_indicator.position = Vector2(offset * v.x, offset * v.y)
-	summon_indicator.rotation = rotate_toward(summon_indicator.rotation, wanted_rotation_angle, rotation_weight)
-	# or, angle between self and ring indicator * 725?
-	
-	# adjust stat labels too (still in progress)
-	#var x_offset = 500
-	#var y_offset = 500
-	#stat_labels.position = Vector2(x_offset * v.x, y_offset * v.y)
-	
-	if unit.active_move and unit.summon_period_over():
-		summon_indicator.visible = true
-		ring_indicator.visible = false
-	else:
-		summon_indicator.visible = false
-		ring_indicator.visible = true
-		
+			
 func get_ring_indicator_vector() -> Vector2:
 	var x_component = cos(ring_indicator.rotation)
 	var y_component = sin(ring_indicator.rotation)
@@ -350,7 +329,7 @@ func _physics_process(delta: float) -> void:
 			GameMother.free_unit(unit.allegiance, self)
 			queue_free()
 		return
-	
+		
 	var direction: Vector2 = get_direction_input_helper()
 	var ring_direction: Vector2 = get_ring_indicator_vector()
 	var is_attacking: bool = get_attack_input_helper()
@@ -368,7 +347,7 @@ func _physics_process(delta: float) -> void:
 	elif is_backpedaling(direction, ring_direction):
 		speed_value /= 2
 	
-	if unit.prep_time <= 0.0 and unit.move_boost_duration_left > 0.0:
+	if unit.move_boost_duration_left > 0.0:
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
 		direction = ring_direction

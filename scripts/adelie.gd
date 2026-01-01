@@ -37,7 +37,7 @@ var stop: bool = false
 	##ponder.call_deferred()
 
 """ Main Brain """
-func ponder() -> void:
+func ponder() -> void:	
 	# AI units follow a pseudo loadout system just like the player does.
 	# 1. Read in the attributes of the loadout's move.
 	# 2. Based on that move's attributes, decide how to move.
@@ -45,6 +45,7 @@ func ponder() -> void:
 	read_in_move_ai_parameters()  # read in ai attributes based on the loaded move
 	decide_on_target()  # pick positon to move too based on read-in ai target
 	
+	stop = true
 	if stop:
 		return
 	
@@ -197,13 +198,7 @@ func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
 	## This is because it is only concerned with execution.
 	
-	 #return
-	
-	# stop enemies but not allies from acting
-	#if unit.allegiance == 2:
-		#return
-	
-	
+	 #return	
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

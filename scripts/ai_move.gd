@@ -17,10 +17,12 @@ And of course, the variables here are all relative to constants set in Coeff.
 @export var max_range: float
 
 func get_move_timer() -> float:
-	return move_duration * Coeff.ai_action_timer
+	#return move_duration * Coeff.ai_action_timer
+	return 1.0
 
 func get_cooldown_timer() -> float:
-	return (move_duration + extra_cooldown_after_using) * Coeff.ai_action_timer
+	#return (move_duration + extra_cooldown_after_using) * Coeff.ai_action_timer
+	return (1.0 + extra_cooldown_after_using) * Coeff.ai_action_timer
 
 func get_standoff_distance() -> float:
 	return standoff_distance * Coeff.standoff

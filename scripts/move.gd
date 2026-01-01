@@ -3,7 +3,7 @@ class_name Move
 
 # Holds information used to create the projectiles resulting from the move's use.
 # Used in loadouts from unit.gd
-enum Move_Spawn_Type {FIRED, ON_RING, SUMMON}
+enum Move_Spawn_Type {FIRED, ON_RING}
 enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
 enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
@@ -16,9 +16,6 @@ enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
 @export var move_speed_add : float  # negate this value to move backwards
 @export var user_speed_mod : float
 @export var user_rotation_mod : float
-@export var move_prep_duration : float
-@export var move_duration : float
-@export var summon_duration : float
 
 @export_group("Recoil Variables") 
 @export var recoil_moment : Recoil_Moments
@@ -48,6 +45,9 @@ var accuracy_table = {
 	4: 0.5,
 	5: 0.75
 }
+
+func get_total_duration() -> float:
+	return fire_table[0]
 
 func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, knockback_direction : Vector2, allegiance: int, priority: int, user: Unit):
 	# return projectiles according to the move's specs.

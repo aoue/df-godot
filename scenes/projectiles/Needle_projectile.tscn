@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://w2mpitayui1x"]
 
 [ext_resource type="Script" uid="uid://cajc5vey5mh7v" path="res://scripts/projectile.gd" id="1_6c00k"]
-[ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/Damage_text.tscn" id="2_grg1i"]
+[ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/FloatingText.tscn" id="2_grg1i"]
 [ext_resource type="Texture2D" uid="uid://cajawetijpwsy" path="res://assets/projectiles/proj small.png" id="3_rsj88"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o61th"]

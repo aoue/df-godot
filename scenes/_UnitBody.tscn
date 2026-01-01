@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://bmxr7brkl6opm" path="res://scripts/unit_body.gd" id="1_eqrot"]
 [ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
 [ext_resource type="PackedScene" uid="uid://tuj5a3vkff0o" path="res://scenes/Loadout.tscn" id="2_4ykhy"]
+[ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/FloatingText.tscn" id="2_j2xxu"]
 [ext_resource type="Texture2D" uid="uid://wk1fygljfjrh" path="res://assets/ui/hp bar bg.png" id="2_r1v5x"]
 [ext_resource type="Texture2D" uid="uid://btw1q13535y1" path="res://assets/ui/hp bar fill.png" id="3_44yiu"]
 [ext_resource type="Texture2D" uid="uid://crs0dp0xvrbs0" path="res://assets/ui/ring image.png" id="4_pvg52"]
-[ext_resource type="Texture2D" uid="uid://cq4xjtkurikxd" path="res://assets/ui/summon indicator.png" id="6_rlaow"]
 [ext_resource type="Texture2D" uid="uid://dnkja1kjq0ey2" path="res://assets/ui/ring indicator white.png" id="6_ym7ra"]
 [ext_resource type="Texture2D" uid="uid://t756x0x1sbjf" path="res://assets/ui/ring indicator blue.png" id="7_ngfjm"]
 [ext_resource type="Script" uid="uid://ncn3y2c8qoro" path="res://scripts/hit_reporter.gd" id="8_5clpj"]
@@ -17,7 +17,7 @@ height = 27.3418
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
 size = Vector2(79, 101)
 
-[node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "summon_indicator", "stat_labels", "stun_label", "utility_label", "speed_label")]
+[node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "stat_labels", "stun_label", "utility_label", "speed_label")]
 collision_layer = 0
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
@@ -26,11 +26,11 @@ hp_bar = NodePath("Stat Labels/HPBar")
 timing_bar = NodePath("RingAnim/RingIndicator/TimingBar")
 ring = NodePath("RingAnim")
 ring_indicator = NodePath("RingAnim/RingIndicator")
-summon_indicator = NodePath("RingAnim/SummonIndicator")
 stat_labels = NodePath("Stat Labels")
 stun_label = NodePath("Stat Labels/Stun Label")
 utility_label = NodePath("Stat Labels/Utility Label")
 speed_label = NodePath("Stat Labels/Speed Label")
+floating_text = ExtResource("2_j2xxu")
 HP_max_coeff = 1.0
 speed_coeff = 1.0
 acceleration_coeff = 1.0
@@ -51,13 +51,7 @@ autoplay = "still"
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("4_pvg52")
 
-[node name="SummonIndicator" type="Sprite2D" parent="RingAnim"]
-rotation = 6.28319
-texture = ExtResource("6_rlaow")
-offset = Vector2(650, 0)
-
 [node name="RingIndicator" type="Sprite2D" parent="RingAnim"]
-rotation = 6.28319
 offset = Vector2(650, 0)
 
 [node name="TimingBar" type="TextureProgressBar" parent="RingAnim/RingIndicator"]

@@ -287,9 +287,9 @@ position_smoothing_enabled = true
 unitName = "Anse"
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("5_8dghd")
-slot1 = ExtResource("3_1exdl")
-slot2 = ExtResource("3_nhue4")
+slot0 = ExtResource("3_1exdl")
+slot1 = ExtResource("3_nhue4")
+slot2 = ExtResource("5_8dghd")
 
 [node name="Loadout1" parent="Unit" index="1"]
 slot0 = ExtResource("4_1tntk")
