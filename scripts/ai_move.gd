@@ -10,6 +10,7 @@ And of course, the variables here are all relative to constants set in Coeff.
 """
 
 @export_group("AI")
+@export var miss_delay: float  # forced wait (unmoving) on miss
 @export var extra_cooldown_after_using: float
 @export var min_range: float
 @export var standoff_distance: float
@@ -29,3 +30,6 @@ func get_min_range() -> float:
 	
 func get_max_range() -> float:
 	return max_range * Coeff.move_range
+
+func get_miss_delay() -> float:
+	return miss_delay

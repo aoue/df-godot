@@ -9,11 +9,11 @@ var direction: Vector2 = Vector2.ZERO
 var attack_priority: int = 0
 var speed: int = 0
 var damage: int = 0
-var break_damage: int = 0
 var knockback: Vector2 = Vector2.ZERO
 var stun: float = 0
 var lifetime: float = 0
 var passthrough: bool = false
+var despawn_on_obstacle_hit: bool = true
 var damage_colour: Color
 
 # State Variables
@@ -22,22 +22,29 @@ var hit_something : bool = false
 var hit_set : Array
 
 # Collisions
-func setup(arg_position: Vector2, arg_direction: Vector2, arg_knockback_direction : Vector2, arg_speed: float, arg_damage: float, arg_break_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
+func setup(arg_position: Vector2, arg_direction: Vector2, arg_knockback_direction : Vector2, arg_speed: float, arg_damage: float, arg_knockback: float, arg_stun: float, arg_lifetime: float, arg_passthrough: bool, arg_despawn_on_obstacle_hit: bool, arg_priority: int, arg_allegiance: int, arg_user: Unit) -> void:
 	# Record movement information
 	position = arg_position
 	direction = arg_direction
 	look_at(arg_position + arg_direction)
+	
+	# set collision information based on allegiance
+	# 2 is enemy
+	if arg_allegiance == 2:
+		set_collision_mask_value(17, true)
+	else:
+		set_collision_mask_value(9, true)
 	
 	attack_priority = arg_priority
 	
 	# Record stats information
 	speed = arg_speed * Coeff.speed
 	damage = arg_damage * Coeff.damage
-	break_damage = damage * arg_break_damage
 	knockback = arg_knockback_direction * arg_knockback * Coeff.knockback
 	stun = arg_stun * Coeff.hit_stun_duration
 	lifetime = arg_lifetime
 	passthrough = arg_passthrough
+	despawn_on_obstacle_hit = arg_despawn_on_obstacle_hit
 	user = arg_user
 	hit_set = Array()
 	
@@ -53,7 +60,8 @@ func flip_direction() -> void:
 func _on_body_entered(_body) -> void:
 	# This should trigger when hitting a border or obstacle, because those have bodies. (units have areas)
 	# So on collision, betray and destroy yourself.
-	lifetime = 0.0
+	if despawn_on_obstacle_hit:
+		lifetime = 0.0
 
 func is_hit_invalid(reporter) -> bool:
 	# no double hit
@@ -65,12 +73,18 @@ func is_hit_invalid(reporter) -> bool:
 	# miss if target is in boost shield
 	if reporter.bodyChief.boost_shield > 0.0:
 		return true
-	# miss if lower attack priority
-	if reporter.bodyChief.unit.attack_priority > attack_priority:
-		return true
+	# miss if:
+	#	- the enemy is currently using an on-ring move move
+	#	- we are currently using an on-ring move
+	#	- we have lower attack priority
+	if reporter.bodyChief.unit.active_move and reporter.bodyChief.unit.active_move.spawn_type == 1:
+		if user.active_move and user.active_move.spawn_type == 1:
+			if reporter.bodyChief.unit.attack_priority > attack_priority:
+				return true
 	return false
 
-func _on_area_entered(area) -> void:
+
+func _on_area_entered(_area) -> void:
 	# When the projectile enters another body, it tells all the other bodies that it hit them. 
 	# Then, having no more reason to exist, it destroys itself.
 	
@@ -90,7 +104,7 @@ func _on_area_entered(area) -> void:
 		#print("struck one person with user id = " + str(reporter.get_unit_id()))
 		hit_set.append(reporter.get_unit_id())
 		
-		reporter.report_hit(damage, break_damage, knockback, stun)
+		reporter.you_have_been_hit(damage, knockback, stun)
 		GameMother.log_hit(damage, user.combat_id, reporter.get_unit_id())
 		
 		# show damage number
@@ -98,7 +112,6 @@ func _on_area_entered(area) -> void:
 		floating_damage_text.text = "-" + str(damage)
 		floating_damage_text.self_modulate = damage_colour
 		floating_damage_text.lifetime = 0.5
-		#add_sibling(floating_damage_text)
 		
 		# add position noise
 		var noise: int = 500 

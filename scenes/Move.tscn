@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b2aeu3y8q8qxh"]
 
-[ext_resource type="Script" path="res://scripts/move.gd" id="1_rrtlf"]
-[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Hero_projectile.tscn" id="2_guc75"]
+[ext_resource type="Script" uid="uid://b6u7vdyjre3g3" path="res://scripts/move.gd" id="1_rrtlf"]
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Needle_projectile.tscn" id="2_guc75"]
 
 [node name="Move" type="Node2D"]
 script = ExtResource("1_rrtlf")
@@ -13,8 +13,6 @@ animation_type = 1
 proj_spawn_offset = 1.0
 proj_speed = 2.5
 proj_damage = 0.1
-proj_damage_spread_percentage = 0.1
-proj_break_percentage = 0.1
 proj_knockback = 1.0
 proj_stun = 1.0
 proj_lifetime = 2.0

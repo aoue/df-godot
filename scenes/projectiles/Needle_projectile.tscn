@@ -1,16 +1,16 @@
 [gd_scene load_steps=5 format=3 uid="uid://w2mpitayui1x"]
 
-[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_6c00k"]
+[ext_resource type="Script" uid="uid://cajc5vey5mh7v" path="res://scripts/projectile.gd" id="1_6c00k"]
 [ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/Damage_text.tscn" id="2_grg1i"]
 [ext_resource type="Texture2D" uid="uid://cajawetijpwsy" path="res://assets/projectiles/proj small.png" id="3_rsj88"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o61th"]
-size = Vector2(115, 31)
+size = Vector2(107.1, 31)
 
 [node name="Projectile" type="Area2D" node_paths=PackedStringArray("projectile_sprite", "projectile_collider")]
 z_index = 100
 collision_layer = 0
-collision_mask = 256
+collision_mask = 0
 script = ExtResource("1_6c00k")
 projectile_sprite = NodePath("Projectile Sprite")
 projectile_collider = NodePath("Projectile Collider")
