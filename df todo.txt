@@ -61,6 +61,12 @@ immediate notes:
 	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
 	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
 
+- mechanic idea, chain:
+	- if every move in your loadout scores a hit, increases damage combo percentage?
+	- or, lets you use a 4th, special move in the combo?
+	or, not lets you use it, but immediately uses it for you.
+	idk, but i'm just getting the feeling hitting a 3-combo is not that satisfying.
+	a longer combo is more fun.
 
 - combat feel:
 	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
