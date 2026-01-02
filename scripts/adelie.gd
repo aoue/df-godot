@@ -23,7 +23,7 @@ var standoff_distance: float = 0.0
 var min_range: float = 0.0
 var max_range: float = 0.0
 
-# dummy testing variables
+# Acting Control Variables
 var target_unit: UnitBody
 var movement_target_position: Vector2  # where the unit wants to move to
 var attack_ready: bool = false  # will be true when the unit thinks it is in a position ready to attack
@@ -31,6 +31,7 @@ var action_timer: float = 0.0  # will be true when the unit thinks it is in a po
 var in_stun: bool = false
 var rng = RandomNumberGenerator.new()
 var stop: bool = false
+var grace_period: float = 0.5
 
 #func _ready():
 	#super()
@@ -104,7 +105,7 @@ func decide_on_target() -> void:
 """ Action Selection """
 func decide_to_attack() -> void:
 	# if target is close enough, then decide to attack (mark 'can_attack' as true)
-	if not unit.can_attack:
+	if not unit.can_attack or grace_period > 0.0:
 		return
 	
 	# also, do not attack if we are not looking within like 30 degrees of the target
@@ -199,6 +200,8 @@ func _physics_process(delta):
 	## This is because it is only concerned with execution.
 	
 	 #return	
+	if grace_period > 0.0:
+		grace_period = max(0, grace_period - delta)
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

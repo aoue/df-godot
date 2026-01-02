@@ -1,22 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://byjmtg2bm3o3r"]
+[gd_scene load_steps=4 format=3 uid="uid://byjmtg2bm3o3r"]
 
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="1_o4cfy"]
-[ext_resource type="PackedScene" uid="uid://c2h231n81s8rr" path="res://scenes/ai moves/AI_Rush.tscn" id="2_favgm"]
 [ext_resource type="PackedScene" uid="uid://ds57vrog0ydj8" path="res://scenes/ai moves/AI_Rifle.tscn" id="3_dinlk"]
 [ext_resource type="Texture2D" uid="uid://t756x0x1sbjf" path="res://assets/ui/ring indicator blue.png" id="4_dinlk"]
 
 [node name="Friendly" instance=ExtResource("1_o4cfy")]
 desire_to_distance_from_allies = 0.5
-HP_max_coeff = 0.25
+HP_max_coeff = 20.0
+speed_coeff = 0.5
+acceleration_coeff = 1.0
 
 [node name="Unit" parent="." index="0"]
 unitName = "Friendly"
 allegiance = 1
-
-[node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("2_favgm")
-slot1 = ExtResource("2_favgm")
-slot2 = ExtResource("3_dinlk")
 
 [node name="Loadout1" parent="Unit" index="1"]
 slot0 = ExtResource("3_dinlk")

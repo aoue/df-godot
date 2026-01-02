@@ -11,7 +11,8 @@ func get_direction_input() -> Vector2:
 		return boost_vector
 	
 	# Cannot move if stunned
-	if hit_stun_duration > 0.0:
+	#if hit_stun_duration > 0.0:
+	if move_stun_duration > 0.0:
 		return Vector2.ZERO
 		
 	var input = Vector2()

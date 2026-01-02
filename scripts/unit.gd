@@ -40,7 +40,7 @@ var cancel_attack : bool = false
 var loadout : Loadout
 var loadout_pointer : int
 var loadout_gate_time : float
-var show_loadout_swap_text : bool
+var show_loadout_load_end_text : bool
 var active_move : Move
 var early_exit_taken : bool = false
 
@@ -86,7 +86,7 @@ func update_loadout_status() -> void:
 		loadout = all_loadouts[0]
 	elif loadout.is_loadout_finished():
 		#print("Current loadout finished... switching loadout")
-		show_loadout_swap_text = true
+		show_loadout_load_end_text = true
 		# switch loadout
 		loadout.finished()
 		loadout_pointer += 1
@@ -205,8 +205,12 @@ func _process(delta):
 		active_move = null
 		attack_priority = -1
 		can_attack_cooldown = max(0, can_attack_cooldown - delta)
-		if can_attack_cooldown == 0.0:
+		if not can_attack and can_attack_cooldown == 0.0:
 			can_attack = true
+			# display loadout swap message to signal that loadout swap has finished
+			if show_loadout_load_end_text:
+				show_loadout_load_end_text = false
+				body.show_loadout_swap("LOADED")
 
 	# manage move speed effect
 	if move_boost_duration_left > 0.0:
@@ -214,9 +218,10 @@ func _process(delta):
 		
 	# manage loadout switch (but only after move has been completed)
 	if not active_move and loadout_gate_time > 0.0:
-		if show_loadout_swap_text:
-			show_loadout_swap_text = false
-			body.show_loadout_swap()
 		loadout_gate_time = max(0, loadout_gate_time - delta)
+		# display loadout swap message to signal that loadout swap has begun
+		#if show_loadout_load_text:
+			#show_loadout_load_text = false
+			#body.show_loadout_swap("LOAD")
 	
 	

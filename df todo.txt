@@ -1,10 +1,10 @@
 commit notes:
--removed summon type moves, which were a mistake as they slow things down.
--increased speed coeff by a lot, really improving the game's feel
--removed prep time (silly mechanic, slows things down)
--reworked move firing table to be simpler
--overhauled floating text to be more generalizable and also gave it display direction bias
--added popup visual indicator for loadout swap (in addition to pre-existing ring indicator timer)
+-changed loadout swap message to play once swap has finished
+-changed boost to add, not mod speed
+-added grace period to start of combat
+-removed hit stun shield, which is a deprecated mechanic for the new combo timing system
+-separated movement lockout stun and attack lockout stun to prevent stunlocking when being hit by multiple units, even in the worst case. Also gives openings for dodging in the middle of a combo
+-added distinction between passthrough and non-passthrough dash moves, with the latter ending its boost on hit
 
 ======= NOTES
 collision layers/masks notes:
@@ -28,9 +28,10 @@ ideal to pursue:
 1. remove summon type moves.......................................[DONE]
 a. rework move firing timing......................................[DONE]
 b. loadout swap visual indicator..................................[DONE]
+2. hit stun and attack cancel rework..............................[DONE]
+3. combo rework...................................................[DONE]
+a. dash move halt without passthrough.............................[]
 
-2. hit stun and attack cancel rework..............................[]
-3. combo rework...................................................[]
 4. combo limiting factor..........................................[]
 
 . mobility and enemy dashing.....................................[]
@@ -39,26 +40,15 @@ b. loadout swap visual indicator..................................[DONE]
 
 
 
-
-- hit stun and attack cancel rework:
-	- tone down hit stun so it doesn't stun for nearly as long or always cancel attacks. 
-	Slight shield somehow?
-	personal stun meter:
-	- every time you finish a combo, set to 0
-	- every time you take damage, increase value
-	- when reaches max value, you are stunned for a second, and your attack is canceled immediately.
-	
-
-- combo rework:
-	let's change how combos work:
-	(don't worry about a limiter for now)
-	- basically, you can keep hitting them for as long you can keep them stunned.
-	- you keep them stunned by hitting them. If you ever miss, you are locked out and your combo is done.
-	but hit stun is very short. It stops them from moving and attacking, but only
-	long enough for your next move to land.
-	- also, remove loadout swap lockout or whatever. Or make it really short.
+- dash move halt without passthrough:
+	- with passthrough, continues as it is now
+	- (new) without passthrough, stops your movement after it connects
 
 - combo limiting factor:
+	escaping combo:
+	- you can do this by moving/boosting after move stun has elapsed
+
+	limiting combo:
 	- in baldr sky they have heat, which is on your end. forces you to take a break.
 	- between putting something on your end or something on the enemy end, it's better on your end, right?
 	- otherwise you could just always be attacking; undesirable.
@@ -88,11 +78,9 @@ b. loadout swap visual indicator..................................[DONE]
 	
 
 - issue with dash attack moves:
-	- obnoxious little extra boost of speed in our dash moves? remove this.
+	- obnoxious little extra boost of speed in our dash moves? make sure this can't happen.
 
-- change ram move:
-	- with passthrough, continues as it is now
-	- (new) without passthrough, stops the movement after the first hit
+
 
 
 

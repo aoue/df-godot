@@ -26,12 +26,13 @@ var hp: int = 1  # base hp value multiplier
 var damage: int = 1  # base damage value multiplier
 var knockback: float = 200  # base knockback value
 
-var hit_stun_duration: float = 0.5  # base duration (s) of move hit stun
-var hit_stun_shield_duration: float = 0.5  # duration (s) of stun immunity after being stunned
+var move_stun_duration: float = 0.25  # base duration of movement lockout on being hit
+var hit_stun_duration: float = 1.0  # base duration (s) of attacking lockout on being hit
+var hit_stun_shield_duration: float = 1.0  # duration (s) of stun immunity after being stunned
 var hit_stun_rotation_speed: float = 0.0  # at 0, cannot rotate when hit.
 
 """Movement Constants"""
-var boost_speed_mod: float = 1.25  # how much of a speedup boost gives
+var boost_speed_add: float = 4000  # how much of a speedup boost gives
 var boost_full_duration: float = 0.25  # how long the boost lasts
 var boost_shield_full_duration: float = boost_full_duration
 var boost_full_cooldown: float = 1.5  # how long until you may boost again

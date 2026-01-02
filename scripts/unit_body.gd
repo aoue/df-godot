@@ -38,8 +38,8 @@ var boost_duration: float = 0.0
 var boost_cooldown: float = 0.0
 
 # Being hit variables
-var hit_stun_duration: float = 0.0  # remaining stun duration on unit, depending on the move that hit them.
-var hit_stun_shield: float = 0.0  # time after being stunned before you can be stunned again (to avoid stunlocking.)
+var move_stun_duration: float = 0.0  # remaining stun duration on unit, impedes movement.
+var hit_stun_duration: float = 0.0  # remaining stun duration on unit, impedes attacking.
 
 # Moveset
 #@export var move1: move
@@ -63,7 +63,8 @@ func _ready() -> void:
 
 """ Input """
 func get_direction_input_helper() -> Vector2:
-	if hit_stun_duration > 0.0:
+	#if hit_stun_duration > 0.0:
+	if move_stun_duration > 0.0:
 		return Vector2.ZERO
 	return get_direction_input()
 	
@@ -74,7 +75,7 @@ func get_boost_input(_direction: Vector2) -> bool:
 	return false
 
 func get_attack_input_helper() -> bool:	
-	if hit_stun_duration > 0.0 or hit_stun_shield > 0.0:
+	if hit_stun_duration > 0.0:
 		return false
 	return get_attack_input()
 func get_attack_input() -> bool:
@@ -104,8 +105,9 @@ func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
 	unit.emergency_exit()
 	
 	# Be stunned, if appropriate
-	if stun > 0 and hit_stun_shield <= 0:
-		hit_stun_duration = stun
+	if stun > 0:
+		move_stun_duration = Coeff.move_stun_duration  # movement stun
+		hit_stun_duration = stun  # attack stun
 		# hit stun shield only activates when the unit's stun is about to expire.
 	
 	# Die, if appropriate
@@ -136,8 +138,8 @@ func update_timing_bar(delta: float) -> void:
 	if hit_stun_duration > 0.0:
 		#new_max_value = Coeff.hit_stun_duration
 		#new_value = hit_stun_duration
-		new_max_value = Coeff.hit_stun_duration + Coeff.hit_stun_shield_duration
-		new_value = hit_stun_shield
+		new_max_value = Coeff.hit_stun_duration
+		new_value = hit_stun_duration
 	## case 1: we are attacking; update attack thing
 	elif unit.attacking_duration_left > 0.0:
 		new_max_value = unit.active_move.get_total_duration()
@@ -175,10 +177,10 @@ func update_labels(_speed_value : float) -> void:
 	#utility_label.text = "UTL--" + str(timing_bar.value)
 	#speed_label.text = "SPD--" + str(speed_value)
 
-func show_loadout_swap() -> void:
+func show_loadout_swap(display_message: String) -> void:
 	# display a visual element thing when swapping loadouts for readability
 	var floating_loadout_swap_text = floating_text.instantiate()
-	var display_str: String = "LOAD"
+	var display_str: String = display_message
 	var display_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
 	var display_noise: int = 650
 	
@@ -192,7 +194,8 @@ func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	
 	# Stunned?
-	if hit_stun_duration > 0.0:
+	#if hit_stun_duration > 0.0:
+	if move_stun_duration > 0.0:
 		character_anim.play("9_being_hit")
 		return
 	# if dead and death delay passed: play("9b_defeated")
@@ -298,7 +301,8 @@ func adjust_indicators(where: Vector2, delta: float):
 	var rotation_weight: float = delta * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0:
 		rotation_weight *= (unit.active_move.user_rotation_mod * Coeff.move_rotation_mod)
-	if hit_stun_duration > 0.0:
+	#if hit_stun_duration > 0.0:
+	if move_stun_duration > 0.0:
 		rotation_weight *= Coeff.hit_stun_rotation_speed
 
 	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
@@ -312,11 +316,8 @@ func pass_duration(delta : float) -> void:
 	boost_shield = max(0, boost_shield - delta)
 	boost_duration = max(0, boost_duration - delta)
 	boost_cooldown = max(0, boost_cooldown - delta)
-	
-	if 0.005 < hit_stun_duration and hit_stun_duration < 0.01:
-		hit_stun_shield = Coeff.hit_stun_shield_duration
+	move_stun_duration = max(0, move_stun_duration - delta)
 	hit_stun_duration = max(0, hit_stun_duration - delta)
-	hit_stun_shield = max(0, hit_stun_shield - delta)
 
 func _physics_process(delta: float) -> void:
 	if defeated:
@@ -340,14 +341,14 @@ func _physics_process(delta: float) -> void:
 	var speed_value = speed
 	if is_boosting:
 		acceleration_value = boost_acceleration
-		speed_value *= Coeff.boost_speed_mod
+		speed_value += Coeff.boost_speed_add
 	#elif unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
 	elif unit.attacking_duration_left > 0.0:
 		speed_value *= unit.active_move.user_speed_mod
 	elif is_backpedaling(direction, ring_direction):
 		speed_value /= 2
 	
-	if unit.move_boost_duration_left > 0.0:
+	if unit.move_boost_duration_left > 0.0 and (not unit.scored_hit or unit.active_move and unit.active_move.proj_passthrough):
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
 		direction = ring_direction

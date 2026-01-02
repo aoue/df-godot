@@ -6,7 +6,7 @@ class_name Move
 enum Move_Spawn_Type {FIRED, ON_RING}
 enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
-enum Recoil_Moments {NA, ON_FIRE, ON_HIT}
+enum Recoil_Moments {NA, WHEN_PROJECTILE_IS_FIRED, WHEN_PROJECTILE_CONNECTS}
 
 # Usage 
 @export_group("Usage Variables") 
