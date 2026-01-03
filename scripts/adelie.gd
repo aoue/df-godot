@@ -46,7 +46,6 @@ func ponder() -> void:
 	read_in_move_ai_parameters()  # read in ai attributes based on the loaded move
 	decide_on_target()  # pick positon to move too based on read-in ai target
 	
-	stop = true
 	if stop:
 		return
 	
@@ -201,7 +200,8 @@ func _physics_process(delta):
 	
 	 #return	
 	if grace_period > 0.0:
-		grace_period = max(0, grace_period - delta)
+		pass
+		#grace_period = max(0, grace_period - delta)
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

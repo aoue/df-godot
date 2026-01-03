@@ -1,10 +1,5 @@
 commit notes:
--changed loadout swap message to play once swap has finished
--changed boost to add, not mod speed
--added grace period to start of combat
--removed hit stun shield, which is a deprecated mechanic for the new combo timing system
--separated movement lockout stun and attack lockout stun to prevent stunlocking when being hit by multiple units, even in the worst case. Also gives openings for dodging in the middle of a combo
--added distinction between passthrough and non-passthrough dash moves, with the latter ending its boost on hit
+-created 'shock' move to round out anse's loadouts
 
 ======= NOTES
 collision layers/masks notes:
@@ -30,21 +25,39 @@ a. rework move firing timing......................................[DONE]
 b. loadout swap visual indicator..................................[DONE]
 2. hit stun and attack cancel rework..............................[DONE]
 3. combo rework...................................................[DONE]
-a. dash move halt without passthrough.............................[]
+a. dash move halt without passthrough.............................[DONE]
+b. combo soft limiting (timing)...................................[]
 
-4. combo limiting factor..........................................[]
+4. combo hard limiting (heat).....................................[]
 
 . mobility and enemy dashing.....................................[]
 . refactoring ai behavior........................................[]
 . attack permission mechanic.....................................[]
 
 
+- combo soft limiting (timing):
+	i wonder if the ability to move while attacking is a problem?
+	- in baldr sky, you can't move once you begin the combo. You can only be carried by your moves.
+	- should we have something like this? No moving between moves in a combo.
+	let's try it. i think so.
+	a combo is determined by:
+	- combo begins once you have attacked. This will always be the first move in a loadout.
+	- when performing a combo, after your move has finished executing, you are in a critical moment.
+		a combo timer starts: (you can display 'COMBO' text when a move ends to tell you can go)
+		- if you attack before it ends, combo continues.
+		- in combo, your movement speed is drastically reduced.
+		- if you do not attack by the time the combo timer ends, the combo ends; LOAD.
 
-- dash move halt without passthrough:
-	- with passthrough, continues as it is now
-	- (new) without passthrough, stops your movement after it connects
-
-- combo limiting factor:
+- combo routing factors:
+	in baldr sky, move order is quite technical because of launching and knockdown
+	- our system doesn't have either of these things.
+	what limits do we have in terms of which moves you can connect together?
+	- power cost: which will determine the length of your combo. 
+	- range of the move: mixing ranged and melee is a no go.
+	- knockback: a big knockback move will knock an enemy out of range of a short move.
+	- future 'flow': some moves do damage relative to flow generated, and may consume it.
+	
+- combo hard limiting (heat):
 	escaping combo:
 	- you can do this by moving/boosting after move stun has elapsed
 
@@ -81,10 +94,9 @@ a. dash move halt without passthrough.............................[]
 	- obnoxious little extra boost of speed in our dash moves? make sure this can't happen.
 
 
-
-
-
-
+- new move type:
+	- on_mouse. a projectile which spawns on mouse and then slowly trails after it.
+	quite slow of course.
 
 
 ==============
