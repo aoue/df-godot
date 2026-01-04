@@ -270,6 +270,7 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	var speed_compensation_value : float = 1
 	if speed < speed_input:
 		speed_compensation_value = speed / speed_input
+			
 	velocity += (knockback * speed_compensation_value)
 	velocity += (unit.recoil * speed_compensation_value)
 	
@@ -339,10 +340,13 @@ func _physics_process(delta: float) -> void:
 	
 	var acceleration_value = acceleration
 	var speed_value = speed
+	
+	if unit.in_combo:
+		speed_value *= Coeff.combo_movement_mod
+		
 	if is_boosting:
 		acceleration_value = boost_acceleration
 		speed_value += Coeff.boost_speed_add
-	#elif unit.attacking_duration_left > 0.0 and not unit.summon_waiting_for_2nd_click():
 	elif unit.attacking_duration_left > 0.0:
 		speed_value *= unit.active_move.user_speed_mod
 	elif is_backpedaling(direction, ring_direction):

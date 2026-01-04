@@ -1,10 +1,12 @@
 commit notes:
--created 'shock' move to round out anse's loadouts
+-added combo timing system
+-added system for combo slowdown, but unsure about its quality (going slower is usually bad); but without it, you can facehug with no penalty.
+-added combo move lockout system, where you must continue the combo to be able to use later moves. 
 
 ======= NOTES
 collision layers/masks notes:
-	layer: others can tell when they hit you
-	mask: you can tell when you hit others
+	layer: gets hit
+	mask: hits others
 	- 1: everything related to units moving and hitting world border or obstacles.
 	- 9: everything related to RANGED ANTI-ENEMY projectiles hitting units and obstacles.
 	- 10: everything related to MELEE ANTI-ENEMY projectiles
@@ -26,7 +28,8 @@ b. loadout swap visual indicator..................................[DONE]
 2. hit stun and attack cancel rework..............................[DONE]
 3. combo rework...................................................[DONE]
 a. dash move halt without passthrough.............................[DONE]
-b. combo soft limiting (timing)...................................[]
+b. added shock move...............................................[DONE]
+b. combo soft limiting (timing)...................................[DONE]
 
 4. combo hard limiting (heat).....................................[]
 
@@ -35,27 +38,8 @@ b. combo soft limiting (timing)...................................[]
 . attack permission mechanic.....................................[]
 
 
-- combo soft limiting (timing):
-	i wonder if the ability to move while attacking is a problem?
-	- in baldr sky, you can't move once you begin the combo. You can only be carried by your moves.
-	- should we have something like this? No moving between moves in a combo.
-	let's try it. i think so.
-	a combo is determined by:
-	- combo begins once you have attacked. This will always be the first move in a loadout.
-	- when performing a combo, after your move has finished executing, you are in a critical moment.
-		a combo timer starts: (you can display 'COMBO' text when a move ends to tell you can go)
-		- if you attack before it ends, combo continues.
-		- in combo, your movement speed is drastically reduced.
-		- if you do not attack by the time the combo timer ends, the combo ends; LOAD.
 
-- combo routing factors:
-	in baldr sky, move order is quite technical because of launching and knockdown
-	- our system doesn't have either of these things.
-	what limits do we have in terms of which moves you can connect together?
-	- power cost: which will determine the length of your combo. 
-	- range of the move: mixing ranged and melee is a no go.
-	- knockback: a big knockback move will knock an enemy out of range of a short move.
-	- future 'flow': some moves do damage relative to flow generated, and may consume it.
+
 	
 - combo hard limiting (heat):
 	escaping combo:
@@ -98,9 +82,16 @@ b. combo soft limiting (timing)...................................[]
 	- on_mouse. a projectile which spawns on mouse and then slowly trails after it.
 	quite slow of course.
 
+- combo routing factors:
+	in baldr sky, move order is quite technical because of launching and knockdown
+	- our system doesn't have either of these things.
+	what limits do we have in terms of which moves you can connect together?
+	- power cost: which will determine the length of your combo. 
+	- range of the move: mixing close and far ranges can be tricky.
+	- knockback: a big knockback move will knock an enemy out of range of a short move.
+	- future 'flow': some moves do damage relative to flow generated, and may consume it.
 
 ==============
-
 
 - new mechanic idea, attack permission:
 	for fighting multiple enemies, so test it against 2,3,4 enemies
@@ -111,13 +102,6 @@ b. combo soft limiting (timing)...................................[]
 	- when it's 0, game mother can give a new unit attack permission for the given target.
 	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
 	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
-
-- mechanic idea, chain:
-	- if every move in your loadout scores a hit, increases damage combo percentage?
-	- or, lets you use a 4th, special move in the combo?
-	or, not lets you use it, but immediately uses it for you.
-	idk, but i'm just getting the feeling hitting a 3-combo is not that satisfying.
-	a longer combo is more fun.
 
 - combat feel:
 	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
@@ -168,8 +152,8 @@ b. combo soft limiting (timing)...................................[]
 	remember, boost is already implemented in unit body, so just have to do flags.
 	summary: if enemy is near you, is attacking; then you dodge away from them.
 
-- ai delay between actions as range:
-	for some enemies, to make them more unpredictable:
+- ai delay between actions value as a range:
+	consider this: for some enemies, to make them more unpredictable:
 	- delay between actions can become a range and stuff.
 	
 - combat feeling review:
@@ -185,6 +169,20 @@ b. combo soft limiting (timing)...................................[]
 	each thing you do, you're doing on purpose, and the game clearly reacts to you doing it.
 
 sound overhaul:
+	lots of things need sound:
+	- units moving
+	- environment (wind, snow, rain, creaking, etc)
+	- unit using a move
+	- unit being hit by a move
+	- music
+
+- alternate attack system, in case this falls apart:
+	you have a combo counter from 1...x
+	- you equip weapons (attack patterns) where the move differs depending on combo counter
+	- you can switch which weapon you are attacking with in the middle of the combo.
+	e.g. you can attack snaphammer1 -> snaphammer2 -> rifle3 -> box4 -> rifle5 -> ...
+	or any other combination that you want.	
+	note: this does feel like an idea where
 
 ================
 

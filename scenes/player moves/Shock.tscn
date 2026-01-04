@@ -9,6 +9,7 @@ accuracy_deviation_label = 0
 animation_type = 2
 proj_speed = 0.05
 proj_damage = 2.0
+proj_knockback = 0.25
 proj_lifetime = 1.5
 proj_passthrough = true
 proj_scene = ExtResource("2_51qpy")

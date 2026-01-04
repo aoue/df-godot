@@ -200,8 +200,8 @@ func _physics_process(delta):
 	
 	 #return	
 	if grace_period > 0.0:
-		pass
-		#grace_period = max(0, grace_period - delta)
+		#pass
+		grace_period = max(0, grace_period - delta)
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

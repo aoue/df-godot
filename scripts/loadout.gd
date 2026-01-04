@@ -27,8 +27,11 @@ func refresh() -> void:
 		if slot != null:
 			filled_slots += 1
 
-func finished():
+func do_not_refresh() -> void:
 	already_refreshed = false
+
+func combo_end() -> void:
+	slot_pointer = filled_slots
 
 func is_loadout_finished() -> bool:
 	return slot_pointer == filled_slots

@@ -40,9 +40,12 @@ var cancel_attack : bool = false
 var loadout : Loadout
 var loadout_pointer : int
 var loadout_gate_time : float
-var show_loadout_load_end_text : bool
 var active_move : Move
 var early_exit_taken : bool = false
+var display_loadout_swap_message: bool = false
+var in_combo : bool = false  # marks whether the unit is currently performing a combo or not.
+var combo_exit_timer : float = 0.0  # a timer that tracks how long until the unit can go without atttack before their combo ends.
+var combo_cancel : bool = false  # a flag set when the unit is hit to tell it to cancel the combo right away.
 
 func refresh(HP_max_coeff: float):
 	# sets the unit's stats to their initial state
@@ -66,7 +69,7 @@ func is_defeated() -> bool:
 # Attacking
 func emergency_exit() -> void:
 	# immediately ends the attack. Prevents damage trading in melee attacks.
-	# this should also hide projectiles, too.
+	combo_cancel = true
 	cancel_attack = true
 	if active_move and (active_move.spawn_type == 1 or active_move.spawn_type == 2):
 		attacking_duration_left = 0.0
@@ -81,14 +84,27 @@ func early_exit() -> void:
 	can_attack_cooldown = Coeff.move_cooldown
 	move_boost_duration_left = Coeff.move_cooldown
 
-func update_loadout_status() -> void:
+func end_combo() -> void:
+	# set flags and visuals
+	in_combo = false
+	combo_cancel = false
+	body.show_loadout_swap("OVER")
+	
+	# force change loadouts (but only if in the middle of one)
+	# (otherwise we would skip over one)
+	if loadout.slot_pointer > 0:
+		loadout.combo_end()
+		update_loadout_status(true)
+
+func update_loadout_status(display_message: bool = true) -> void:
 	if not loadout:
 		loadout = all_loadouts[0]
 	elif loadout.is_loadout_finished():
-		#print("Current loadout finished... switching loadout")
-		show_loadout_load_end_text = true
+		# show visual
+		display_loadout_swap_message = display_message
+		
 		# switch loadout
-		loadout.finished()
+		loadout.do_not_refresh()
 		loadout_pointer += 1
 		if loadout_pointer == len(all_loadouts):
 			loadout_pointer = 0
@@ -109,7 +125,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 			
 		# if the move has hit, then you can immediately finish it after the last projectile has been fired (combo incentive)
 		elif projectile_counter == len(active_move.fire_table) and not early_exit_taken and scored_hit:
-			early_exit()		
+			early_exit()	
 		return
 		
 	if can_attack == false:
@@ -136,6 +152,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	recoil_knockback = active_move.recoil_knockback
 	
 	# set flags
+	in_combo = true
 	set_attack_anim = true
 	cancel_attack = false
 	can_attack = false
@@ -180,7 +197,6 @@ func report_hit(hit_body_position : Vector2) -> void:
 	# Called by projectile when it scores a hit to let the unit know what's happened.
 	# (This is for when the unit's projectile hits something, not when the unit is hit.)
 	#print("Scored hit!")
-	
 	scored_hit = true
 	
 	# report knockback, if 'on_hit' type
@@ -192,6 +208,7 @@ func report_hit(hit_body_position : Vector2) -> void:
 
 func _process(delta):
 	# manage attack cooldown
+	print(combo_exit_timer)
 	if attacking_duration_left > 0.0:
 		attacking_duration_left = max(0, attacking_duration_left - delta)
 	else:
@@ -205,12 +222,20 @@ func _process(delta):
 		active_move = null
 		attack_priority = -1
 		can_attack_cooldown = max(0, can_attack_cooldown - delta)
+		
+		# end combo timer
+		if loadout_gate_time == 0 and ((can_attack and in_combo) or (in_combo and combo_cancel)):
+			if combo_cancel:
+				combo_exit_timer = 0
+			combo_exit_timer = max(0, combo_exit_timer - delta)
+			if combo_exit_timer == 0:
+				# exit the combo
+				end_combo()
+		
+		# enable attack again once cooldown has finished
 		if not can_attack and can_attack_cooldown == 0.0:
 			can_attack = true
-			# display loadout swap message to signal that loadout swap has finished
-			if show_loadout_load_end_text:
-				show_loadout_load_end_text = false
-				body.show_loadout_swap("LOADED")
+			combo_exit_timer = Coeff.combo_timeout_duration  # you can attack again, so set the combo timeout duration
 
 	# manage move speed effect
 	if move_boost_duration_left > 0.0:
@@ -220,8 +245,9 @@ func _process(delta):
 	if not active_move and loadout_gate_time > 0.0:
 		loadout_gate_time = max(0, loadout_gate_time - delta)
 		# display loadout swap message to signal that loadout swap has begun
-		#if show_loadout_load_text:
-			#show_loadout_load_text = false
-			#body.show_loadout_swap("LOAD")
+		if loadout_gate_time == 0 and display_loadout_swap_message:
+			display_loadout_swap_message = false
+			body.show_loadout_swap("LOADED")
+			# add option to show either LOAD or OVER
 	
 	
