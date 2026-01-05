@@ -342,20 +342,18 @@ func _physics_process(delta: float) -> void:
 	var speed_value = speed
 	
 	if unit.in_combo:
-		speed_value *= Coeff.combo_movement_mod
+		speed_value *= unit.combo_speed_mod
 		
 	if is_boosting:
 		acceleration_value = boost_acceleration
 		speed_value += Coeff.boost_speed_add
-	elif unit.attacking_duration_left > 0.0:
-		speed_value *= unit.active_move.user_speed_mod
-	elif is_backpedaling(direction, ring_direction):
-		speed_value /= 2
-	
-	if unit.move_boost_duration_left > 0.0 and (not unit.scored_hit or unit.active_move and unit.active_move.proj_passthrough):
+	elif unit.move_boost_duration_left > 0.0 and (not unit.scored_hit or unit.active_move and unit.active_move.proj_passthrough):
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
 		direction = ring_direction
+	elif is_backpedaling(direction, ring_direction):
+		speed_value /= 2
+	
 		
 	adjust_indicators(target_pos, delta)
 	go_move(direction, speed_value, acceleration_value)

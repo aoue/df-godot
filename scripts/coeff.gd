@@ -13,7 +13,6 @@ The values are set here, and all stats are proportional to the coefficient value
 
 """Combat Balance"""
 var combo_timeout_duration: float = 0.5  # time it takes for a combo to elapse if you do not attack.
-var combo_movement_mod: float = 0.1 # time it takes for a combo to elapse if you do not attack.
 
 var loadout_cooldown: float = 0.5  # time it takes to switch to the next loadout
 var move_cooldown: float = 0.2  # time between using moves

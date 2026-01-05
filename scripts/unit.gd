@@ -43,9 +43,12 @@ var loadout_gate_time : float
 var active_move : Move
 var early_exit_taken : bool = false
 var display_loadout_swap_message: bool = false
+
+# Combo
 var in_combo : bool = false  # marks whether the unit is currently performing a combo or not.
-var combo_exit_timer : float = 0.0  # a timer that tracks how long until the unit can go without atttack before their combo ends.
 var combo_cancel : bool = false  # a flag set when the unit is hit to tell it to cancel the combo right away.
+var combo_exit_timer : float = 0.0  # a timer that tracks how long until the unit can go without atttack before their combo ends.
+var combo_speed_mod : float = 1.0  # Slows movement speed during combo, updated to hold the speed mod of the last used move.
 
 func refresh(HP_max_coeff: float):
 	# sets the unit's stats to their initial state
@@ -143,9 +146,12 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	# set timers
 	attacking_duration_left = active_move.fire_table[0]
 	move_boost_duration_left = active_move.move_speed_add_duration
-	projectile_counter = 0
 	can_attack_cooldown = attacking_duration_left + Coeff.move_cooldown
 	miss_attack_cooldown_save = active_move.get_miss_delay()
+	
+	# setup information from move
+	projectile_counter = 0
+	combo_speed_mod = active_move.user_speed_mod
 	
 	# set recoil vars
 	recoil_moment = active_move.recoil_moment

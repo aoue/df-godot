@@ -6,7 +6,6 @@
 [node name="Move (Snap swing)" instance=ExtResource("1_l34j8")]
 fire_table = Array[float]([1.0])
 accuracy_deviation_label = 0
-user_speed_mod = 0.75
 user_rotation_mod = 0.2
 recoil_moment = 2
 recoil_knockback = -15.0

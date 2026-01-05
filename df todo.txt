@@ -1,7 +1,5 @@
 commit notes:
--added combo timing system
--added system for combo slowdown, but unsure about its quality (going slower is usually bad); but without it, you can facehug with no penalty.
--added combo move lockout system, where you must continue the combo to be able to use later moves. 
+-small change to combo move mod, where the mod is set by the last used move instead of a constant
 
 ======= NOTES
 collision layers/masks notes:
@@ -29,40 +27,36 @@ b. loadout swap visual indicator..................................[DONE]
 3. combo rework...................................................[DONE]
 a. dash move halt without passthrough.............................[DONE]
 b. added shock move...............................................[DONE]
-b. combo soft limiting (timing)...................................[DONE]
-
-4. combo hard limiting (heat).....................................[]
+c. combo soft limiter (timing)....................................[DONE]
+4. combo hard limiter (heat)......................................[]
 
 . mobility and enemy dashing.....................................[]
 . refactoring ai behavior........................................[]
 . attack permission mechanic.....................................[]
 
 
-
-
-	
 - combo hard limiting (heat):
-	escaping combo:
-	- you can do this by moving/boosting after move stun has elapsed
-
 	limiting combo:
 	- in baldr sky they have heat, which is on your end. forces you to take a break.
-	- between putting something on your end or something on the enemy end, it's better on your end, right?
+	- between putting something on your end or something on the enemy end, it's better on your end, right? otherwise you could just switch to a new enemy.
 	- otherwise you could just always be attacking; undesirable.
 	so a self-limiting factor seems best.
 	- something as basic as: every move you use increases heat? when heat is over the max, you're done.
 	- maybe you do whole loadouts at a time though? you only have to check for overheat when getting your next loadout. so you can tack on a loadout at the end with massive heat cost. interesting feature. essentially a combo finisher.
 	heat gauge ticks down when you are officially out of combo. can't attack until total refresh.
 
-- rework loadout system:
-	- controls which group of 3 moves you will get to next
-	- if interrupted in the middle of a loadout, lose the whole combo.
-	
+	-need to display heat. for now, can just use the old stun text or whatever. show number 0...100
+	-when you go over 100, you're done.
+	-and watch the heat tick down in real time.
+	maybe you don't have to wait for heat to go all the way back down to 0? 
+	but it will always prevent you from attacking if it is over 100 (on the unitbody side)
+
 
 - mobility and enemy dashing:
 	- units should be repositioning more and faster type stuff. Just faster paced game.
 	- they can attack quickly; not as big a deal if it doesn't stun for long.
-	- they can quickly: reposition with a dash->dive in and attack. 
+	- they can quickly: reposition with a dash->dive in and attack.
+	have them pick destinations further away? instead of always trying to stay in the ideal range?
 
 - refactoring ai behaviour:
 	- create a desire system that chooses between x actions: move, attack, change target, dodge, etc
@@ -73,9 +67,27 @@ b. combo soft limiting (timing)...................................[DONE]
 	- manage so a unit can only have like 1 person diving them, 1 person skirmishing them
 	- everyone else has to hover around
 	
+	works when: (actions in priority, i think)
+	- there is an enemy which can proactively dodge an incoming attack
+	- the enemy can dive
+	- the enemy can skirmish
+	- the enemy can follow the action
+	
+
+- new mechanic idea, attack permission:
+	for fighting multiple enemies, so test it against 2,3,4 enemies
+	- anti dogpile/anti chaos mechanic. 
+	- Before executing your move, you need 'attack permission' from the game mother.
+	- maintains a dict of 'unit_id: permission time left'
+	- attack permission, when obtained, is a timer that lasts x time.
+	- when it's 0, game mother can give a new unit attack permission for the given target.
+	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
+	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
+
 
 - issue with dash attack moves:
 	- obnoxious little extra boost of speed in our dash moves? make sure this can't happen.
+	this seems to be here no longer, though. nice.
 
 
 - new move type:
@@ -93,15 +105,11 @@ b. combo soft limiting (timing)...................................[DONE]
 
 ==============
 
-- new mechanic idea, attack permission:
-	for fighting multiple enemies, so test it against 2,3,4 enemies
-	- anti dogpile/anti chaos mechanic. 
-	- Before executing your move, you need 'attack permission' from the game mother.
-	- maintains a dict of 'unit_id: permission time left'
-	- attack permission, when obtained, is a timer that lasts x time.
-	- when it's 0, game mother can give a new unit attack permission for the given target.
-	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
-	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
+- loadout swap system as a choice:
+	- when swapping loadouts, how do you control which loadout you will move to next?
+	this kind of system is desirable i think	
+
+
 
 - combat feel:
 	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
