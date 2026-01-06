@@ -107,18 +107,12 @@ func _on_area_entered(_area) -> void:
 		reporter.you_have_been_hit(damage, knockback, stun)
 		GameMother.log_hit(damage, user.combat_id, reporter.get_unit_id())
 		
-		# show damage number
+		# create/show damage number
 		var floating_damage_text = damage_label.instantiate()
-		floating_damage_text.text = "-" + str(damage)
-		floating_damage_text.self_modulate = damage_colour
-		floating_damage_text.lifetime = 0.5
-		
-		# add position noise
-		var noise: int = 500 
-		var placement_noise: Vector2 = Vector2(randi_range(-noise/2, noise/2), randi_range(-noise/2, noise/2))
-		floating_damage_text.position = placement_noise
-		
+		var display_bias: Vector2 = (Vector2.ZERO - direction).normalized()
+		floating_damage_text.display("-" + str(damage), damage_colour, display_bias)
 		reporter.add_child(floating_damage_text)
+		
 		
 		# report hit and hit recoil if applicable
 		user.report_hit(reporter.global_position)

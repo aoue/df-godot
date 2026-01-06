@@ -5,19 +5,18 @@
 
 [node name="AiRush" type="Node2D"]
 script = ExtResource("1_6hptx")
-miss_delay = 0.5
 min_range = 0.1
 standoff_distance = 1.0
 max_range = 8.0
-fire_table = Array[float]([0.7])
-move_speed_add_duration = 0.7
+fire_table = Array[float]([0.5])
+output_on_fire = 30.0
+move_speed_add_duration = 0.5
 move_speed_add = 1.75
 user_rotation_mod = 0.01
-move_duration = 1.0
 spawn_type = 1
 proj_damage = 2.0
 proj_knockback = 1.0
 proj_stun = 1.0
-proj_lifetime = 0.7
+proj_lifetime = 0.6
 proj_passthrough = true
 proj_scene = ExtResource("2_3xtnj")

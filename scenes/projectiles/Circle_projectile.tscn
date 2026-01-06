@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2tqdrjsgb6h1"]
+
+[ext_resource type="PackedScene" uid="uid://w2mpitayui1x" path="res://scenes/projectiles/Needle_projectile.tscn" id="1_82y28"]
+[ext_resource type="Texture2D" uid="uid://cqhy3ls4j7ssw" path="res://assets/projectiles/circle.png" id="2_f5y0s"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f5y0s"]
+
+[node name="Projectile" instance=ExtResource("1_82y28")]
+
+[node name="Projectile Sprite" parent="." index="0"]
+position = Vector2(474, 0)
+texture = ExtResource("2_f5y0s")
+
+[node name="Projectile Collider" parent="." index="1"]
+position = Vector2(470.99997, -1.5)
+scale = Vector2(62.367455, 68.02073)
+shape = SubResource("CircleShape2D_f5y0s")

@@ -5,10 +5,10 @@
 
 [node name="Move" type="Node2D"]
 script = ExtResource("1_rrtlf")
+output_on_fire = 10.0
 accuracy_deviation_label = 1
 user_speed_mod = 0.1
 user_rotation_mod = 0.05
-move_duration = 1.5
 animation_type = 1
 proj_spawn_offset = 1.0
 proj_speed = 2.5

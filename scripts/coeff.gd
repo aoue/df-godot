@@ -12,26 +12,32 @@ The values are set here, and all stats are proportional to the coefficient value
 """
 
 """Combat Balance"""
-var loadout_cooldown: float = 2.0  # time it takes to switch to the next loadout
-var move_cooldown: float = 0.1  # time between using moves
+var combo_timeout_duration: float = 0.65  # time it takes for a combo to elapse if you do not attack.
+var combo_output_relief_speed: float = 40  # how quickly combo_output is reduced (amount in 1 second).
+var combo_output_to_enter_combo: float = 0.0  # the unit's combo output must be leq than this to begin a new combo.
+# ^unsure whether this value should be 0 or 50 or customizable or what
+
+var loadout_cooldown: float = 0.5  # time it takes to switch to the next loadout
+var move_cooldown: float = 0.2  # time between using moves
 var move_rotation_mod: float = 1.0 # affects speed of rotation when using a move.
 
 #var proj_spawn_offset : int = 750
 var proj_spawn_offset : int = 50  # to prevent facehugging, it seems.
 var rotation_speed: int = 20  # speed at which indicators rotate
-var speed: int = 5000  # speed at which units move across the map
+var speed: int = 8000  # speed at which units move across the map
 var acceleration: float = 0.08  # acceleration at which units increase speed
 
 var hp: int = 1  # base hp value multiplier
 var damage: int = 1  # base damage value multiplier
 var knockback: float = 200  # base knockback value
 
-var hit_stun_duration: float = 1.0  # base duration (s) of move hit stun
-var hit_stun_shield_duration: float = 0.5  # duration (s) of stun immunity after being stunned
+var move_stun_duration: float = 0.25  # base duration of movement lockout on being hit
+var hit_stun_duration: float = 1.0  # base duration (s) of attacking lockout on being hit
+var hit_stun_shield_duration: float = 1.0  # duration (s) of stun immunity after being stunned
 var hit_stun_rotation_speed: float = 0.0  # at 0, cannot rotate when hit.
 
 """Movement Constants"""
-var boost_speed_mod: float = 1.25  # how much of a speedup boost gives
+var boost_speed_add: float = 4000  # how much of a speedup boost gives
 var boost_full_duration: float = 0.25  # how long the boost lasts
 var boost_shield_full_duration: float = boost_full_duration
 var boost_full_cooldown: float = 1.5  # how long until you may boost again

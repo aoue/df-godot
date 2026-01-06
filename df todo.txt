@@ -1,55 +1,59 @@
 commit notes:
--reduced mandatory move cooldown because there's really no reason making it anything other than super short
--resized camera a little
--added a whiff punish miss delay, we can get some use out of our still animations
+-
 
 ======= NOTES
 collision layers/masks notes:
-	layer: others can tell when they hit you
-	mask: you can tell when you hit others
+	layer: gets hit
+	mask: hits others
 	- 1: everything related to units moving and hitting world border or obstacles.
 	- 9: everything related to RANGED ANTI-ENEMY projectiles hitting units and obstacles.
 	- 10: everything related to MELEE ANTI-ENEMY projectiles
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
 
-======= THE BIG DEAL: combat feeling
+======= THE BIG DEAL: MAJOR combat feeling rework
 
-immediate notes:
--small bug with attack priority i think
+1. remove summon type moves.......................................[DONE]
+a. rework move firing timing......................................[DONE]
+b. loadout swap visual indicator..................................[DONE]
+2. hit stun and attack cancel rework..............................[DONE]
+3. combo rework...................................................[DONE]
+a. dash move halt without passthrough.............................[DONE]
+b. added shock move...............................................[DONE]
+c. combo soft limiter (timing)....................................[DONE]
+4. combo hard limiter (heat)......................................[DONE]
 
-1. iterate on art------------------------------------------------[]
-2. concerns on combat feeling -----------------------------------[in progress]
-
-. make allied friday unit----------------------------------------[]
-. [gate] Friday spritesheet--------------------------------------[]
-
-. think more about 'flight mode' mechanic------------------------[]
-. think about break/special mechanic-----------------------------[]
-
-[gate] (long term goal)
-. fully asset-ed up, encounter at scale--------------------------[]
-. group encounter feels good-------------------------------------[]
-. encounter against a boss feels good----------------------------[]
-. review---------------------------------------------------------[]
-
-immediate notes:
--
+. refactoring ai behavior........................................[]
+. mobility and enemy dashing.....................................[]
+. attack permission mechanic.....................................[]
 
 
-- issue with dash effect:
-	- obnoxious little extra boost of speed in our dash moves? remove this.
+- branch clean-up:
+	- merge combat feel branch back in. 
+	- create new branch: ai behaviour refactor
 
-- change ram move:
-	- with passthrough, continues as it is now
-	- without passthrough (new), stops the movement after the first hit
-	- give it a bigger knockback. good opener move, but not the AoE it is now.
-
-- camera stuff:
-	some ideas:
-	- frame player and closest enemy
-	- frame player, closest enemy, and enemy with attack permission
+- refactoring ai behaviour:
+	- create a desire system that chooses between x actions: move, attack, change target, dodge, etc
+	put the action delay onto the specific action's side.
+	could create more complex behavior compared to what we have now.
+	also simpler.
+	also includes attack permission:
+	- manage so a unit can only have like 1 person diving them, 1 person skirmishing them
+	- everyone else has to hover around
 	
+	works when: (actions in priority, i think)
+	- there is an enemy which can proactively dodge an incoming attack
+	- the enemy can dive
+	- the enemy can skirmish
+	- the enemy can follow the action (meaning where the fighting is taking place)
+	- if at high heat, then retreat/dodge
+
+- mobility and enemy dashing:
+	- units should be repositioning more and faster type stuff. Just faster paced game.
+	- they can attack quickly; not as big a deal if it doesn't stun for long.
+	- they can quickly: reposition with a dash->dive in and attack.
+	have them pick destinations further away? instead of always trying to stay in the ideal range?
+
 
 - new mechanic idea, attack permission:
 	for fighting multiple enemies, so test it against 2,3,4 enemies
@@ -61,12 +65,35 @@ immediate notes:
 	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
 	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
 
-- mechanic idea, chain:
-	- if every move in your loadout scores a hit, increases damage combo percentage?
-	- or, lets you use a 4th, special move in the combo?
-	or, not lets you use it, but immediately uses it for you.
-	idk, but i'm just getting the feeling hitting a 3-combo is not that satisfying.
-	a longer combo is more fun.
+- new move type:
+	- on_mouse. a projectile which spawns on mouse and then slowly trails after it.
+	quite slow of course.
+
+- combo routing factors:
+	in baldr sky, move order is quite technical because of launching and knockdown
+	- our system doesn't have either of these things.
+	what limits do we have in terms of which moves you can connect together?
+	- move output cost: which will determine the length of your combo, and also last move, which is free.
+	- range of the move: mixing close and far ranges can be tricky.
+	- knockback: a big knockback move will knock an enemy out of range of a short move.
+	- future 'flow': some moves do damage relative to flow generated, and may consume it.
+
+- concerns about defensive bias:
+	on the mechanic how taking ANY damage breaks a combo.
+	- show only some attacks have that ability?
+	- should being in combo protect you, so the player has to respect the combo for its length?
+	- stun meter, so you can still break it, but not in one hit?
+
+- hit-vincibility?
+	- can't get hit too soon after just being hit. same idea as stunlock prevention.
+	well, i'm not sure if we need this. but in large hits, it can be frustrating to be punished 3 times
+	for the same mistake if you are fighting 3 enemies. but maybe attack permission will solve this, so wait.
+
+==============
+
+- loadout swap as a choice:
+	- when swapping loadouts, how do you control which loadout you will move to next?
+	this kind of system is desirable i think	
 
 - combat feel:
 	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
@@ -117,8 +144,8 @@ immediate notes:
 	remember, boost is already implemented in unit body, so just have to do flags.
 	summary: if enemy is near you, is attacking; then you dodge away from them.
 
-- ai delay between actions as range:
-	for some enemies, to make them more unpredictable:
+- ai delay between actions value as a range:
+	consider this: for some enemies, to make them more unpredictable:
 	- delay between actions can become a range and stuff.
 	
 - combat feeling review:
@@ -134,6 +161,20 @@ immediate notes:
 	each thing you do, you're doing on purpose, and the game clearly reacts to you doing it.
 
 sound overhaul:
+	lots of things need sound:
+	- units moving
+	- environment (wind, snow, rain, creaking, etc)
+	- unit using a move
+	- unit being hit by a move
+	- music
+
+- alternate attack system, in case this falls apart:
+	you have a combo counter from 1...x
+	- you equip weapons (attack patterns) where the move differs depending on combo counter
+	- you can switch which weapon you are attacking with in the middle of the combo.
+	e.g. you can attack snaphammer1 -> snaphammer2 -> rifle3 -> box4 -> rifle5 -> ...
+	or any other combination that you want.	
+	note: this does feel like an idea where
 
 ================
 
