@@ -13,7 +13,7 @@ The values are set here, and all stats are proportional to the coefficient value
 
 """Combat Balance"""
 var combo_timeout_duration: float = 0.65  # time it takes for a combo to elapse if you do not attack.
-var combo_output_relief_speed: float = 40  # how quickly combo_output is reduced (amount in 1 second).
+var combo_output_relief_speed: float = 60  # how quickly combo_output is reduced (amount in 1 second).
 var combo_output_to_enter_combo: float = 0.0  # the unit's combo output must be leq than this to begin a new combo.
 # ^unsure whether this value should be 0 or 50 or customizable or what
 

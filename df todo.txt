@@ -1,5 +1,5 @@
 commit notes:
--
+-increased combo output refresh speed
 
 ======= NOTES
 collision layers/masks notes:
