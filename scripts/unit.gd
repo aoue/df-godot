@@ -258,7 +258,6 @@ func _process(delta):
 			#combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * (combo_output/10.0)))
 			var high_value_speedup_mod: float = max(1.0, (combo_output + 50.0) / 100.0)
 			combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * high_value_speedup_mod))
-			combo_output = snapped(combo_output, 0.1)
 		
 		# enable attack again once cooldown has finished
 		if not can_attack and can_attack_cooldown == 0.0:

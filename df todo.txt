@@ -1,5 +1,5 @@
 commit notes:
--increased combo output refresh speed
+-
 
 ======= NOTES
 collision layers/masks notes:
@@ -13,40 +13,43 @@ collision layers/masks notes:
 
 ======= THE BIG DEAL: MAJOR combat feeling rework
 
-1. remove summon type moves.......................................[DONE]
-a. rework move firing timing......................................[DONE]
-b. loadout swap visual indicator..................................[DONE]
-2. hit stun and attack cancel rework..............................[DONE]
-3. combo rework...................................................[DONE]
-a. dash move halt without passthrough.............................[DONE]
-b. added shock move...............................................[DONE]
-c. combo soft limiter (timing)....................................[DONE]
-4. combo hard limiter (heat)......................................[DONE]
+1. dummy attack permission behavior...............................[]
 
 . refactoring ai behavior........................................[]
+
 . mobility and enemy dashing.....................................[]
 . attack permission mechanic.....................................[]
+. mode to watch ai units fight without my action.................[]
 
 
-- branch clean-up:
-	- merge combat feel branch back in. 
-	- create new branch: ai behaviour refactor
+- dummy attack permission behavior:
+	- since we're working with just one unit right now, simply always give it.
 
 - refactoring ai behaviour:
 	- create a desire system that chooses between x actions: move, attack, change target, dodge, etc
 	put the action delay onto the specific action's side.
-	could create more complex behavior compared to what we have now.
-	also simpler.
-	also includes attack permission:
-	- manage so a unit can only have like 1 person diving them, 1 person skirmishing them
-	- everyone else has to hover around
+	could create more complex behavior compared to what we have now, but also simpler to manage.
+	desire system design:
+	if no desire, choose one: (and also check every half second)
+	(each desire executes on a timer or until marked over)
+	- DODGE: enemy close enough to you and your heat is above a certain level and you can boost.
+		-> boost away at a semi random angle
+	- DIVE: enemy in your attack range and your heat is low and you have dive permission.
+		-> use melee loadout
+	- SKIRMISH: enemy in your attack range and your heat is low and you have skirmish permission.
+		-> use skirmish loadout
+	- REPOSITION: enemy not in your attack range and you are crowded and you can boost
+		-> (boost) move away from the crowd
+	- FOLLOW: enemy not in your attack range and you are not crowded
+		-> move towards the targets generally
+
+	example enemy execution:
+	1. enemy is at high output and player is near
+	2. enemy decides to DODGE
+	3. enemy decides to SKIRMISH, and executes that loadout
+	4. enemy decides to DIVE, closing the distance. 
+	5. enemy decides to DODGE again, because output is high
 	
-	works when: (actions in priority, i think)
-	- there is an enemy which can proactively dodge an incoming attack
-	- the enemy can dive
-	- the enemy can skirmish
-	- the enemy can follow the action (meaning where the fighting is taking place)
-	- if at high heat, then retreat/dodge
 
 - mobility and enemy dashing:
 	- units should be repositioning more and faster type stuff. Just faster paced game.
@@ -88,6 +91,9 @@ c. combo soft limiter (timing)....................................[DONE]
 	- can't get hit too soon after just being hit. same idea as stunlock prevention.
 	well, i'm not sure if we need this. but in large hits, it can be frustrating to be punished 3 times
 	for the same mistake if you are fighting 3 enemies. but maybe attack permission will solve this, so wait.
+
+- dash increase output?
+	- consider.
 
 ==============
 

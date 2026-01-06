@@ -171,7 +171,7 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
 func update_labels(_speed_value : float) -> void:
-	output_label.text = str(unit.combo_output) + "%"
+	output_label.text = str(snapped(unit.combo_output, 1)) + "%"
 	#stun_label.text = str(unit.stun_cur) + "%"
 	#utility_label.text = "UTL--" + str(timing_bar.value)
 	#speed_label.text = "SPD--" + str(speed_value)
