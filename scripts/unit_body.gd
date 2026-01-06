@@ -12,7 +12,7 @@ class_name UnitBody
 
 @export_group("Display")
 @export var stat_labels : Node2D
-@export var stun_label : Label
+@export var output_label : Label
 @export var utility_label : Label
 @export var speed_label : Label
 @export var floating_text : PackedScene
@@ -52,18 +52,17 @@ func _ready() -> void:
 	speed = speed_coeff * Coeff.speed
 	acceleration = acceleration_coeff * Coeff.acceleration
 	boost_acceleration = 2.0 * Coeff.acceleration
-	
-	# Hitbox layers
-	#set_collision_mask_value(1, true)  # unnecessary, since all units have this property.
 		
 	# Colour ring
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
 	ring.self_modulate = unit_colour
 	ring_indicator.self_modulate = unit_colour
+	
+	# Label colours
+	output_label.self_modulate = unit_colour
 
 """ Input """
 func get_direction_input_helper() -> Vector2:
-	#if hit_stun_duration > 0.0:
 	if move_stun_duration > 0.0:
 		return Vector2.ZERO
 	return get_direction_input()
@@ -76,6 +75,8 @@ func get_boost_input(_direction: Vector2) -> bool:
 
 func get_attack_input_helper() -> bool:	
 	if hit_stun_duration > 0.0:
+		return false
+	if unit.output_exceeding_limit():
 		return false
 	return get_attack_input()
 func get_attack_input() -> bool:
@@ -136,8 +137,6 @@ func update_timing_bar(delta: float) -> void:
 	
 	# case 0: we are stunned
 	if hit_stun_duration > 0.0:
-		#new_max_value = Coeff.hit_stun_duration
-		#new_value = hit_stun_duration
 		new_max_value = Coeff.hit_stun_duration
 		new_value = hit_stun_duration
 	## case 1: we are attacking; update attack thing
@@ -172,7 +171,7 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
 func update_labels(_speed_value : float) -> void:
-	pass
+	output_label.text = str(unit.combo_output) + "%"
 	#stun_label.text = str(unit.stun_cur) + "%"
 	#utility_label.text = "UTL--" + str(timing_bar.value)
 	#speed_label.text = "SPD--" + str(speed_value)
@@ -194,7 +193,6 @@ func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	
 	# Stunned?
-	#if hit_stun_duration > 0.0:
 	if move_stun_duration > 0.0:
 		character_anim.play("9_being_hit")
 		return
@@ -302,11 +300,11 @@ func adjust_indicators(where: Vector2, delta: float):
 	var rotation_weight: float = delta * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0:
 		rotation_weight *= (unit.active_move.user_rotation_mod * Coeff.move_rotation_mod)
-	#if hit_stun_duration > 0.0:
 	if move_stun_duration > 0.0:
 		rotation_weight *= Coeff.hit_stun_rotation_speed
 
 	ring_indicator.rotation = rotate_toward(current_rotation, wanted_rotation_angle, rotation_weight)
+	output_label.rotation = rotate_toward(-current_rotation, -wanted_rotation_angle, rotation_weight)
 			
 func get_ring_indicator_vector() -> Vector2:
 	var x_component = cos(ring_indicator.rotation)
@@ -341,7 +339,7 @@ func _physics_process(delta: float) -> void:
 	var acceleration_value = acceleration
 	var speed_value = speed
 	
-	if unit.in_combo:
+	if unit.in_combo and not is_boosting:
 		speed_value *= unit.combo_speed_mod
 		
 	if is_boosting:
@@ -354,7 +352,6 @@ func _physics_process(delta: float) -> void:
 	elif is_backpedaling(direction, ring_direction):
 		speed_value /= 2
 	
-		
 	adjust_indicators(target_pos, delta)
 	go_move(direction, speed_value, acceleration_value)
 	go_attack(is_attacking, global_position, ring_direction)

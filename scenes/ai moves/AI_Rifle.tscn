@@ -9,6 +9,7 @@ min_range = 0.5
 standoff_distance = 2.5
 max_range = 5.0
 fire_table = Array[float]([0.66, 0.5, 0.33])
+output_on_fire = 10.0
 accuracy_deviation_label = 1
 user_speed_mod = 0.1
 user_rotation_mod = 0.05

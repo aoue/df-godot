@@ -1,5 +1,6 @@
 commit notes:
--small change to combo move mod, where the mod is set by the last used move instead of a constant
+-made boost speed add unaffected by combo slowdown
+-added combo output system, the hard limit system to combos (unsure about entry gate value, but it can be easily changed in coeff)
 
 ======= NOTES
 collision layers/masks notes:
@@ -12,13 +13,6 @@ collision layers/masks notes:
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
 
 ======= THE BIG DEAL: MAJOR combat feeling rework
-ideal to pursue:
-	- player slides in, hits enemy with a three hit combo back to back in short time
-	- swaps loadout and the player has a chance to reposition for a split second (enemy can dodge?)
-	- player continues with second combo
-	enough for now.
-
-(lock enemy behavior for now, don't need them.)
 
 1. remove summon type moves.......................................[DONE]
 a. rework move firing timing......................................[DONE]
@@ -34,22 +28,6 @@ c. combo soft limiter (timing)....................................[DONE]
 . refactoring ai behavior........................................[]
 . attack permission mechanic.....................................[]
 
-
-- combo hard limiting (heat):
-	limiting combo:
-	- in baldr sky they have heat, which is on your end. forces you to take a break.
-	- between putting something on your end or something on the enemy end, it's better on your end, right? otherwise you could just switch to a new enemy.
-	- otherwise you could just always be attacking; undesirable.
-	so a self-limiting factor seems best.
-	- something as basic as: every move you use increases heat? when heat is over the max, you're done.
-	- maybe you do whole loadouts at a time though? you only have to check for overheat when getting your next loadout. so you can tack on a loadout at the end with massive heat cost. interesting feature. essentially a combo finisher.
-	heat gauge ticks down when you are officially out of combo. can't attack until total refresh.
-
-	-need to display heat. for now, can just use the old stun text or whatever. show number 0...100
-	-when you go over 100, you're done.
-	-and watch the heat tick down in real time.
-	maybe you don't have to wait for heat to go all the way back down to 0? 
-	but it will always prevent you from attacking if it is over 100 (on the unitbody side)
 
 
 - mobility and enemy dashing:
@@ -71,7 +49,8 @@ c. combo soft limiter (timing)....................................[DONE]
 	- there is an enemy which can proactively dodge an incoming attack
 	- the enemy can dive
 	- the enemy can skirmish
-	- the enemy can follow the action
+	- the enemy can follow the action (meaning where the fighting is taking place)
+	- if at high heat, then retreat/dodge
 	
 
 - new mechanic idea, attack permission:
@@ -84,12 +63,6 @@ c. combo soft limiter (timing)....................................[DONE]
 	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
 	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
 
-
-- issue with dash attack moves:
-	- obnoxious little extra boost of speed in our dash moves? make sure this can't happen.
-	this seems to be here no longer, though. nice.
-
-
 - new move type:
 	- on_mouse. a projectile which spawns on mouse and then slowly trails after it.
 	quite slow of course.
@@ -98,18 +71,27 @@ c. combo soft limiter (timing)....................................[DONE]
 	in baldr sky, move order is quite technical because of launching and knockdown
 	- our system doesn't have either of these things.
 	what limits do we have in terms of which moves you can connect together?
-	- power cost: which will determine the length of your combo. 
+	- move output cost: which will determine the length of your combo, and also last move, which is free.
 	- range of the move: mixing close and far ranges can be tricky.
 	- knockback: a big knockback move will knock an enemy out of range of a short move.
 	- future 'flow': some moves do damage relative to flow generated, and may consume it.
 
+- concerns about defensive bias:
+	on the mechanic how taking ANY damage breaks a combo.
+	- show only some attacks have that ability?
+	- should being in combo protect you, so the player has to respect the combo for its length?
+	- stun meter, so you can still break it, but not in one hit?
+
+- hit-vincibility?
+	- can't get hit too soon after just being hit. same idea as stunlock prevention.
+	well, i'm not sure if we need this. but in large hits, it can be frustrating to be punished 3 times
+	for the same mistake if you are fighting 3 enemies. but maybe attack permission will solve this, so wait.
+
 ==============
 
-- loadout swap system as a choice:
+- loadout swap as a choice:
 	- when swapping loadouts, how do you control which loadout you will move to next?
 	this kind of system is desirable i think	
-
-
 
 - combat feel:
 	work on these in a small scale, 1-on-1 situation. Then scale them up and see.

@@ -11,6 +11,7 @@ enum Recoil_Moments {NA, WHEN_PROJECTILE_IS_FIRED, WHEN_PROJECTILE_CONNECTS}
 # Usage 
 @export_group("Usage Variables") 
 @export var fire_table : Array[float]
+@export var output_on_fire : float  # added to unit's output when a projectile is fired.
 @export var accuracy_deviation_label : Accuracy_Labels
 @export var move_speed_add_duration : float
 @export var move_speed_add : float  # negate this value to move backwards

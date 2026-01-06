@@ -49,6 +49,8 @@ var in_combo : bool = false  # marks whether the unit is currently performing a 
 var combo_cancel : bool = false  # a flag set when the unit is hit to tell it to cancel the combo right away.
 var combo_exit_timer : float = 0.0  # a timer that tracks how long until the unit can go without atttack before their combo ends.
 var combo_speed_mod : float = 1.0  # Slows movement speed during combo, updated to hold the speed mod of the last used move.
+var combo_output: float = 0.0  # a value that sets a hard limit to combo output, increasing with move output.
+var combo_output_max: float = 100  # barrier for combo output, when output is over this, cannot attack.
 
 func refresh(HP_max_coeff: float):
 	# sets the unit's stats to their initial state
@@ -99,6 +101,18 @@ func end_combo() -> void:
 		loadout.combo_end()
 		update_loadout_status(true)
 
+func output_exceeding_limit() -> bool:
+	# called by unit body to revoke ability to attack. 
+	# returns true if the unit's combo_output is too high.
+	
+	# if starting a new combo, must be 0
+	if not in_combo and combo_output > Coeff.combo_output_to_enter_combo:
+		return true
+	# if in combo, must not exceed limit
+	if in_combo and combo_output >= combo_output_max:
+		return true
+	return false
+
 func update_loadout_status(display_message: bool = true) -> void:
 	if not loadout:
 		loadout = all_loadouts[0]
@@ -124,6 +138,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 		# check against active move's fire times
 		if projectile_counter < len(active_move.fire_table) and attacking_duration_left <= active_move.fire_table[projectile_counter]:
 			projectile_counter += 1
+			combo_output += active_move.output_on_fire
 			fire(unit_pos, ring_indicator_vector, ring_indicator_obj)
 			
 		# if the move has hit, then you can immediately finish it after the last projectile has been fired (combo incentive)
@@ -214,7 +229,6 @@ func report_hit(hit_body_position : Vector2) -> void:
 
 func _process(delta):
 	# manage attack cooldown
-	print(combo_exit_timer)
 	if attacking_duration_left > 0.0:
 		attacking_duration_left = max(0, attacking_duration_left - delta)
 	else:
@@ -229,14 +243,22 @@ func _process(delta):
 		attack_priority = -1
 		can_attack_cooldown = max(0, can_attack_cooldown - delta)
 		
-		# end combo timer
+		# manage combo timer
 		if loadout_gate_time == 0 and ((can_attack and in_combo) or (in_combo and combo_cancel)):
+			# tick down the timer
 			if combo_cancel:
 				combo_exit_timer = 0
 			combo_exit_timer = max(0, combo_exit_timer - delta)
+			# exit the combo
 			if combo_exit_timer == 0:
-				# exit the combo
 				end_combo()
+		elif not in_combo:
+			# when not in a combo, tick down heat
+			#print("ticking down output: " + str(combo_output))
+			#combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * (combo_output/10.0)))
+			var high_value_speedup_mod: float = max(1.0, (combo_output + 50.0) / 100.0)
+			combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * high_value_speedup_mod))
+			combo_output = snapped(combo_output, 0.1)
 		
 		# enable attack again once cooldown has finished
 		if not can_attack and can_attack_cooldown == 0.0:
