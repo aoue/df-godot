@@ -1,6 +1,5 @@
 commit notes:
--made boost speed add unaffected by combo slowdown
--added combo output system, the hard limit system to combos (unsure about entry gate value, but it can be easily changed in coeff)
+-
 
 ======= NOTES
 collision layers/masks notes:
@@ -22,19 +21,16 @@ b. loadout swap visual indicator..................................[DONE]
 a. dash move halt without passthrough.............................[DONE]
 b. added shock move...............................................[DONE]
 c. combo soft limiter (timing)....................................[DONE]
-4. combo hard limiter (heat)......................................[]
+4. combo hard limiter (heat)......................................[DONE]
 
-. mobility and enemy dashing.....................................[]
 . refactoring ai behavior........................................[]
+. mobility and enemy dashing.....................................[]
 . attack permission mechanic.....................................[]
 
 
-
-- mobility and enemy dashing:
-	- units should be repositioning more and faster type stuff. Just faster paced game.
-	- they can attack quickly; not as big a deal if it doesn't stun for long.
-	- they can quickly: reposition with a dash->dive in and attack.
-	have them pick destinations further away? instead of always trying to stay in the ideal range?
+- branch clean-up:
+	- merge combat feel branch back in. 
+	- create new branch: ai behaviour refactor
 
 - refactoring ai behaviour:
 	- create a desire system that chooses between x actions: move, attack, change target, dodge, etc
@@ -51,7 +47,13 @@ c. combo soft limiter (timing)....................................[DONE]
 	- the enemy can skirmish
 	- the enemy can follow the action (meaning where the fighting is taking place)
 	- if at high heat, then retreat/dodge
-	
+
+- mobility and enemy dashing:
+	- units should be repositioning more and faster type stuff. Just faster paced game.
+	- they can attack quickly; not as big a deal if it doesn't stun for long.
+	- they can quickly: reposition with a dash->dive in and attack.
+	have them pick destinations further away? instead of always trying to stay in the ideal range?
+
 
 - new mechanic idea, attack permission:
 	for fighting multiple enemies, so test it against 2,3,4 enemies
