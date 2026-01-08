@@ -79,7 +79,8 @@ func is_hit_invalid(reporter) -> bool:
 	#	- we have lower attack priority
 	if reporter.bodyChief.unit.active_move and reporter.bodyChief.unit.active_move.spawn_type == 1:
 		if user.active_move and user.active_move.spawn_type == 1:
-			if reporter.bodyChief.unit.attack_priority > attack_priority:
+			#if reporter.bodyChief.unit.attack_priority > attack_priority:
+			if reporter.bodyChief.unit.attack_priority < attack_priority:
 				return true
 	return false
 

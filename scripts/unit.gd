@@ -94,6 +94,7 @@ func end_combo() -> void:
 	in_combo = false
 	combo_cancel = false
 	body.show_loadout_swap("OVER")
+	body.end_combo_ai()
 	
 	# force change loadouts (but only if in the middle of one)
 	# (otherwise we would skip over one)

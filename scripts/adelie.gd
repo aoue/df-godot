@@ -32,10 +32,8 @@ var in_stun: bool = false
 var rng = RandomNumberGenerator.new()
 var stop: bool = false
 var grace_period: float = 0.5
+var obtained_attack_permission: bool = true
 
-#func _ready():
-	#super()
-	##ponder.call_deferred()
 
 """ Main Brain """
 func ponder() -> void:	
@@ -52,18 +50,7 @@ func ponder() -> void:
 	pick_destination()  # move closer to your desires
 	decide_to_attack()  # pick if you are in a position you can attack in
 
-func read_in_move_ai_parameters() -> void:
-	# Given the current loadout's current move, set unit's ai parameters.
-	var packed_loaded_move = unit.loadout.peek_next_move()
-	var loaded_move = packed_loaded_move.instantiate()
-	
-	hold_timer = loaded_move.get_move_timer()
-	cooldown_timer = loaded_move.get_cooldown_timer()
-	standoff_distance = loaded_move.get_standoff_distance()
-	min_range = loaded_move.get_min_range()
-	max_range = loaded_move.get_max_range()
-	
-	loaded_move.queue_free()
+
 
 """ Target Selection """
 func decide_on_target() -> void:
@@ -113,6 +100,10 @@ func decide_to_attack() -> void:
 	if not vector_from_unit_to_target.dot(own_direction_vector) > 0:  # you must be facing the target as well
 		return
 	
+	# further, you must have attack permission (reset on combo end)
+	if not obtained_attack_permission and not GameMother.get_attack_permission(target_unit):
+		return
+	
 	var abs_distance_to_target = abs(target_unit.position.distance_to(global_position))
 	if abs_distance_to_target > min_range and abs_distance_to_target < max_range:
 		# signal that navigation should be updated with the target's precise position
@@ -150,6 +141,19 @@ func pick_destination() -> void:
 		pick_dest_helper()
 
 """ Helpers """
+func read_in_move_ai_parameters() -> void:
+	# Given the current loadout's current move, set unit's ai parameters.
+	var packed_loaded_move = unit.loadout.peek_next_move()
+	var loaded_move = packed_loaded_move.instantiate()
+	
+	hold_timer = loaded_move.get_move_timer()
+	cooldown_timer = loaded_move.get_cooldown_timer()
+	standoff_distance = loaded_move.get_standoff_distance()
+	min_range = loaded_move.get_min_range()
+	max_range = loaded_move.get_max_range()
+	
+	loaded_move.queue_free()
+
 func get_direction_input() -> Vector2:	
 	# update if nav is finished or action timer elapsed
 	if unit.miss_attack_cooldown > 0.0:
@@ -165,6 +169,11 @@ func get_direction_input() -> Vector2:
 func get_attack_input() -> bool:
 	# returns true if the unit has intention to attack and ability to attack.
 	if attack_ready and unit.can_attack:
+		
+		## BUT ALSO you must get attack permission from gamemother, darling
+		#if not GameMother.get_attack_permission(target_unit):
+			#return false
+		
 		attack_ready = false
 		return true
 	return false
@@ -186,6 +195,9 @@ func get_target_position() -> Vector2:
 	else:
 		return nav.get_next_path_position()
 
+func end_combo_ai() -> void:
+	obtained_attack_permission = false
+
 func being_hit_ai() -> void:
 	in_stun = true
 
@@ -200,8 +212,8 @@ func _physics_process(delta):
 	
 	 #return	
 	if grace_period > 0.0:
-		pass
-		#grace_period = max(0, grace_period - delta)
+		#pass
+		grace_period = max(0, grace_period - delta)
 	if hit_stun_duration <= 0.0:
 		action_timer -= delta
 		if in_stun:

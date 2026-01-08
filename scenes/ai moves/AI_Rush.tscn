@@ -5,11 +5,11 @@
 
 [node name="AiRush" type="Node2D"]
 script = ExtResource("1_6hptx")
-min_range = 0.1
+min_range = 1.0
 standoff_distance = 1.0
-max_range = 8.0
-fire_table = Array[float]([0.5])
-output_on_fire = 30.0
+max_range = 10.0
+fire_table = Array[float]([0.9])
+output_on_fire = 50.0
 move_speed_add_duration = 0.5
 move_speed_add = 1.75
 user_rotation_mod = 0.01

@@ -90,7 +90,12 @@ func get_target_position() -> Vector2:
 func take_recoil(recoil_amount: Vector2):
 	knockback += recoil_amount
 
+func end_combo_ai() -> void:
+	# pure virtual
+	pass
+
 func being_hit_ai() -> void:
+	# pure virtual
 	pass
 	
 func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:

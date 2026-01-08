@@ -44,6 +44,7 @@ var boost_full_cooldown: float = 1.5  # how long until you may boost again
 var full_speed_angle_gate: float = PI / (8.0 / 3)  # how large the angle between the indicator and the movement input may be while the unit still moves at full speed
 
 """AI Parameters"""
+var attack_permission_timer: int = 2000  # lockout time on giving permission for another unit to attack a unit (in milliseconds)
 var ai_action_timer: float = 1.0  # base timer between ai units selecting actions
 var standoff: float = -1000.0  # base distance ai units want between themselves and their targets
 var move_range: float = 1000.0  # base value for min range and max range of ai moves

@@ -15,7 +15,7 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 1
+var enemy_count: int = 4
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,10 +32,10 @@ func create_world() -> void:
 	# (includes geography, units/enemies starting positions, gamerules, etc)
 	GameMother.setup_UI()
 	
-	#friendly_in_world = Friendly.instantiate()
-	#friendly_in_world.position = Vector2(-1250, 0)
-	#add_child(friendly_in_world)
-	#GameMother.add_hero(friendly_in_world)
+	friendly_in_world = Friendly.instantiate()
+	friendly_in_world.position = Vector2(-1250, 0)
+	add_child(friendly_in_world)
+	GameMother.add_hero(friendly_in_world)
 	
 	anse_in_world = Anse.instantiate()
 	add_child(anse_in_world)
