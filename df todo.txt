@@ -17,11 +17,22 @@ collision layers/masks notes:
 
 1. attack permission behavior.....................................[DONE]
 a. tweak attack priority interaction..............................[DONE]
+b. mode to watch ai units fight without my action.................[]
 2. mobility and ai boosting.......................................[]
 
-. mode to watch ai units fight without my action.................[]
 
 
+- some things to add from watching gameplay:
+	- units do sometimes get stuck in a corner
+	- when a unit's output is high, encourage them to retreat 
+		(adding dodge could fix this)
+		- or rather, no need to close distance when high output: add to standoff?
+	- for some reason, ai units seems to be instantly exiting their combos.
+		- output is decreasing immediately
+
+- ai is still deeply bugged:
+	- not combo-ing when you would expect it too
+	can't avoid the overhaul, i think. yeah, it's messy but seems like you gotta do it.
 
 - refactoring ai behaviour:
 	- DODGE: enemy close enough to you and your heat is above a certain level and you can boost.

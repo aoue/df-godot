@@ -132,7 +132,9 @@ func pick_dest_helper() -> void:
 		direction_away_rotated = direction_away.rotated(PI/2)
 	
 	# calculate position with respect to target's position, move standoff, and closeness to allies
-	var adjusted_position: Vector2 = movement_target_position + (global_position.direction_to(movement_target_position) * standoff_distance) + (direction_away_rotated * closest_friendly_mag)
+	var spacing_vector: Vector2 = (direction_away_rotated * closest_friendly_mag)
+	var standoff_vector: Vector2 = (global_position.direction_to(movement_target_position) * standoff_distance)	
+	var adjusted_position: Vector2 = movement_target_position + standoff_vector + spacing_vector
 	action_timer = delay_between_actions * Coeff.ai_action_timer
 	set_movement_target(adjusted_position)
 	
@@ -204,14 +206,13 @@ func being_hit_ai() -> void:
 """ Movement """
 func set_movement_target(movement_target: Vector2):
 	nav.target_position = movement_target
-	#nav.target_desired_distance = standoff_distance
 	
 func _physics_process(delta):
 	## basically, all the parent class functions are defined here, so physics_process will work as normal.
 	## This is because it is only concerned with execution.
-	
+		
 	 #return	
-	if grace_period > 0.0:
+	if grace_period > 0.0 and unit.allegiance != 2:
 		#pass
 		grace_period = max(0, grace_period - delta)
 	if hit_stun_duration <= 0.0:
