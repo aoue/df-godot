@@ -10,6 +10,8 @@ Also holds gamerules and stuff like that too.
 @export_group("UI")
 @export var logLabel : Label
 
+var rng = RandomNumberGenerator.new()
+
 """ Tracking during battle """
 var heroes : Array[UnitBody] = []  # Anse and friends
 var villains : Array[UnitBody] = []  # Opponents to Anse and friends
@@ -71,7 +73,6 @@ func update_cotargeting(old_unitbody: UnitBody, new_unitbody: UnitBody) -> void:
 			cotargeting_dict[new_unit_id] += 1
 		else:
 			cotargeting_dict[new_unit_id] = 1
-	#print(cotargeting_dict)
 
 func get_cotargeter_count(some_unitbody: UnitBody) -> int:
 	# when asked about 'receiver_unit_id', gives the number of units targeting it.
@@ -86,12 +87,12 @@ func get_cotargeter_count(some_unitbody: UnitBody) -> int:
 func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
 	# Return the min distance to any villain unit that is not this unit
 	# (does not have the same combat_id)
-	var relevant_unit_list
+	var relevant_unit_list: Array[UnitBody]
 	# {PLAYER, ALLY, ENEMY}
 	if user_allegiance == 2:
-		relevant_unit_list = heroes
-	else:
 		relevant_unit_list = villains
+	else:
+		relevant_unit_list = heroes
 	
 	var closest_position: Vector2 = Vector2.ZERO
 	for check_unit in relevant_unit_list:
@@ -121,7 +122,7 @@ func get_attack_permission(some_unitbody: UnitBody) -> bool:
 			# then you have permission. Do update the attack permission dict before you go.
 			attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
 			return true
-				
+	
 	return false
 
 """ UI Functions """

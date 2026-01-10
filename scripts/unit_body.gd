@@ -21,6 +21,7 @@ class_name UnitBody
 # Basic movement variables
 @export var HP_max_coeff: float
 @export var speed_coeff: float
+@export var rotation_coeff: float
 @export var acceleration_coeff: float
 var speed: float
 var acceleration: float
@@ -79,6 +80,7 @@ func get_attack_input_helper() -> bool:
 	if unit.output_exceeding_limit():
 		return false
 	return get_attack_input()
+
 func get_attack_input() -> bool:
 	return false
 
@@ -302,7 +304,7 @@ func adjust_indicators(where: Vector2, delta: float):
 	# For enemy, moved with ai.
 	var wanted_rotation_angle: float = position.angle_to_point(where)
 	var current_rotation: float = ring_indicator.rotation
-	var rotation_weight: float = delta * Coeff.rotation_speed
+	var rotation_weight: float = delta * rotation_coeff * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0:
 		rotation_weight *= (unit.active_move.user_rotation_mod * Coeff.move_rotation_mod)
 	if move_stun_duration > 0.0:

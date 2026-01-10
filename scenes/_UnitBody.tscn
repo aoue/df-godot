@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://8f6wd8hvqtfp"]
 
 [ext_resource type="Script" uid="uid://bmxr7brkl6opm" path="res://scripts/unit_body.gd" id="1_eqrot"]
-[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
+[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="1_nye7s"]
 [ext_resource type="PackedScene" uid="uid://tuj5a3vkff0o" path="res://scenes/Loadout.tscn" id="2_4ykhy"]
 [ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/FloatingText.tscn" id="2_j2xxu"]
 [ext_resource type="Texture2D" uid="uid://wk1fygljfjrh" path="res://assets/ui/hp bar bg.png" id="2_r1v5x"]
@@ -33,6 +33,7 @@ speed_label = NodePath("Stat Labels/Speed Label")
 floating_text = ExtResource("2_j2xxu")
 HP_max_coeff = 1.0
 speed_coeff = 1.0
+rotation_coeff = 1.0
 acceleration_coeff = 1.0
 
 [node name="Unit" parent="." node_paths=PackedStringArray("all_loadouts") instance=ExtResource("1_nye7s")]

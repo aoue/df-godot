@@ -18,9 +18,10 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 1
+var enemy_count: int = 4
 
-var camera_mode: bool = true
+var call_friendly: bool = true
+var camera_mode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,10 +38,11 @@ func create_world() -> void:
 	# (includes geography, units/enemies starting positions, gamerules, etc)
 	GameMother.setup_UI()
 	
-	friendly_in_world = Friendly.instantiate()
-	friendly_in_world.position = Vector2(-1250, 0)
-	add_child(friendly_in_world)
-	GameMother.add_hero(friendly_in_world)
+	if call_friendly:
+		friendly_in_world = Friendly.instantiate()
+		friendly_in_world.position = Vector2(-1250, 0)
+		add_child(friendly_in_world)
+		GameMother.add_hero(friendly_in_world)
 	
 	if camera_mode:
 		fixedCamera.enabled = true
@@ -58,7 +60,7 @@ func create_world() -> void:
 		add_child(adelie_in_world)
 		GameMother.add_villain(adelie_in_world)
 		spawn_offset += 500
-		flip_offset = flip_offset * -1
+		#flip_offset = flip_offset * -1
 	
 	# Once all units are created. Necessary for proper hit register.
 	GameMother.assign_combat_ids()
