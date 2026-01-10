@@ -84,6 +84,15 @@ func get_cotargeter_count(some_unitbody: UnitBody) -> int:
 		return cotargeting_dict[unit_id]
 	return 0
 
+func get_closest_hostile_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
+	var relevant_unit_list: Array[UnitBody]
+	# {PLAYER, ALLY, ENEMY}
+	if user_allegiance == 2:
+		relevant_unit_list = heroes
+	else:
+		relevant_unit_list = villains
+	return get_closest_unit_position(my_combat_id, my_pos, relevant_unit_list)
+
 func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
 	# Return the min distance to any villain unit that is not this unit
 	# (does not have the same combat_id)
@@ -93,7 +102,9 @@ func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_p
 		relevant_unit_list = villains
 	else:
 		relevant_unit_list = heroes
+	return get_closest_unit_position(my_combat_id, my_pos, relevant_unit_list)
 	
+func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list: Array[UnitBody]) -> Vector2:
 	var closest_position: Vector2 = Vector2.ZERO
 	for check_unit in relevant_unit_list:
 		if check_unit and my_combat_id != check_unit.unit.combat_id:

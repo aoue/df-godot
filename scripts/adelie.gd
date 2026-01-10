@@ -11,7 +11,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 
 """ Saved variables for brain """
 ## Behaviour constants
-var my_intention : Intention  # records the current intention of the unit
+var my_intention : Intention = Intention.SLEEP  # records the current intention of the unit
 var last_action_timestamp : int = 0  # records the time (in ms) since the unit last acted
 var time_between_updates : int = 1000  # for updating during the same intention (in ms)
 var last_update_timestamp : int = 0  # records the time (in ms) since the last update
@@ -20,6 +20,9 @@ var last_update_timestamp : int = 0  # records the time (in ms) since the last u
 var desired_unit_target : UnitBody = null
 var desired_movement_location : Vector2 = Vector2.ZERO
 var desired_distance_from_allies : int = 2000
+
+var recalculate_random_offset : bool = false  # to not constantly recalculate random elements. Once per intention is fine.
+var saved_random_offset: float = 0.0
 
 ## Loaded Move Records
 var move_loaded: bool = false
@@ -36,9 +39,16 @@ func update_intention() -> void:
 	# If it isn't time to act again yet, trivially keep the same intention.
 	if not time_to_act():
 		return
-
-	# otherwise, chooses intention here.
-	my_intention = Intention.ADVANCE
+	recalculate_random_offset = true
+		
+	# Choose intention here based on situation.
+	if unit.output_exceeding_limit() and feeling_threatened():
+		my_intention = Intention.RETREAT
+	 #elif you are able to attack:
+		#my_intention = Intention.ATTACK
+	else:
+		my_intention = Intention.ADVANCE
+	# my_intention = Intention.SLEEP
 
 func execute_intention() -> void:
 	# Based on the current intention, does the stuff to help us keep executing it properly.
@@ -47,12 +57,24 @@ func execute_intention() -> void:
 	if not move_loaded:
 		load_move_stats()
 	
-	if my_intention == Intention.ADVANCE:
+	# Based on the situation, chooses where the unit wants to walk to and look at.
+	if my_intention == Intention.SLEEP:
+		start_sleep()
+	elif my_intention == Intention.ADVANCE:
 		start_advance()
+	elif my_intention == Intention.RETREAT:
+		start_retreat()
 
 """ ADVANCE Intention Functions """
+func start_sleep() -> void:
+	var random_walk: Vector2 = Vector2.ZERO
+	if recalculate_random_offset:
+		var random_direction = calculate_random_offset_rotation(2*PI)
+		random_walk = Vector2(1000.0, 0.0).rotated(random_direction)
+	
+	desired_movement_location = position + random_walk
+
 func start_advance() -> void:
-	# Based on the situation, chooses where the unit wants to walk to and look at.
 	# For advance, they want to follow the action.
 	# This means follow their chosen target by a certain distance.
 	
@@ -66,9 +88,34 @@ func start_advance() -> void:
 	if too_close_to_ally():
 		ally_offset_vector = calculate_ally_offset_vector()
 	
-	# only update if position is different enough than our own. No back and forth stuff.
-	var new_desired_movement_location: Vector2 = desired_unit_target.position + ally_offset_vector
-	desired_movement_location = new_desired_movement_location
+	# update target position
+	desired_movement_location = desired_unit_target.position + ally_offset_vector
+
+func start_retreat() -> void:
+	# For retreat, they want to create space from the closest unit.
+	# This means pick a spot away from the closest target and also some randomness.
+	
+	
+	# take the direction to the closest hostile, flip it around
+	# then multiply by a magnitude of 1000 or whatever
+	var closest_hostile_position: Vector2 = GameMother.get_closest_hostile_position(unit.allegiance, unit.combat_id, position)
+	var retreat_direction: Vector2 = position.direction_to(closest_hostile_position) * -1
+	
+	# apply randomness to retreat direction
+	var retreat_direction_offset: float = calculate_random_offset_rotation(PI)
+	retreat_direction = retreat_direction.rotated(retreat_direction_offset)
+	retreat_direction *= standoff_distance
+		
+	# update target position
+	desired_movement_location = position + retreat_direction
+
+func feeling_threatened() -> bool:
+	# basically, if someone is within a certain distance from you
+	var closest_hostile_position: Vector2 = GameMother.get_closest_hostile_position(unit.allegiance, unit.combat_id, position)
+	#if closest_hostile_position.distance_to(position) < Coeff.feel_threatened_at_distance:
+	if closest_hostile_position.distance_to(position) < standoff_distance:
+		return true
+	return false
 
 """ Helpers """
 func too_close_to_ally() -> bool:
@@ -79,6 +126,13 @@ func too_close_to_ally() -> bool:
 			return true
 	
 	return false
+
+func calculate_random_offset_rotation(range_value: float) -> float:
+	if recalculate_random_offset:
+		recalculate_random_offset = false
+		var ran: float = GameMother.rng.randf_range(-range_value/2.0, range_value/2.0)
+		saved_random_offset = ran
+	return saved_random_offset
 
 func calculate_ally_offset_vector() -> Vector2:
 	var closest_friendly_mag: float = 0.0
@@ -124,7 +178,7 @@ func choose_target() -> void:
 
 func time_to_act() -> bool:
 	var current_time: int = Time.get_ticks_msec()
-	if current_time > last_action_timestamp + Coeff.time_between_actions:
+	if current_time > last_action_timestamp + Coeff.time_between_intention_update:
 		last_action_timestamp = current_time
 		return true
 	return false
@@ -151,6 +205,15 @@ func load_move_stats() -> void:
 	loaded_move.queue_free()
 	move_loaded = true
 
+func get_standoff_helper() -> float:
+	if my_intention == Intention.SLEEP:
+		return 100.0
+	if my_intention == Intention.ADVANCE:
+		return standoff_distance
+	elif my_intention == Intention.RETREAT:
+		return standoff_distance / 2
+	return 0.0
+
 """ Supers """
 func end_combo_ai() -> void:
 	# pure virtual
@@ -159,9 +222,10 @@ func end_combo_ai() -> void:
 func get_direction_input() -> Vector2:
 	# Returns the vector that the unitBody wants to move in
 	var current_agent_position: Vector2 = position
-	if current_agent_position.distance_to(desired_movement_location) < standoff_distance:
+	# if you are close enough that you are within standoff distance, don't move any more.
+	if current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
 		return Vector2.ZERO
-	# else
+	# otherwise, just move where you like.
 	return current_agent_position.direction_to(nav.get_next_path_position())	
 
 func get_target_position() -> Vector2:

@@ -15,10 +15,9 @@
 height = 27.3418
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
-size = Vector2(79, 101)
+size = Vector2(158, 249.5)
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "stat_labels", "output_label", "utility_label", "speed_label")]
-collision_layer = 0
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
@@ -90,7 +89,7 @@ scale = Vector2(-20.8048, 25.711)
 shape = SubResource("CapsuleShape2D_ieh1m")
 
 [node name="MovementHitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, 200)
+position = Vector2(0, 125)
 shape = SubResource("RectangleShape2D_4brxe")
 
 [node name="Stat Labels" type="Node2D" parent="."]

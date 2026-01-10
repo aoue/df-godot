@@ -1,6 +1,7 @@
 commit notes:
--created basic framework for ai overhaul using the new intention system
--created the advance intention and its behavior, with new interpretation of standoff and ally offset
+-changed unit physical collision with each other; they do.
+-added sleep intention and behaviour
+-added retreat intention and behaviour
 
 ======= NOTES
 collision layers/masks notes:
@@ -19,11 +20,22 @@ a. tweak attack priority interaction..............................[DONE]
 b. mode to watch ai units fight without my action.................[DONE]
 
 2. ai overhaul: advance...........................................[DONE]
-3. ai overhaul: retreat...........................................[]
+3. ai overhaul: retreat...........................................[DONE]
+a. ai overhaul: sleep.............................................[DONE]
 4. ai overhaul: boost.............................................[]
 5. ai overhaul: attack............................................[]
 5. big massive ai overhaul complete...............................[]
 
+
+- retreat intention notes:
+	[condition]
+	- force set combo output to 150%
+	- enter retreat intention IF:
+		- output is above a certain threshold
+		- enemy is within a certain range to you
+
+	[execution] [DONE]
+	- set destination to get away from two closest targets, weighted proportionally to distance
 
 - refactoring ai behaviour:
 	(see notes on paper.)
