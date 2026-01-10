@@ -33,8 +33,8 @@ var defeated_disappear_timer: float = 5.0
 
 # Boost variables
 var boost_shield: float = 0.0
-var boost_acceleration: float
-var boost_vector: Vector2
+var boost_acceleration: float = 2.0 * Coeff.acceleration
+var boost_vector: Vector2 = Vector2.ZERO
 var boost_duration: float = 0.0
 var boost_cooldown: float = 0.0
 
@@ -52,7 +52,6 @@ func _ready() -> void:
 	hp_bar.value = unit.HP_max
 	speed = speed_coeff * Coeff.speed
 	acceleration = acceleration_coeff * Coeff.acceleration
-	boost_acceleration = 2.0 * Coeff.acceleration
 		
 	# Colour ring
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
@@ -66,6 +65,9 @@ func _ready() -> void:
 func get_direction_input_helper() -> Vector2:
 	if move_stun_duration > 0.0:
 		return Vector2.ZERO
+	if boost_duration > 0.0:
+		return boost_vector
+	
 	return get_direction_input()
 	
 func get_direction_input() -> Vector2:
@@ -260,7 +262,14 @@ func go_anim(delta: float, direction_input: Vector2, boost_input: bool) -> void:
 	set_anim_plus(boost_input)
 	update_hp_bar(unit.HP_cur, delta)
 	update_timing_bar(delta)
-	
+
+func go_boost(direction_value: Vector2) -> void:
+	# Save current direction for our boost
+	boost_shield = Coeff.boost_shield_full_duration
+	boost_vector = direction_value
+	boost_duration = Coeff.boost_full_duration
+	boost_cooldown = Coeff.boost_full_cooldown + Coeff.boost_full_duration  # wow that's pretty smart (it was my idea)
+
 func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float) -> void:
 	if direction_input.length() > 0:
 		velocity = velocity.lerp(direction_input * speed_input, acceleration_input)

@@ -1,7 +1,5 @@
 commit notes:
--changed unit physical collision with each other; they do.
--added sleep intention and behaviour
--added retreat intention and behaviour
+-generalized boost behaviour to unitbody
 
 ======= NOTES
 collision layers/masks notes:
@@ -22,26 +20,29 @@ b. mode to watch ai units fight without my action.................[DONE]
 2. ai overhaul: advance...........................................[DONE]
 3. ai overhaul: retreat...........................................[DONE]
 a. ai overhaul: sleep.............................................[DONE]
+b. refactor boost to unitbody.....................................[DONE]
 4. ai overhaul: boost.............................................[]
 5. ai overhaul: attack............................................[]
 5. big massive ai overhaul complete...............................[]
 
 
-- retreat intention notes:
-	[condition]
-	- force set combo output to 150%
-	- enter retreat intention IF:
-		- output is above a certain threshold
-		- enemy is within a certain range to you
+- ai overhaul: boost:
+	basically:
+		you have somewhere you want to go
+		you are a sufficient distance from it
+		your boost cooldown exists
+		(and it has not been too soon in this new intention)
 
-	[execution] [DONE]
-	- set destination to get away from two closest targets, weighted proportionally to distance
+- ai overhaul: attack:
+	basically:
+		you are inside your desired range
+		that should be it, right?
 
 - refactoring ai behaviour:
 	(see notes on paper.)
 	step 1: advance. Have 1/3 follow around targets are proper, as expected. [DONE]
-	step 2: retreat. Have 1 retreat from the player when they get close.
-	step 3: boost. Have 1 boost to dest in advance, and boost to dest in retreat
+	step 2: retreat. Have 1 retreat from the player when they get close. [DONE]
+	step 3: boost. Have 1 boost to dest in advance, and boost to dest in retreat 
 	step 4: attack
 
 - gamemother new function:
