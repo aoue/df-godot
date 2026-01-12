@@ -21,6 +21,7 @@ class_name UnitBody
 # Basic movement variables
 @export var HP_max_coeff: float
 @export var speed_coeff: float
+@export var rotation_coeff: float
 @export var acceleration_coeff: float
 var speed: float
 var acceleration: float
@@ -32,8 +33,8 @@ var defeated_disappear_timer: float = 5.0
 
 # Boost variables
 var boost_shield: float = 0.0
-var boost_acceleration: float
-var boost_vector: Vector2
+var boost_acceleration: float = 2.0 * Coeff.acceleration
+var boost_vector: Vector2 = Vector2.ZERO
 var boost_duration: float = 0.0
 var boost_cooldown: float = 0.0
 
@@ -51,7 +52,6 @@ func _ready() -> void:
 	hp_bar.value = unit.HP_max
 	speed = speed_coeff * Coeff.speed
 	acceleration = acceleration_coeff * Coeff.acceleration
-	boost_acceleration = 2.0 * Coeff.acceleration
 		
 	# Colour ring
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
@@ -65,6 +65,9 @@ func _ready() -> void:
 func get_direction_input_helper() -> Vector2:
 	if move_stun_duration > 0.0:
 		return Vector2.ZERO
+	if boost_duration > 0.0:
+		return boost_vector
+	
 	return get_direction_input()
 	
 func get_direction_input() -> Vector2:
@@ -79,6 +82,7 @@ func get_attack_input_helper() -> bool:
 	if unit.output_exceeding_limit():
 		return false
 	return get_attack_input()
+
 func get_attack_input() -> bool:
 	return false
 
@@ -90,7 +94,12 @@ func get_target_position() -> Vector2:
 func take_recoil(recoil_amount: Vector2):
 	knockback += recoil_amount
 
+func end_combo_ai() -> void:
+	# pure virtual
+	pass
+
 func being_hit_ai() -> void:
+	# pure virtual
 	pass
 	
 func being_hit(proj_damage: int, proj_knockback: Vector2, stun: float) -> void:
@@ -171,7 +180,7 @@ func update_hp_bar(new_value: int, delta: float) -> void:
 		hp_bar.value += Coeff.hp_bar_update_speed * delta
 
 func update_labels(_speed_value : float) -> void:
-	output_label.text = str(unit.combo_output) + "%"
+	output_label.text = str(snapped(unit.combo_output, 1)) + "%"
 	#stun_label.text = str(unit.stun_cur) + "%"
 	#utility_label.text = "UTL--" + str(timing_bar.value)
 	#speed_label.text = "SPD--" + str(speed_value)
@@ -253,7 +262,14 @@ func go_anim(delta: float, direction_input: Vector2, boost_input: bool) -> void:
 	set_anim_plus(boost_input)
 	update_hp_bar(unit.HP_cur, delta)
 	update_timing_bar(delta)
-	
+
+func go_boost(direction_value: Vector2) -> void:
+	# Save current direction for our boost
+	boost_shield = Coeff.boost_shield_full_duration
+	boost_vector = direction_value
+	boost_duration = Coeff.boost_full_duration
+	boost_cooldown = Coeff.boost_full_cooldown + Coeff.boost_full_duration  # wow that's pretty smart (it was my idea)
+
 func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float) -> void:
 	if direction_input.length() > 0:
 		velocity = velocity.lerp(direction_input * speed_input, acceleration_input)
@@ -297,7 +313,7 @@ func adjust_indicators(where: Vector2, delta: float):
 	# For enemy, moved with ai.
 	var wanted_rotation_angle: float = position.angle_to_point(where)
 	var current_rotation: float = ring_indicator.rotation
-	var rotation_weight: float = delta * Coeff.rotation_speed
+	var rotation_weight: float = delta * rotation_coeff * Coeff.rotation_speed
 	if unit.attacking_duration_left > 0.0:
 		rotation_weight *= (unit.active_move.user_rotation_mod * Coeff.move_rotation_mod)
 	if move_stun_duration > 0.0:
@@ -339,12 +355,12 @@ func _physics_process(delta: float) -> void:
 	var acceleration_value = acceleration
 	var speed_value = speed
 	
-	if unit.in_combo and not is_boosting:
+	if unit.in_combo:
 		speed_value *= unit.combo_speed_mod
 		
 	if is_boosting:
 		acceleration_value = boost_acceleration
-		speed_value += Coeff.boost_speed_add
+		speed_value += Coeff.boost_speed_set
 	elif unit.move_boost_duration_left > 0.0 and (not unit.scored_hit or unit.active_move and unit.active_move.proj_passthrough):
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)

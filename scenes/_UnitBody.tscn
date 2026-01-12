@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://8f6wd8hvqtfp"]
 
 [ext_resource type="Script" uid="uid://bmxr7brkl6opm" path="res://scripts/unit_body.gd" id="1_eqrot"]
-[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/Unit.tscn" id="1_nye7s"]
+[ext_resource type="PackedScene" uid="uid://c4xjf3btss7k7" path="res://scenes/unit.tscn" id="1_nye7s"]
 [ext_resource type="PackedScene" uid="uid://tuj5a3vkff0o" path="res://scenes/Loadout.tscn" id="2_4ykhy"]
 [ext_resource type="PackedScene" uid="uid://bmrvww7mjpfv3" path="res://scenes/FloatingText.tscn" id="2_j2xxu"]
 [ext_resource type="Texture2D" uid="uid://wk1fygljfjrh" path="res://assets/ui/hp bar bg.png" id="2_r1v5x"]
@@ -15,10 +15,9 @@
 height = 27.3418
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4brxe"]
-size = Vector2(79, 101)
+size = Vector2(158, 249.5)
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "stat_labels", "output_label", "utility_label", "speed_label")]
-collision_layer = 0
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
@@ -33,6 +32,7 @@ speed_label = NodePath("Stat Labels/Speed Label")
 floating_text = ExtResource("2_j2xxu")
 HP_max_coeff = 1.0
 speed_coeff = 1.0
+rotation_coeff = 1.0
 acceleration_coeff = 1.0
 
 [node name="Unit" parent="." node_paths=PackedStringArray("all_loadouts") instance=ExtResource("1_nye7s")]
@@ -89,7 +89,7 @@ scale = Vector2(-20.8048, 25.711)
 shape = SubResource("CapsuleShape2D_ieh1m")
 
 [node name="MovementHitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, 200)
+position = Vector2(0, 125)
 shape = SubResource("RectangleShape2D_4brxe")
 
 [node name="Stat Labels" type="Node2D" parent="."]

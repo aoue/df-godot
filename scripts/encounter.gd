@@ -10,12 +10,17 @@ var cursor_sprite = load("res://assets/ui/encounter_cursor.png")
 @export var Adelie : PackedScene
 @export var Friendly : PackedScene
 
+@export_group("Testing")
+@export var fixedCamera : Camera2D
+
 """ Testing """
 var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
 var enemy_count: int = 1
+var call_friendly: bool = false #true
+var camera_mode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,14 +37,19 @@ func create_world() -> void:
 	# (includes geography, units/enemies starting positions, gamerules, etc)
 	GameMother.setup_UI()
 	
-	#friendly_in_world = Friendly.instantiate()
-	#friendly_in_world.position = Vector2(-1250, 0)
-	#add_child(friendly_in_world)
-	#GameMother.add_hero(friendly_in_world)
+	if call_friendly:
+		friendly_in_world = Friendly.instantiate()
+		friendly_in_world.position = Vector2(-1250, 0)
+		add_child(friendly_in_world)
+		GameMother.add_hero(friendly_in_world)
 	
-	anse_in_world = Anse.instantiate()
-	add_child(anse_in_world)
-	GameMother.add_hero(anse_in_world)
+	if camera_mode:
+		fixedCamera.enabled = true
+	else:
+		fixedCamera.enabled = false
+		anse_in_world = Anse.instantiate()
+		add_child(anse_in_world)
+		GameMother.add_hero(anse_in_world)
 	
 	var spawn_offset: int = 0
 	var flip_offset: int = 1

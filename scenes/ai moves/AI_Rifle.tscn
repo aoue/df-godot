@@ -5,9 +5,8 @@
 
 [node name="AiRifle" type="Node2D"]
 script = ExtResource("1_yllbx")
-min_range = 0.5
-standoff_distance = 2.5
-max_range = 5.0
+standoff_distance = 5.5
+max_range = 10.0
 fire_table = Array[float]([0.66, 0.5, 0.33])
 output_on_fire = 10.0
 accuracy_deviation_label = 1

@@ -1,5 +1,5 @@
 commit notes:
--increased combo output refresh speed
+-added attack intention and behaviour
 
 ======= NOTES
 collision layers/masks notes:
@@ -11,111 +11,50 @@ collision layers/masks notes:
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
 
-======= THE BIG DEAL: MAJOR combat feeling rework
+======= THE BIG DEAL: ai behavior overhaul
 
-1. remove summon type moves.......................................[DONE]
-a. rework move firing timing......................................[DONE]
-b. loadout swap visual indicator..................................[DONE]
-2. hit stun and attack cancel rework..............................[DONE]
-3. combo rework...................................................[DONE]
-a. dash move halt without passthrough.............................[DONE]
-b. added shock move...............................................[DONE]
-c. combo soft limiter (timing)....................................[DONE]
-4. combo hard limiter (heat)......................................[DONE]
-
-. refactoring ai behavior........................................[]
-. mobility and enemy dashing.....................................[]
-. attack permission mechanic.....................................[]
+1. attack permission behavior.....................................[DONE]
+a. tweak attack priority interaction..............................[DONE]
+b. mode to watch ai units fight without my action.................[DONE]
+2. ai overhaul: advance...........................................[DONE]
+3. ai overhaul: retreat...........................................[DONE]
+a. ai overhaul: sleep.............................................[DONE]
+b. refactor boost to unitbody.....................................[DONE]
+4. ai overhaul: boost.............................................[DONE]
+5. ai overhaul: attack............................................[DONE]
+a. tweak attack permission a bit..................................[]
+5. big massive ai overhaul complete...............................[]
 
 
-- branch clean-up:
-	- merge combat feel branch back in. 
-	- create new branch: ai behaviour refactor
+- small issue with attack permission
+	- maybe a system to prioritize giving it to someone who hasn't had it in a while?
+	- or whoever is closest?
+	something like that. because sometimes someone is staring you dead in the eyes but isn't attacking.
+	fix idea: (random coordination)
+	- you call in with your score, the last highest score is recorded there
+		(but it degrades automatically over time)
+	- based on the difference between the two scores, you must wait a set amount of time before attacking
+	that could work.
 
-- refactoring ai behaviour:
-	- create a desire system that chooses between x actions: move, attack, change target, dodge, etc
-	put the action delay onto the specific action's side.
-	could create more complex behavior compared to what we have now.
-	also simpler.
-	also includes attack permission:
-	- manage so a unit can only have like 1 person diving them, 1 person skirmishing them
-	- everyone else has to hover around
-	
-	works when: (actions in priority, i think)
-	- there is an enemy which can proactively dodge an incoming attack
-	- the enemy can dive
-	- the enemy can skirmish
-	- the enemy can follow the action (meaning where the fighting is taking place)
-	- if at high heat, then retreat/dodge
+- test battles:
+	- anse vs 2/3/4 adelie
+	- anse + friendly vs 2/3/4 adelie
+	check the feeling
 
-- mobility and enemy dashing:
-	- units should be repositioning more and faster type stuff. Just faster paced game.
-	- they can attack quickly; not as big a deal if it doesn't stun for long.
-	- they can quickly: reposition with a dash->dive in and attack.
-	have them pick destinations further away? instead of always trying to stay in the ideal range?
-
-
-- new mechanic idea, attack permission:
-	for fighting multiple enemies, so test it against 2,3,4 enemies
-	- anti dogpile/anti chaos mechanic. 
-	- Before executing your move, you need 'attack permission' from the game mother.
-	- maintains a dict of 'unit_id: permission time left'
-	- attack permission, when obtained, is a timer that lasts x time.
-	- when it's 0, game mother can give a new unit attack permission for the given target.
-	hopefully this would lead to a situation where you are surrounded, but you fight them all at once.
-	so you have to dodge them one at a time, which keeps the pressure up but also gives you counterplay.
+- gamemother new function:
+	- instead of asking for information about targets and thinking myself,
+	what if you just said: gamemother suggest me a target.
 
 - new move type:
 	- on_mouse. a projectile which spawns on mouse and then slowly trails after it.
 	quite slow of course.
 
-- combo routing factors:
-	in baldr sky, move order is quite technical because of launching and knockdown
-	- our system doesn't have either of these things.
-	what limits do we have in terms of which moves you can connect together?
-	- move output cost: which will determine the length of your combo, and also last move, which is free.
-	- range of the move: mixing close and far ranges can be tricky.
-	- knockback: a big knockback move will knock an enemy out of range of a short move.
-	- future 'flow': some moves do damage relative to flow generated, and may consume it.
 
-- concerns about defensive bias:
-	on the mechanic how taking ANY damage breaks a combo.
-	- show only some attacks have that ability?
-	- should being in combo protect you, so the player has to respect the combo for its length?
-	- stun meter, so you can still break it, but not in one hit?
-
-- hit-vincibility?
-	- can't get hit too soon after just being hit. same idea as stunlock prevention.
-	well, i'm not sure if we need this. but in large hits, it can be frustrating to be punished 3 times
-	for the same mistake if you are fighting 3 enemies. but maybe attack permission will solve this, so wait.
-
-==============
-
-- loadout swap as a choice:
-	- when swapping loadouts, how do you control which loadout you will move to next?
-	this kind of system is desirable i think	
-
-- combat feel:
-	work on these in a small scale, 1-on-1 situation. Then scale them up and see.
-	remember:
-	- each move should feel significant.
-	- play should feel technical.
-	- enemies should feel like they have clear openings.
-		(ex1: adelie dive attack: start, move in line, recover standing still for a moment; lock movement while recovering. uses standing.)
-		(ex2: unit fires projectiles in line, slowly banking but not enough. We move around it and it finishes; lock movement while recovering. then we hit in that window.)
-	maybe i need to carefully study the behaviour of a baldr sky enemy.
-
-
-
-- new mechanic idea, slam:
-	- when a unit is in stun and hits a 2d collider, like a unit or obstacle unit, it is 'slammed'
-	it can take some more damage, display the 'SLAM' text, show a special anim frame if you want
-
-
-===== end of combat feel rebalance branch
+===== end of branch
 
 - iterating on art:
-	overall darker and more muted theme.
+	(see new refs folder featuring the work of the amazing [frider])
+	overall darker and more muted visual style.
 	- new background too
 	- look at sketchbook drawings 
 	- see if we can go for a more serious style (remember people are gonna die)
@@ -125,13 +64,22 @@ c. combo soft limiter (timing)....................................[DONE]
 	- and place emphasis on backpacks/engines and hip jets. bulkier, like old infantry designs.
 	- named characters should have hair poking through and unique/strong/distinctive designs.
 
+- art overhaul:
+	- the spritesheet for anse will need to be redone at some point. 
+	Probably by adding his hair and changing colours to the brown/tan of his coat.
+	- maybe could do something like tall lined collar but no hood; go back to big collared anse.
+	(symbolic, etc, after all.)
+	Here's a general idea. For generic FSes, they can wear full hoods.
+	But for important characters, they should have their hair visible somewhere.
+
 - Friday unit:
 	- object
 	- spritesheet
 	- moveset
 
 - death movement bug:
-	- on death, enemy momentum stops completely. Change this so they continue getting knocked back.
+	- on death, enemy momentum stops completely.
+	Consider changing this so they do take proper knockback back.
 
 - ai dodging:
 	- more advanced units (allies or enemies) need to be able to dodge at least a little
@@ -147,7 +95,10 @@ c. combo soft limiter (timing)....................................[DONE]
 - ai delay between actions value as a range:
 	consider this: for some enemies, to make them more unpredictable:
 	- delay between actions can become a range and stuff.
-	
+
+- end of combo:
+	automatic right now. should we change it to be like rmb to end combo?
+
 - combat feeling review:
 	- it's not enough to just work, it must also feel right.
 	we will be able to judge it feels right if we're in a situation where:
@@ -176,18 +127,18 @@ sound overhaul:
 	or any other combination that you want.	
 	note: this does feel like an idea where
 
+- combo routing factors:
+	in baldr sky, move order is quite technical because of launching and knockdown
+	- our system doesn't have either of these things.
+	what limits do we have in terms of which moves you can connect together?
+	- move output cost: which will determine the length of your combo, and also last move, which is free.
+	- range of the move: mixing close and far ranges can be tricky.
+	- knockback: a big knockback move will knock an enemy out of range of a short move.
+	- future 'flow': some moves do damage relative to flow generated, and may consume it.
+	yeah, this has been resolved now. But we'll keep it around for now so we keep it in mind.
+
 ================
 
-- art overhaul:
-	- the spritesheet for anse will need to be redone at some point. Probably by adding his hair and changing colours to the brown/tan of his coat.
-		- maybe could do something like tall lined collar but no hood; go back to big collared anse. symbolic, etc, after all.
-	Here's a general idea. For generic FSes, they can wear full hoods.
-	But for important characters, they should have their hair visible somewhere.
-
-- if there is some kind of special move:
-	it would be to skip the loadout timer swap and immediately go to the next one.
-	- break accumulates on units normally, when a unit is broken, though:
-	- no loadout skip on switch
 
 - grounded snow effect:
 	- when you change direction or come to a stop, pop us a snow effect?
@@ -205,19 +156,6 @@ sound overhaul:
 	- for each entry in the projectile list, it fires a projectile at every position in the offset list.
 	- entries in the list range from 0-359 are correspond to a position around the unit relative to the position
 	  of the unit circle arrow.
-
-- new movement system to consider and test
-	ACTUALLY, here's like probably a way better idea:
-	- in normal movement mode, wasd like already implemented.
-	- instead of shift being a boost, pressing shift would enter into flight mode.
-	- when in flight mode, character moves in direction of pointer. faster than normal.
-	- probably there would also be a limited duration to it. and also a lockout period too.
-	- simple as.
-	so you would only want to do this to escape enemies, or close distance fast, or dodge a tricky attack.
-	- does it create a situation where you can just shift and run away every time an enemy attacks?
-	- maybe, but you still have to get closer yourself too, you know.
-	- also, you could still do that in baldr sky, but game still slapped.
-	- our method of forcing different weapon sets to be equipped should combat that, right?
 
 - camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
@@ -254,9 +192,7 @@ sound overhaul:
 
 - red line tracer
 	- should we draw a line between mouse position and player to help with aiming?
-
-- fill loadouts properly:
-	-see paper notes for movesets for prologue units.
+	- or is it just cool?
 
 - encounter ai:
 	-there is an encounter manager which helps with:
@@ -265,7 +201,7 @@ sound overhaul:
 start of battle animation:
 	-if would be cool if there was an animation with all the rings coming on as the fight began. Like a bootup. Like, rapidly increase the ring's scale from 0 to 1 over a time window.
 
-- loadout system:
+- loadout system swap choice:
 	- a simple and elegant way to determine which loadout you're switching to next
 	rather than just going through them all in a preset order.
 	(for the beginning, we only have 2 loadouts so we can ignore it for now.)
@@ -273,6 +209,9 @@ start of battle animation:
 	(or pressing 1/2/3/4?) <-- fav so far, because it lets you choose any cleanly.
 	(or leftclick/rightclick to select either prev or former loadout?)
 	the idea is that, although you can't choose a particular move for any situation, you can choose the perfect loadout for the given moment. So it's a bit higher level.
+	remember, it is time sensitive as you only have a short window.
+	- but to counteract this, you can enter the next loadout at any time to buffer it.
+
 
 == vn don't forget
 

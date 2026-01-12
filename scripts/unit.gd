@@ -94,6 +94,7 @@ func end_combo() -> void:
 	in_combo = false
 	combo_cancel = false
 	body.show_loadout_swap("OVER")
+	body.end_combo_ai()
 	
 	# force change loadouts (but only if in the middle of one)
 	# (otherwise we would skip over one)
@@ -143,6 +144,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 			
 		# if the move has hit, then you can immediately finish it after the last projectile has been fired (combo incentive)
 		elif projectile_counter == len(active_move.fire_table) and not early_exit_taken and scored_hit:
+		#elif projectile_counter == len(active_move.fire_table) and not early_exit_taken:
 			early_exit()	
 		return
 		
@@ -159,6 +161,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	active_move = next_move.instantiate()
 	
 	# set timers
+	combo_exit_timer = Coeff.combo_timeout_duration
 	attacking_duration_left = active_move.fire_table[0]
 	move_boost_duration_left = active_move.move_speed_add_duration
 	can_attack_cooldown = attacking_duration_left + Coeff.move_cooldown
@@ -182,6 +185,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 
 func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# find its spawn location (between player and mouse), offset
+	combo_exit_timer = Coeff.combo_timeout_duration
 	
 	var offset: int = Coeff.proj_spawn_offset * active_move.proj_spawn_offset
 	var spawn_direction : Vector2 = Vector2.ZERO
@@ -228,6 +232,23 @@ func report_hit(hit_body_position : Vector2) -> void:
 		#print("report_hit()!, setting recoil: " + str(recoil))
 
 func _process(delta):
+	# try putting combo timer outside of this
+	
+	# manage combo timer (if you do not score a hit and get early exit, your combo will likely timeout)
+	#if loadout_gate_time == 0 and (in_combo and can_attack):
+	if loadout_gate_time == 0 and in_combo:
+		# tick down the timer
+		if combo_cancel:
+			combo_exit_timer = 0
+		combo_exit_timer = max(0, combo_exit_timer - delta)
+		# exit the combo
+		if combo_exit_timer == 0:
+			end_combo()
+	elif not in_combo:
+		# when not in a combo, tick down heat
+		var high_value_speedup_mod: float = max(1.0, (combo_output + 50.0) / 100.0)
+		combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * high_value_speedup_mod))
+	
 	# manage attack cooldown
 	if attacking_duration_left > 0.0:
 		attacking_duration_left = max(0, attacking_duration_left - delta)
@@ -243,27 +264,12 @@ func _process(delta):
 		attack_priority = -1
 		can_attack_cooldown = max(0, can_attack_cooldown - delta)
 		
-		# manage combo timer
-		if loadout_gate_time == 0 and ((can_attack and in_combo) or (in_combo and combo_cancel)):
-			# tick down the timer
-			if combo_cancel:
-				combo_exit_timer = 0
-			combo_exit_timer = max(0, combo_exit_timer - delta)
-			# exit the combo
-			if combo_exit_timer == 0:
-				end_combo()
-		elif not in_combo:
-			# when not in a combo, tick down heat
-			#print("ticking down output: " + str(combo_output))
-			#combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * (combo_output/10.0)))
-			var high_value_speedup_mod: float = max(1.0, (combo_output + 50.0) / 100.0)
-			combo_output = max(0, combo_output - (delta * Coeff.combo_output_relief_speed * high_value_speedup_mod))
-			combo_output = snapped(combo_output, 0.1)
+		## old combo timeout code was here
 		
+				
 		# enable attack again once cooldown has finished
 		if not can_attack and can_attack_cooldown == 0.0:
 			can_attack = true
-			combo_exit_timer = Coeff.combo_timeout_duration  # you can attack again, so set the combo timeout duration
 
 	# manage move speed effect
 	if move_boost_duration_left > 0.0:

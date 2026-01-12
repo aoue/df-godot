@@ -10,12 +10,15 @@ Also holds gamerules and stuff like that too.
 @export_group("UI")
 @export var logLabel : Label
 
+var rng = RandomNumberGenerator.new()
+
 """ Tracking during battle """
 var heroes : Array[UnitBody] = []  # Anse and friends
 var villains : Array[UnitBody] = []  # Opponents to Anse and friends
 #var thirds : Array[UnitBody]  # opponents of all
 var attack_priority_counter: int = 0
-var cotargeting_dict = {}  # records targeting info, 'being targeted': count
+var cotargeting_dict = {}  # records targeting info, 'id being targeted': count
+var attackPermission_dict = {}  # records active attacking info, 'id being targeted': time since last attack on them
 
 """ Encounter Setup Functions """
 func setup_UI() -> void:
@@ -41,7 +44,7 @@ func assign_combat_ids() -> void:
 		villain.unit.combat_id = id_value
 		id_value += 1
 
-""" Managing Functions """
+""" Assisting AI Decision-Making Functions """
 func assign_attack_priority() -> int:
 	attack_priority_counter += 1
 	return attack_priority_counter
@@ -81,16 +84,27 @@ func get_cotargeter_count(some_unitbody: UnitBody) -> int:
 		return cotargeting_dict[unit_id]
 	return 0
 
-func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
-	# Return the min distance to any villain unit that is not this unit
-	# (does not have the same combat_id)
-	var relevant_unit_list
+func get_closest_hostile_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
+	var relevant_unit_list: Array[UnitBody]
 	# {PLAYER, ALLY, ENEMY}
 	if user_allegiance == 2:
 		relevant_unit_list = heroes
 	else:
 		relevant_unit_list = villains
+	return get_closest_unit_position(my_combat_id, my_pos, relevant_unit_list)
+
+func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_pos: Vector2) -> Vector2:
+	# Return the min distance to any villain unit that is not this unit
+	# (does not have the same combat_id)
+	var relevant_unit_list: Array[UnitBody]
+	# {PLAYER, ALLY, ENEMY}
+	if user_allegiance == 2:
+		relevant_unit_list = villains
+	else:
+		relevant_unit_list = heroes
+	return get_closest_unit_position(my_combat_id, my_pos, relevant_unit_list)
 	
+func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list: Array[UnitBody]) -> Vector2:
 	var closest_position: Vector2 = Vector2.ZERO
 	for check_unit in relevant_unit_list:
 		if check_unit and my_combat_id != check_unit.unit.combat_id:
@@ -100,8 +114,30 @@ func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_p
 		
 	return closest_position
 
+""" Attack Permission Mechanic """
+func get_attack_permission(some_unitbody: UnitBody) -> bool:
+	# Stop enemies from attacking a single target all at once. They have to take their turn, in a way.
+	# Returns true if the asker is given permission to attack, and also updates the dictionary kvp with the current time.
+	# Returns false if the asker is not given permission to attack. Does nothing.
+	# (each dict entry[unit id] is tied to a time value. When enough time has passed, give permission to attack.)
+	#print(attackPermission_dict)
+	if some_unitbody:
+		var unit_id: int = some_unitbody.unit.combat_id
+		var current_time: int = Time.get_ticks_msec()
+		# trivial case: unit does not exist
+		if unit_id not in attackPermission_dict:
+			attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
+			return true
+		# normal case: unit exists; compare current time to recorded time of last attack permission given
+		elif current_time > attackPermission_dict[unit_id]:
+			# then you have permission. Do update the attack permission dict before you go.
+			attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
+			return true
+	
+	return false
+
 """ UI Functions """
-func log_hit(damage: int, user_id: int, target_id: int) -> void:
+func log_hit(_damage: int, _user_id: int, _target_id: int) -> void:
 	#logLabel.text = "A hit was scored!"
 	return
 
