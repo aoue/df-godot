@@ -5,9 +5,10 @@ The AI unit controller.
 """
 
 enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
+@export var nav: NavigationAgent2D
 
 @export_group("AI")
-@export var nav: NavigationAgent2D
+@export var allowed_to_boost: bool
 
 """ Saved variables for brain """
 ## Behaviour constants
@@ -25,6 +26,8 @@ var recalculate_random_offset : bool = false  # to not constantly recalculate ra
 var saved_random_offset: float = 0.0
 
 var want_to_boost: bool = false
+var want_to_attack: bool = false
+var obtained_attack_permission: bool = true
 
 ## Loaded Move Records
 var move_loaded: bool = false
@@ -45,15 +48,21 @@ func update_intention() -> void:
 	# Reset once-per-intention variables
 	recalculate_random_offset = true
 	want_to_boost = false
-		
+	want_to_attack = false
+			
 	# Choose intention here based on situation.
 	if unit.output_exceeding_limit() and feeling_threatened():
 		my_intention = Intention.RETREAT
-	 #elif you are able to attack:
-		#my_intention = Intention.ATTACK
-	else:
+	elif feel_like_attacking():
+		my_intention = Intention.ATTACK
+	else:  # idk, maybe advance permission
 		my_intention = Intention.ADVANCE
 	# my_intention = Intention.SLEEP
+	
+	#if unit.allegiance == 2:
+		#my_intention = Intention.RETREAT
+	#else:
+		#my_intention = Intention.ADVANCE
 
 func execute_intention() -> void:
 	# Based on the current intention, does the stuff to help us keep executing it properly.
@@ -68,23 +77,46 @@ func execute_intention() -> void:
 	elif my_intention == Intention.RETREAT:
 		start_retreat()
 	elif my_intention == Intention.ATTACK:
-		#start_attack()
-		pass
+		start_attack()
 	elif my_intention == Intention.ADVANCE:
 		start_advance()
 	
 	# Boost works incidentally to other intentions as an add on.
-	feel_like_boosting()
-	
+	want_to_boost = feel_like_boosting()
 
-func feel_like_boosting() -> void:
+func feel_like_boosting() -> bool:
 	# Returns true if the unit wants to boost
-	# -they have somewhere they want to go which is pretty far away
-	# -not in boost cooldown
-	# -hasn't been too soon since you just switched to this intention
-	#if all these conditions are met, then set 'want_to_boost' to true
-	pass
+	if not allowed_to_boost:
+		return false
 	
+	# -if your destination is too close, permission denied.
+	var dist_to_destination: float = position.distance_to(desired_movement_location)
+	if dist_to_destination < Coeff.boost_min_distance_to_trigger:
+		return false
+	
+	# -if it hasn't been long enough in this intention, denied.
+	var current_time: int = Time.get_ticks_msec()
+	var time_since_intention_switch: int = current_time - last_action_timestamp
+	if time_since_intention_switch < Coeff.time_before_boost_permitted:
+		return false
+	
+	return true
+	
+func feel_like_attacking() -> bool:
+	## Return true to give the unit the go ahead to attack. Basically, you need:
+	# -have attack permission
+	
+	if not desired_unit_target:
+		choose_target()
+	if not desired_unit_target:
+		return false
+	
+	# further, you must have attack permission (reset on combo end)
+	obtained_attack_permission = GameMother.get_attack_permission(desired_unit_target)
+	if not obtained_attack_permission:
+		return false
+	
+	return true
 
 """ Execution Functions """
 
@@ -93,7 +125,6 @@ func start_sleep() -> void:
 	if recalculate_random_offset:
 		var random_direction = calculate_random_offset_rotation(2*PI)
 		random_walk = Vector2(1000.0, 0.0).rotated(random_direction)
-	
 	desired_movement_location = position + random_walk
 
 func start_advance() -> void:
@@ -102,6 +133,8 @@ func start_advance() -> void:
 	
 	## 1. Decide where the action is
 	choose_target()
+	if not desired_unit_target:
+		return
 	
 	## 2. Add offset to unit to find desired location
 	# a. standoff offset
@@ -121,6 +154,10 @@ func start_retreat() -> void:
 	# take the direction to the closest hostile, flip it around
 	# then multiply by a magnitude of 1000 or whatever
 	var closest_hostile_position: Vector2 = GameMother.get_closest_hostile_position(unit.allegiance, unit.combat_id, position)
+	if closest_hostile_position == Vector2.ZERO:
+		
+		return
+	
 	var retreat_direction: Vector2 = position.direction_to(closest_hostile_position) * -1
 	
 	# apply randomness to retreat direction
@@ -130,6 +167,32 @@ func start_retreat() -> void:
 		
 	# update target position
 	desired_movement_location = position + retreat_direction
+
+func start_attack() -> void:
+	# the 'advance' intention got us into a starting spot.
+	# now, all we have to down is dive the opponent.
+	# set the destination to be right on their face, and look straight at them.
+	#	^actually, add another field to accompany 'standoff', 'execution_standoff'
+	#	this one tells us how close you want to be during execution itself.
+	if not desired_unit_target:
+		my_intention = Intention.SLEEP
+	
+	want_to_attack = true
+		
+	# check that you will be able to properly hit the target
+	var dist_to_target: float = position.distance_to(desired_unit_target.position)
+	if not (dist_to_target > min_range and dist_to_target < max_range):
+		want_to_attack = false
+		
+	# check that the angle is right
+	# do not attack if we are not looking within _ degrees of the target
+	var vector_from_unit_to_target = global_position.direction_to(desired_unit_target.position)
+	var own_direction_vector = get_ring_indicator_vector()
+	var angle_from_self_to_target = vector_from_unit_to_target.dot(own_direction_vector)
+	if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
+		want_to_attack = false
+	
+	desired_movement_location = desired_unit_target.position
 
 func feeling_threatened() -> bool:
 	# basically, if someone is within a certain distance from you
@@ -194,7 +257,9 @@ func choose_target() -> void:
 		if temp_score > check_target_score:
 			check_target_score = temp_score
 			check_target = opp
-		
+	
+	if not check_target:
+		return
 	GameMother.update_cotargeting(desired_unit_target, check_target)
 	desired_unit_target = check_target
 
@@ -240,6 +305,7 @@ func get_standoff_helper() -> float:
 func end_combo_ai() -> void:
 	# pure virtual
 	move_loaded = false
+	obtained_attack_permission = false
 
 func get_direction_input() -> Vector2:
 	# Returns the vector that the unitBody wants to move in
@@ -258,6 +324,8 @@ func get_target_position() -> Vector2:
 		return nav.get_next_path_position()
 	
 func get_attack_input() -> bool:
+	if want_to_attack:
+		return true
 	return false
 
 func get_boost_input(direction: Vector2) -> bool:

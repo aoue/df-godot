@@ -144,6 +144,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 			
 		# if the move has hit, then you can immediately finish it after the last projectile has been fired (combo incentive)
 		elif projectile_counter == len(active_move.fire_table) and not early_exit_taken and scored_hit:
+		#elif projectile_counter == len(active_move.fire_table) and not early_exit_taken:
 			early_exit()	
 		return
 		

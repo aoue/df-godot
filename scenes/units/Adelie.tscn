@@ -214,6 +214,7 @@ animations = [{
 position = Vector2(0, -217)
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
+allowed_to_boost = true
 HP_max_coeff = 100.0
 speed_coeff = 0.25
 rotation_coeff = 0.5

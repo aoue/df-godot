@@ -355,12 +355,12 @@ func _physics_process(delta: float) -> void:
 	var acceleration_value = acceleration
 	var speed_value = speed
 	
-	if unit.in_combo and not is_boosting:
+	if unit.in_combo:
 		speed_value *= unit.combo_speed_mod
 		
 	if is_boosting:
 		acceleration_value = boost_acceleration
-		speed_value += Coeff.boost_speed_add
+		speed_value += Coeff.boost_speed_set
 	elif unit.move_boost_duration_left > 0.0 and (not unit.scored_hit or unit.active_move and unit.active_move.proj_passthrough):
 		# if the move boosts, then add its speed and prioritize its own direction
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)

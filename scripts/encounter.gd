@@ -19,7 +19,7 @@ var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
 var enemy_count: int = 1
-var call_friendly: bool = false
+var call_friendly: bool = false #true
 var camera_mode: bool = false
 
 # Called when the node enters the scene tree for the first time.

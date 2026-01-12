@@ -37,14 +37,16 @@ var hit_stun_shield_duration: float = 1.0  # duration (s) of stun immunity after
 var hit_stun_rotation_speed: float = 0.0  # at 0, cannot rotate when hit.
 
 """Movement Constants"""
-var boost_speed_add: float = 4000  # how much of a speedup boost gives
+var boost_speed_set: float = 9000.0  # boosting sets your speed to this value
 var boost_full_duration: float = 0.25  # how long the boost lasts
 var boost_shield_full_duration: float = boost_full_duration
-var boost_full_cooldown: float = 1.5  # how long until you may boost again
+var boost_full_cooldown: float = 2.0  # how long until you may boost again
 var full_speed_angle_gate: float = PI / (8.0 / 3)  # how large the angle between the indicator and the movement input may be while the unit still moves at full speed
 
 """AI Parameters"""
+var boost_min_distance_to_trigger: float = 3500.0  # the minimum distance a unit must want to travel to consider boosting
 var feel_threatened_at_distance: float = 5000.0  # how close a hostile may be to a unit before it feels threatened
+var time_before_boost_permitted: int = 1000  # how long (ms) a unit must be in a given intention before it may boost.
 var retreat_randomness_range: float = PI/2.0  # how far a unit may veer off from its retreat course.
 var time_between_intention_update: int = 2000  # in ms. temp for now.
 var attack_permission_timer: int = 2000  # lockout time on giving permission for another unit to attack a unit (in milliseconds)
