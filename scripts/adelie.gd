@@ -13,7 +13,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 ## Behaviour constants
 var my_intention : Intention = Intention.SLEEP  # records the current intention of the unit
 var last_action_timestamp : int = 0  # records the time (in ms) since the unit last acted
-var time_between_updates : int = 1000  # for updating during the same intention (in ms)
+var time_between_updates : int = 10  # for updating during the same intention (in ms)
 var last_update_timestamp : int = 0  # records the time (in ms) since the last update
 
 ## Navigation
@@ -65,27 +65,28 @@ func execute_intention() -> void:
 	# Based on the situation, chooses where the unit wants to walk to and look at.
 	if my_intention == Intention.SLEEP:
 		start_sleep()
-	elif my_intention == Intention.ADVANCE:
-		start_advance()
 	elif my_intention == Intention.RETREAT:
 		start_retreat()
+	elif my_intention == Intention.ATTACK:
+		#start_attack()
+		pass
+	elif my_intention == Intention.ADVANCE:
+		start_advance()
 	
 	# Boost works incidentally to other intentions as an add on.
-	if feel_like_boosting():
-		start_boost()
+	feel_like_boosting()
 	
 
-func feel_like_boosting() -> bool:
+func feel_like_boosting() -> void:
 	# Returns true if the unit wants to boost
 	# -they have somewhere they want to go which is pretty far away
 	# -not in boost cooldown
 	# -hasn't been too soon since you just switched to this intention
-	return false
+	#if all these conditions are met, then set 'want_to_boost' to true
+	pass
+	
 
 """ Execution Functions """
-func start_boost() -> void:
-	# you want to boost, so do it if able.
-	pass
 
 func start_sleep() -> void:
 	var random_walk: Vector2 = Vector2.ZERO
@@ -259,19 +260,13 @@ func get_target_position() -> Vector2:
 func get_attack_input() -> bool:
 	return false
 
-func get_boost_input(_direction: Vector2) -> bool:
-	## Anse's get_boost_input() function:
-	#if boost_duration > 0.0:  # already boosting
-		#return true
-		#
-	#if Input.is_action_pressed('boost') and boost_cooldown <= 0.0 and direction.length() > 0:  # start boosting
-		## Save current direction for our boost
-		#boost_shield = Coeff.boost_shield_full_duration
-		#boost_vector = direction
-		#boost_duration = Coeff.boost_full_duration
-		#boost_cooldown = Coeff.boost_full_cooldown + Coeff.boost_full_duration  # wow that's pretty smart (it was my idea)
-		#return true
-	#return false
+func get_boost_input(direction: Vector2) -> bool:
+	if boost_duration > 0.0:  # already boosting
+		return true
+	# want to boost and able to
+	if want_to_boost and boost_cooldown <= 0.0 and direction.length() > 0:  # start boosting
+		go_boost(direction)
+		return true
 	return false
 
 func _physics_process(delta):

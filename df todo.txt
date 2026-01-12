@@ -1,5 +1,6 @@
 commit notes:
--generalized boost behaviour to unitbody
+-shortened loadout swap timer substantially because it is not something to do
+-adjusted combo timeout to run in parallel to attacks to punish whiffs (a whiff means almost certainly that your combo will end and you will be vulnerable during the recovery. Does stop no hit combos from continuing, which could be a concern for ai unit combos. We'll address this later, I'm sure.)
 
 ======= NOTES
 collision layers/masks notes:
@@ -16,7 +17,6 @@ collision layers/masks notes:
 1. attack permission behavior.....................................[DONE]
 a. tweak attack priority interaction..............................[DONE]
 b. mode to watch ai units fight without my action.................[DONE]
-
 2. ai overhaul: advance...........................................[DONE]
 3. ai overhaul: retreat...........................................[DONE]
 a. ai overhaul: sleep.............................................[DONE]
@@ -27,16 +27,16 @@ b. refactor boost to unitbody.....................................[DONE]
 
 
 - ai overhaul: boost:
-	basically:
-		you have somewhere you want to go
-		you are a sufficient distance from it
-		your boost cooldown exists
-		(and it has not been too soon in this new intention)
+	finish up 'feel like boosting()' function
+	- and then test it properly :)
 
 - ai overhaul: attack:
 	basically:
 		you are inside your desired range
 		that should be it, right?
+
+- loadout swap timer:
+	- stupid? should it be shorter. Let's think about it.
 
 - refactoring ai behaviour:
 	(see notes on paper.)
