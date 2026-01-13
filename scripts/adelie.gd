@@ -49,6 +49,9 @@ func update_intention() -> void:
 	recalculate_random_offset = true
 	want_to_boost = false
 	want_to_attack = false
+	
+	#my_intention = Intention.SLEEP
+	#return
 			
 	# Choose intention here based on situation.
 	if unit.output_exceeding_limit() and feeling_threatened():
@@ -57,12 +60,7 @@ func update_intention() -> void:
 		my_intention = Intention.ATTACK
 	else:  # idk, maybe advance permission
 		my_intention = Intention.ADVANCE
-	# my_intention = Intention.SLEEP
-	
-	#if unit.allegiance == 2:
-		#my_intention = Intention.RETREAT
-	#else:
-		#my_intention = Intention.ADVANCE
+	 
 
 func execute_intention() -> void:
 	# Based on the current intention, does the stuff to help us keep executing it properly.
@@ -108,8 +106,8 @@ func feel_like_attacking() -> bool:
 	
 	if not desired_unit_target:
 		choose_target()
-	if not desired_unit_target:
-		return false
+		if not desired_unit_target:
+			return false
 	
 	# further, you must have attack permission (reset on combo end)
 	obtained_attack_permission = GameMother.get_attack_permission(desired_unit_target)
@@ -121,11 +119,11 @@ func feel_like_attacking() -> bool:
 """ Execution Functions """
 
 func start_sleep() -> void:
-	var random_walk: Vector2 = Vector2.ZERO
 	if recalculate_random_offset:
+		var random_walk: Vector2 = Vector2.ZERO
 		var random_direction = calculate_random_offset_rotation(2*PI)
 		random_walk = Vector2(1000.0, 0.0).rotated(random_direction)
-	desired_movement_location = position + random_walk
+		desired_movement_location = position + random_walk
 
 func start_advance() -> void:
 	# For advance, they want to follow the action.
@@ -176,6 +174,7 @@ func start_attack() -> void:
 	#	this one tells us how close you want to be during execution itself.
 	if not desired_unit_target:
 		my_intention = Intention.SLEEP
+		return
 	
 	want_to_attack = true
 		
@@ -189,7 +188,8 @@ func start_attack() -> void:
 	var vector_from_unit_to_target = global_position.direction_to(desired_unit_target.position)
 	var own_direction_vector = get_ring_indicator_vector()
 	var angle_from_self_to_target = vector_from_unit_to_target.dot(own_direction_vector)
-	if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
+	#if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
+	if angle_from_self_to_target < 0.98:  # (angle IS NOT narrower than [very narrow])
 		want_to_attack = false
 	
 	desired_movement_location = desired_unit_target.position
@@ -301,6 +301,11 @@ func get_standoff_helper() -> float:
 		return standoff_distance / 2
 	return 0.0
 
+func validate_target() -> void:
+	if desired_unit_target and is_instance_valid(desired_unit_target):
+		return
+	desired_unit_target = null
+
 """ Supers """
 func end_combo_ai() -> void:
 	# pure virtual
@@ -314,7 +319,7 @@ func get_direction_input() -> Vector2:
 	if current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
 		return Vector2.ZERO
 	# otherwise, just move where you like.
-	return current_agent_position.direction_to(nav.get_next_path_position())	
+	return current_agent_position.direction_to(nav.get_next_path_position())
 
 func get_target_position() -> Vector2:
 	# Returns the vector that the unitBody wants to look at
@@ -338,6 +343,7 @@ func get_boost_input(direction: Vector2) -> bool:
 	return false
 
 func _physics_process(delta):
+	validate_target()
 	update_intention()
 	execute_intention()
 	set_nav_movement_target()

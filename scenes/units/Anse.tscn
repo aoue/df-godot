@@ -277,7 +277,7 @@ animations = [{
 position = Vector2(0, -451)
 script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
-HP_max_coeff = 100.0
+HP_max_coeff = 20.0
 
 [node name="Camera2D" type="Camera2D" parent="." index="0"]
 scale = Vector2(1.33333, 1.33333)
@@ -312,4 +312,4 @@ frame_progress = 0.422746
 collision_layer = 196608
 
 [node name="MovementHitbox" parent="." index="5"]
-position = Vector2(0, 400)
+position = Vector2(0, 304.99997)
