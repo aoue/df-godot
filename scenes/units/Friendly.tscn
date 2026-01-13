@@ -7,7 +7,7 @@
 
 [node name="Friendly" instance=ExtResource("1_o4cfy")]
 allowed_to_boost = true
-HP_max_coeff = 20.0
+HP_max_coeff = 40.0
 speed_coeff = 0.5
 acceleration_coeff = 1.0
 
@@ -17,12 +17,13 @@ allegiance = 1
 all_loadouts = [NodePath("Loadout0"), NodePath("Loadout1")]
 
 [node name="Loadout0" parent="Unit" index="0"]
+slot0 = ExtResource("3_dinlk")
 slot1 = ExtResource("2_dinlk")
 slot2 = ExtResource("3_dinlk")
 
 [node name="Loadout1" parent="Unit" index="1"]
 slot0 = ExtResource("2_dinlk")
-slot1 = ExtResource("2_dinlk")
+slot1 = ExtResource("3_dinlk")
 slot2 = ExtResource("3_dinlk")
 
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="1"]

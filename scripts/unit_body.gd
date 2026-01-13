@@ -134,9 +134,9 @@ func go_be_defeated() -> void:
 	hp_bar.hide()
 	GameMother.free_unit(unit.allegiance, self)
 	
-	# turn off collision for movement and projectiles (actually, we aren't doing that for now.)
-	#set_collision_layer_value(1, false)
-	#set_collision_mask_value(1, false)
+	# turn off collision for movement and projectiles
+	set_collision_layer_value(1, false)
+	set_collision_mask_value(1, false)
 
 func get_delay_between_actions() -> float:
 	return 0.0

@@ -28,6 +28,7 @@ var saved_random_offset: float = 0.0
 var want_to_boost: bool = false
 var want_to_attack: bool = false
 var obtained_attack_permission: bool = true
+var attack_permission_delay: int = 0
 
 ## Loaded Move Records
 var move_loaded: bool = false
@@ -37,6 +38,12 @@ var max_range: float = 0.0
 
 
 """ Brain """
+func _ready() -> void:
+	# grace note
+	if unit.allegiance == 2:
+		last_action_timestamp = GameMother.rng.randi_range(500, 1500)
+	super()
+
 func update_intention() -> void:
 	# Updates/maintains the unit's current intention.
 	# If no intention is set, sets one.
@@ -49,10 +56,8 @@ func update_intention() -> void:
 	recalculate_random_offset = true
 	want_to_boost = false
 	want_to_attack = false
-	
-	#my_intention = Intention.SLEEP
-	#return
-			
+	attack_permission_delay = 0
+				
 	# Choose intention here based on situation.
 	if unit.output_exceeding_limit() and feeling_threatened():
 		my_intention = Intention.RETREAT
@@ -61,7 +66,6 @@ func update_intention() -> void:
 	else:  # idk, maybe advance permission
 		my_intention = Intention.ADVANCE
 	 
-
 func execute_intention() -> void:
 	# Based on the current intention, does the stuff to help us keep executing it properly.
 	if not time_to_update():
@@ -103,16 +107,22 @@ func feel_like_boosting() -> bool:
 func feel_like_attacking() -> bool:
 	## Return true to give the unit the go ahead to attack. Basically, you need:
 	# -have attack permission
-	
 	if not desired_unit_target:
 		choose_target()
 		if not desired_unit_target:
 			return false
 	
+	## boolean attack permission method
 	# further, you must have attack permission (reset on combo end)
-	obtained_attack_permission = GameMother.get_attack_permission(desired_unit_target)
-	if not obtained_attack_permission:
+	#obtained_attack_permission = GameMother.get_attack_permission(desired_unit_target)
+	#if not obtained_attack_permission:
+		#return false
+	var dist_to_target: float = position.distance_to(desired_unit_target.position)
+	if not (dist_to_target > min_range and dist_to_target < max_range):
 		return false
+	
+	## delay based permission method
+	attack_permission_delay = GameMother.get_attack_permission_delay(unit.combat_id, desired_unit_target) + Time.get_ticks_msec()
 	
 	return true
 
@@ -172,8 +182,9 @@ func start_attack() -> void:
 	# set the destination to be right on their face, and look straight at them.
 	#	^actually, add another field to accompany 'standoff', 'execution_standoff'
 	#	this one tells us how close you want to be during execution itself.
-	if not desired_unit_target:
-		my_intention = Intention.SLEEP
+	if not desired_unit_target or Time.get_ticks_msec() < attack_permission_delay:
+		#my_intention = Intention.SLEEP
+		start_sleep()
 		return
 	
 	want_to_attack = true
@@ -189,7 +200,7 @@ func start_attack() -> void:
 	var own_direction_vector = get_ring_indicator_vector()
 	var angle_from_self_to_target = vector_from_unit_to_target.dot(own_direction_vector)
 	#if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
-	if angle_from_self_to_target < 0.98:  # (angle IS NOT narrower than [very narrow])
+	if want_to_attack and angle_from_self_to_target < 0.98:  # (angle IS NOT narrower than [very narrow])
 		want_to_attack = false
 	
 	desired_movement_location = desired_unit_target.position

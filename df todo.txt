@@ -1,7 +1,7 @@
 commit notes:
--fixed bug where combo cancel was not being properly reset, causing loadout swap at the wrong time after the unit had been hit recently
--extended knockback to defeated units, so they experience it even as they fade away
--fixed bug causing crash when a unit was targeting a freed target
+-randomized grace period at start for ai units
+-adjusted attack permission to be delay based instead of Boolean based, so units have their attacks delayed depending on how many other units are attacking at the same time. It's not perfect, will have to come to this.
+-adjusted speed down, things felt too fast.
 
 ======= NOTES
 collision layers/masks notes:
@@ -17,7 +17,7 @@ collision layers/masks notes:
 
 What is this game's thing? Here is what it is:
 	- the preset sequences of moves of the loadout system.
-	- the on the fly arrangement of the loadouts as you go.
+	- the on the fly selection of loadouts as you go. A mix of preparation and improvisation.
 	(you can select this by pressing a number key at any time while the loadout is active/swapping)
 	so you can decide how you want to continue the combo in the moment.
 
@@ -26,32 +26,20 @@ What is this game's thing? Here is what it is:
 a. fix loadout swap bug...........................................[DONE]
 b. defeated move behavior.........................................[DONE]
 c. fixed freed target bug.........................................[DONE]
-1. attack permission issue........................................[]
-2. test finished ai overhaul......................................[]
+d. randomize grace period.........................................[DONE]
+1. attack permission issue........................................[DONE]
+a. units switching targets weird..................................[DONE]
+2. test finished ai overhaul......................................[DONE]
+3. fix hp bar visual bug..........................................[]
+4. generalize ai unit scene.......................................[]
+5. recreate units with generalized ai scene.......................[]
 
 [gate]. visual overhaul...........................................[]
+. test battles with visual overhaul..............................[]
 
-- randomize grace period at start of combat:
-	- helps coordinate attack permission in that first tick
-
-- small issue with attack permission
-	- maybe a system to prioritize giving it to someone who hasn't had it in a while?
-	- or whoever is closest?
-	something like that. because sometimes someone is staring you dead in the eyes but isn't attacking.
-	fix idea: (random coordination)
-	- you call in with your score, the last highest score is recorded there
-		(but it degrades automatically over time)
-	- based on the difference between the two scores, you must wait a set amount of time before attacking
-	that could work.
 
 - fix hp bar:
-	- do this, displaying all wonky.
-
-- units switching targets:
-	- they seem to glitch out when this happens
-	maybe attack permission will change this
-	maybe you cannot switch targets for _ time after choosing one.
-	(or in the same intention?)	
+	- displaying weirdly. Flashing up and down.
 
 - generalize ai unit scene:
 	current adelie scene into the standard 'ai unit' scene
@@ -59,11 +47,6 @@ c. fixed freed target bug.........................................[DONE]
 - add create new units from ai unit scene:
 	- sharp beaked adelie
 	- wired Adelie
-
-- test battles:
-	- anse vs 2/3/4 adelie
-	- anse + friendly vs 2/3/4 adelie
-	check the feeling
 
 - notes for iterating on art:
 	(see new refs folder featuring the work of the amazing [frider])
@@ -85,6 +68,17 @@ c. fixed freed target bug.........................................[DONE]
 	(symbolic, etc, after all.)
 	Here's a general idea. For generic FSes, they can wear full hoods.
 	But for important characters, they should have their hair visible somewhere.
+
+- test battles:
+	- anse vs 2/3/4 adelie
+	- anse + friendly vs 2/3/4 adelie
+	check the feeling...
+	honestly i can't tell right now. There's some good stuff, some bad stuff.
+	it clearly feels incomplete right now. Part is mechanics, part is how it looks.
+	i definitely think some issues are:
+	- combos are not especially satisfying to pull off. No mechanical challenge.
+	- battle is very chaotic. slowing it down a little might be beneficial.
+	- it doesn't look cool. sound, better art, effects, will do a lot for this.
 
 === [visual overhaul gate] ===
 
