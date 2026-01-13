@@ -214,8 +214,8 @@ animations = [{
 position = Vector2(0, -217)
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
-allowed_to_boost = true
-HP_max_coeff = 100.0
+allowed_to_boost = false
+HP_max_coeff = 10.0
 speed_coeff = 0.25
 rotation_coeff = 0.5
 acceleration_coeff = 0.75
@@ -243,6 +243,6 @@ texture_under = ExtResource("6_23lvc")
 collision_layer = 768
 
 [node name="MovementHitbox" parent="." index="4"]
-position = Vector2(0, 163)
+position = Vector2(0, 128.99998)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." index="6"]

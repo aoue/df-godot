@@ -1,5 +1,7 @@
 commit notes:
--added attack intention and behaviour
+-randomized grace period at start for ai units
+-adjusted attack permission to be delay based instead of Boolean based, so units have their attacks delayed depending on how many other units are attacking at the same time. It's not perfect, will have to come to this.
+-adjusted speed down, things felt too fast.
 
 ======= NOTES
 collision layers/masks notes:
@@ -11,60 +13,55 @@ collision layers/masks notes:
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
 	- 18: everything related to ANTI-ALLY projectiles hitting units and obstacles
 
-======= THE BIG DEAL: ai behavior overhaul
+======= THE BIG DEAL: 
 
-1. attack permission behavior.....................................[DONE]
-a. tweak attack priority interaction..............................[DONE]
-b. mode to watch ai units fight without my action.................[DONE]
-2. ai overhaul: advance...........................................[DONE]
-3. ai overhaul: retreat...........................................[DONE]
-a. ai overhaul: sleep.............................................[DONE]
-b. refactor boost to unitbody.....................................[DONE]
-4. ai overhaul: boost.............................................[DONE]
-5. ai overhaul: attack............................................[DONE]
-a. tweak attack permission a bit..................................[]
-5. big massive ai overhaul complete...............................[]
+What is this game's thing? Here is what it is:
+	- the preset sequences of moves of the loadout system.
+	- the on the fly selection of loadouts as you go. A mix of preparation and improvisation.
+	(you can select this by pressing a number key at any time while the loadout is active/swapping)
+	so you can decide how you want to continue the combo in the moment.
 
+=======
 
-- small issue with attack permission
-	- maybe a system to prioritize giving it to someone who hasn't had it in a while?
-	- or whoever is closest?
-	something like that. because sometimes someone is staring you dead in the eyes but isn't attacking.
-	fix idea: (random coordination)
-	- you call in with your score, the last highest score is recorded there
-		(but it degrades automatically over time)
-	- based on the difference between the two scores, you must wait a set amount of time before attacking
-	that could work.
+a. fix loadout swap bug...........................................[DONE]
+b. defeated move behavior.........................................[DONE]
+c. fixed freed target bug.........................................[DONE]
+d. randomize grace period.........................................[DONE]
+1. attack permission issue........................................[DONE]
+a. units switching targets weird..................................[DONE]
+2. test finished ai overhaul......................................[DONE]
+3. fix hp bar visual bug..........................................[]
+4. generalize ai unit scene.......................................[]
+5. recreate units with generalized ai scene.......................[]
 
-- test battles:
-	- anse vs 2/3/4 adelie
-	- anse + friendly vs 2/3/4 adelie
-	check the feeling
-
-- gamemother new function:
-	- instead of asking for information about targets and thinking myself,
-	what if you just said: gamemother suggest me a target.
-
-- new move type:
-	- on_mouse. a projectile which spawns on mouse and then slowly trails after it.
-	quite slow of course.
+[gate]. visual overhaul...........................................[]
+. test battles with visual overhaul..............................[]
 
 
-===== end of branch
+- fix hp bar:
+	- displaying weirdly. Flashing up and down.
 
-- iterating on art:
+- generalize ai unit scene:
+	current adelie scene into the standard 'ai unit' scene
+
+- add create new units from ai unit scene:
+	- sharp beaked adelie
+	- wired Adelie
+
+- notes for iterating on art:
 	(see new refs folder featuring the work of the amazing [frider])
 	overall darker and more muted visual style.
 	- new background too
 	- look at sketchbook drawings 
-	- see if we can go for a more serious style (remember people are gonna die)
+	- see if we can go for a more serious style (remember people are going to die)
+	- a lot of it is colours and moody lighting
 	you can use Friday as the case study? or maybe anse, idk
 	
 	- consider increasing sprite size to like 1200x or 1500x to allow for more detailed drawings.
 	- and place emphasis on backpacks/engines and hip jets. bulkier, like old infantry designs.
 	- named characters should have hair poking through and unique/strong/distinctive designs.
 
-- art overhaul:
+- visual overhaul:
 	- the spritesheet for anse will need to be redone at some point. 
 	Probably by adding his hair and changing colours to the brown/tan of his coat.
 	- maybe could do something like tall lined collar but no hood; go back to big collared anse.
@@ -72,32 +69,28 @@ a. tweak attack permission a bit..................................[]
 	Here's a general idea. For generic FSes, they can wear full hoods.
 	But for important characters, they should have their hair visible somewhere.
 
+- test battles:
+	- anse vs 2/3/4 adelie
+	- anse + friendly vs 2/3/4 adelie
+	check the feeling...
+	honestly i can't tell right now. There's some good stuff, some bad stuff.
+	it clearly feels incomplete right now. Part is mechanics, part is how it looks.
+	i definitely think some issues are:
+	- combos are not especially satisfying to pull off. No mechanical challenge.
+	- battle is very chaotic. slowing it down a little might be beneficial.
+	- it doesn't look cool. sound, better art, effects, will do a lot for this.
+
+=== [visual overhaul gate] ===
+
 - Friday unit:
 	- object
 	- spritesheet
 	- moveset
 
-- death movement bug:
-	- on death, enemy momentum stops completely.
-	Consider changing this so they do take proper knockback back.
 
-- ai dodging:
-	- more advanced units (allies or enemies) need to be able to dodge at least a little
-	could start with something as simple as:
-	- wherever it is you want to be, if you feel you are under threat
-		- you want distance but enemy close, or you want close but enemy distant (but not too distant)
-		- and you are not too close already to target position
-	- if you can, then use your boost in the direction you want to go
-	this will naturally help units either close distance or make distance.
-	remember, boost is already implemented in unit body, so just have to do flags.
-	summary: if enemy is near you, is attacking; then you dodge away from them.
-
-- ai delay between actions value as a range:
-	consider this: for some enemies, to make them more unpredictable:
-	- delay between actions can become a range and stuff.
-
-- end of combo:
-	automatic right now. should we change it to be like rmb to end combo?
+- another combo mechanic (low priority):
+	- a single loadout can only be used a single time in a combo
+	- you can't loop back around to the same loadout twice in one go
 
 - combat feeling review:
 	- it's not enough to just work, it must also feel right.
@@ -135,22 +128,21 @@ sound overhaul:
 	- range of the move: mixing close and far ranges can be tricky.
 	- knockback: a big knockback move will knock an enemy out of range of a short move.
 	- future 'flow': some moves do damage relative to flow generated, and may consume it.
-	yeah, this has been resolved now. But we'll keep it around for now so we keep it in mind.
 
-================
+=== [combat feeling gate] ====
 
 
 - grounded snow effect:
-	- when you change direction or come to a stop, pop us a snow effect?
+	- when you change direction or come to a stop, pop up a snow effect? scattered dust into the air.
 
 - weather effect:
-	- snow or rain particle effects on screen, at varying intensity.
+	- snow or rain particle effect on screen, at programmable intensity.
 
 - debris effect:
 	- when a unit is defeated, create some relevant debris on the ground near them
 	ferra leave parts, Friday will leave her coat, etc.
 
-- system to fire projectiles in multiple directions
+- system to fire projectiles in multiple directions:
 	of course we want moves that are able to shoot in every direction.
 	in addition to the projectile list, there is a projectile offset list
 	- for each entry in the projectile list, it fires a projectile at every position in the offset list.
@@ -160,9 +152,6 @@ sound overhaul:
 - camera manager:
 	-zoom and move camera so that it can capture everything we want in frame at the same time
 	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
-
-- create proper loadouts:
-	- see paper notes about this
 
 - flow mechanic:
 	-some moves generate 'flow'
@@ -212,8 +201,10 @@ start of battle animation:
 	remember, it is time sensitive as you only have a short window.
 	- but to counteract this, you can enter the next loadout at any time to buffer it.
 
+- ai unit targeting indicator:
+	- draw a coloured line from them to the circle of their target? or just in that direction? idk.
 
-== vn don't forget
+=== [vn-ready gate] ===
 
 -visuals (to consider)
 	-lip sync

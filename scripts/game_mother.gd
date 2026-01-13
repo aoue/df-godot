@@ -52,6 +52,11 @@ func assign_attack_priority() -> int:
 func free_unit(flag: int, unit_to_remove: UnitBody) -> void:
 	# Given 'flag' and 'id_to_free', erases the given unit from memory.
 	# {PLAYER, ALLY, ENEMY}
+	
+	# update cotargeting
+	if unit_to_remove.unit.allegiance != 0:
+		update_cotargeting(unit_to_remove.desired_unit_target, null)
+	
 	if flag == 2:
 		villains.erase(unit_to_remove)
 	else:
@@ -115,6 +120,24 @@ func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list
 	return closest_position
 
 """ Attack Permission Mechanic """
+func get_attack_permission_delay(attacker_combat_id: int, some_unitbody: UnitBody) -> int:
+	# To stop enemy units from attacking the player literally all at once.
+	# Coordinates attackers instead so they may attack in sequence but not all at once.
+	# The delay is larger the more enemies are trying to attack the same unit.
+	if some_unitbody:
+		var unit_id: int = some_unitbody.unit.combat_id
+		if unit_id not in cotargeting_dict:
+			return 0
+		@warning_ignore("integer_division")
+		#return cotargeting_dict[unit_id] * (Coeff.time_between_intention_update)
+		## delay function: delay = sqrt(units cotargeting) * constant (more gradual growth)
+		#return sqrt(cotargeting_dict[unit_id]) * Coeff.attack_delay_per_cotargeter
+		## delay function: delay = (attacker's unit id) % (units cotargeting) * constant
+		return (attacker_combat_id % max(1, cotargeting_dict[unit_id])) * Coeff.attack_delay_per_cotargeter
+		
+	return 0
+
+
 func get_attack_permission(some_unitbody: UnitBody) -> bool:
 	# Stop enemies from attacking a single target all at once. They have to take their turn, in a way.
 	# Returns true if the asker is given permission to attack, and also updates the dictionary kvp with the current time.

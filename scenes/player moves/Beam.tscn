@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bp3ugyhrj5qav" path="res://scenes/projectiles/Beam_projectile.tscn" id="2_31yld"]
 
 [node name="Move (Beam)" instance=ExtResource("1_cdr0k")]
-fire_table = Array[float]([0.9])
+fire_table = Array[float]([1.0])
 accuracy_deviation_label = 0
 recoil_moment = 1
 recoil_knockback = -1.0

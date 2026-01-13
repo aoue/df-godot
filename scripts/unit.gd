@@ -82,6 +82,7 @@ func emergency_exit() -> void:
 		move_boost_duration_left = 0.0
 
 func early_exit() -> void:
+	combo_exit_timer = Coeff.combo_timeout_duration
 	if early_exit_taken:  # idempotent
 		return
 	early_exit_taken = true
@@ -176,6 +177,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	recoil_knockback = active_move.recoil_knockback
 	
 	# set flags
+	combo_cancel = false
 	in_combo = true
 	set_attack_anim = true
 	cancel_attack = false

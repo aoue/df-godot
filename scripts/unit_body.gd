@@ -132,7 +132,11 @@ func go_be_defeated() -> void:
 	# hide hpbar and ring stuff
 	ring.hide()
 	hp_bar.hide()
+	GameMother.free_unit(unit.allegiance, self)
+	
 	# turn off collision for movement and projectiles
+	set_collision_layer_value(1, false)
+	set_collision_mask_value(1, false)
 
 func get_delay_between_actions() -> float:
 	return 0.0
@@ -287,7 +291,7 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 			
 	velocity += (knockback * speed_compensation_value)
 	velocity += (unit.recoil * speed_compensation_value)
-	
+
 	move_and_slide()
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
@@ -337,12 +341,16 @@ func pass_duration(delta : float) -> void:
 func _physics_process(delta: float) -> void:
 	if defeated:
 		defeated_disappear_timer -= delta
+		
+		# show the knockback still, though.
+		go_move(Vector2.ZERO, 0, acceleration)
+		#GameMother.free_unit(unit.allegiance, self)
+		
 		# start fading out as well
 		# function, do nothing for 1 second, then fade out at a constant rate over 5 seconds
 		var color_alpha: Color = Color(Color.WHITE, 0.2 * defeated_disappear_timer)
 		modulate = color_alpha
 		if defeated_disappear_timer < 0.05:
-			GameMother.free_unit(unit.allegiance, self)
 			queue_free()
 		return
 		
