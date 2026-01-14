@@ -120,42 +120,80 @@ func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list
 	return closest_position
 
 """ Attack Permission Mechanic """
-func get_attack_permission_delay(attacker_combat_id: int, some_unitbody: UnitBody) -> int:
-	# To stop enemy units from attacking the player literally all at once.
-	# Coordinates attackers instead so they may attack in sequence but not all at once.
-	# The delay is larger the more enemies are trying to attack the same unit.
-	if some_unitbody:
-		var unit_id: int = some_unitbody.unit.combat_id
-		if unit_id not in cotargeting_dict:
-			return 0
-		@warning_ignore("integer_division")
-		#return cotargeting_dict[unit_id] * (Coeff.time_between_intention_update)
-		## delay function: delay = sqrt(units cotargeting) * constant (more gradual growth)
-		#return sqrt(cotargeting_dict[unit_id]) * Coeff.attack_delay_per_cotargeter
-		## delay function: delay = (attacker's unit id) % (units cotargeting) * constant
-		return (attacker_combat_id % max(1, cotargeting_dict[unit_id])) * Coeff.attack_delay_per_cotargeter
-		
-	return 0
+#func get_attack_permission_delay(attacker_combat_id: int, some_unitbody: UnitBody) -> int:
+	## To stop enemy units from attacking the player literally all at once.
+	## Coordinates attackers instead so they may attack in sequence but not all at once.
+	## The delay is larger the more enemies are trying to attack the same unit.
+	#if some_unitbody:
+		#var unit_id: int = some_unitbody.unit.combat_id
+		#if unit_id not in cotargeting_dict:
+			#return 0
+		#@warning_ignore("integer_division")
+		##return cotargeting_dict[unit_id] * (Coeff.time_between_intention_update)
+		### delay function: delay = sqrt(units cotargeting) * constant (more gradual growth)
+		##return sqrt(cotargeting_dict[unit_id]) * Coeff.attack_delay_per_cotargeter
+		### delay function: delay = (attacker's unit id) % (units cotargeting) * constant
+		#return (attacker_combat_id % max(1, cotargeting_dict[unit_id])) * Coeff.attack_delay_per_cotargeter
+	#return 0
 
+func attack_ceded(actor_unitbody, target_unitbody) -> void:
+	"""
+	remove the unitbody with ceder's id from the list
+		for all unitbodies that want to hit the target:
+			find the closest
+		finally, closest.quick_authorize_attack()
+	"""
+	#var actor_unit_id: int = actor_unitbody.unit.combat_id
+	#for body in attackPermission_dict[target_unit_id]:
+		#if actor_unit_id == body.unit.combat_id:
+	var target_unit_id: int = target_unitbody.unit.combat_id
+	var relevant_unit_list = attackPermission_dict[target_unit_id]
+	
+	#print("pre:" + str(relevant_unit_list.size()))
+	relevant_unit_list.erase(actor_unitbody)
+	#print("post:" + str(relevant_unit_list.size()))
 
-func get_attack_permission(some_unitbody: UnitBody) -> bool:
+	# get the unit in the list that is closest to target_unitbody and give them attack permission
+	var closest_position: Vector2 = Vector2.ZERO
+	var saved_unit: UnitBody = null
+	var target_pos: Vector2 = target_unitbody.position
+	for check_unit in relevant_unit_list:
+		if check_unit:
+			var diff: float = (target_pos - check_unit.position).length()
+			if closest_position == Vector2.ZERO or diff < (target_pos - closest_position).length():
+				saved_unit = check_unit
+				closest_position = check_unit.position
+	
+	if saved_unit:
+		saved_unit.quick_authorize_attack()
+
+func get_attack_permission(actor_unitbody: UnitBody, target_unitbody: UnitBody) -> bool:
 	# Stop enemies from attacking a single target all at once. They have to take their turn, in a way.
 	# Returns true if the asker is given permission to attack, and also updates the dictionary kvp with the current time.
 	# Returns false if the asker is not given permission to attack. Does nothing.
 	# (each dict entry[unit id] is tied to a time value. When enough time has passed, give permission to attack.)
 	#print(attackPermission_dict)
-	if some_unitbody:
-		var unit_id: int = some_unitbody.unit.combat_id
-		var current_time: int = Time.get_ticks_msec()
+	if target_unitbody:
+		var target_unit_id: int = target_unitbody.unit.combat_id
+		#var current_time: int = Time.get_ticks_msec()
 		# trivial case: unit does not exist
-		if unit_id not in attackPermission_dict:
-			attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
+		if target_unit_id not in attackPermission_dict:
+			#attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
+			
+			#var heroes : Array[UnitBody] = []
+			attackPermission_dict[target_unit_id] = []
+			attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return true
 		# normal case: unit exists; compare current time to recorded time of last attack permission given
-		elif current_time > attackPermission_dict[unit_id]:
-			# then you have permission. Do update the attack permission dict before you go.
-			attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
+		elif attackPermission_dict[target_unit_id].size() == 0:
+			attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return true
+		else:
+			# then you have permission. Do update the attack permission dict before you go.
+			#attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
+			if actor_unitbody not in attackPermission_dict[target_unit_id]:
+				attackPermission_dict[target_unit_id].append(actor_unitbody)
+			return false
 	
 	return false
 

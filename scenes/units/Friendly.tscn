@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://t756x0x1sbjf" path="res://assets/ui/ring indicator blue.png" id="4_dinlk"]
 
 [node name="Friendly" instance=ExtResource("1_o4cfy")]
+collision_layer = 1
 allowed_to_boost = true
 HP_max_coeff = 40.0
 speed_coeff = 0.5
@@ -33,5 +34,6 @@ texture_under = ExtResource("4_dinlk")
 collision_layer = 196608
 
 [node name="Stun Label" type="Label" parent="Stat Labels" index="1"]
+visible = false
 offset_right = 1.0
 offset_bottom = 23.0

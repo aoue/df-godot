@@ -24,6 +24,7 @@ var desired_distance_from_allies : int = 2000
 
 var recalculate_random_offset : bool = false  # to not constantly recalculate random elements. Once per intention is fine.
 var saved_random_offset: float = 0.0
+var already_chosen_target: bool = false  # to not constantly osciallate between targets
 
 var want_to_boost: bool = false
 var want_to_attack: bool = false
@@ -54,8 +55,10 @@ func update_intention() -> void:
 	
 	# Reset once-per-intention variables
 	recalculate_random_offset = true
+	already_chosen_target = false
 	want_to_boost = false
 	want_to_attack = false
+	obtained_attack_permission = false
 	attack_permission_delay = 0
 				
 	# Choose intention here based on situation.
@@ -112,19 +115,39 @@ func feel_like_attacking() -> bool:
 		if not desired_unit_target:
 			return false
 	
-	## boolean attack permission method
-	# further, you must have attack permission (reset on combo end)
-	#obtained_attack_permission = GameMother.get_attack_permission(desired_unit_target)
-	#if not obtained_attack_permission:
-		#return false
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
 	if not (dist_to_target > min_range and dist_to_target < max_range):
 		return false
-	
-	## delay based permission method
-	attack_permission_delay = GameMother.get_attack_permission_delay(unit.combat_id, desired_unit_target) + Time.get_ticks_msec()
+		
+	## boolean attack permission method
+	# further, you must have attack permission (reset on combo end)
+	obtained_attack_permission = GameMother.get_attack_permission(self, desired_unit_target)
+	if not obtained_attack_permission:
+		return false
 	
 	return true
+
+""" Coordination and Reaction Functions """
+func quick_authorize_attack() -> void:
+	## Called from gamemother to immediately authorize this guy's attack (with a slight delay though)
+	#print("quick_authorize_attack() called")
+	obtained_attack_permission = true
+	my_intention = Intention.ATTACK
+	last_action_timestamp = Time.get_ticks_msec()
+	attack_permission_delay = Time.get_ticks_msec() + Coeff.attack_permission_timer
+
+func quick_cede_attack() -> void:
+	## Informs gamemother that we no longer need to use attack permission.
+	# And thus gamemother can give it to someone else.
+	#print("quick_cede_attack() called")
+	move_loaded = false
+	obtained_attack_permission = false
+	
+	my_intention = Intention.RETREAT
+	last_action_timestamp = Time.get_ticks_msec()
+	
+	if desired_unit_target:
+		GameMother.attack_ceded(self, desired_unit_target)
 
 """ Execution Functions """
 
@@ -191,7 +214,7 @@ func start_attack() -> void:
 		
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
-	if not (dist_to_target > min_range and dist_to_target < max_range):
+	if want_to_attack and not (dist_to_target > min_range and dist_to_target < max_range):
 		want_to_attack = false
 		
 	# check that the angle is right
@@ -249,6 +272,9 @@ func choose_target() -> void:
 	# Chooses the most appealing unit target on the map, favouring:
 	#	- low geographical distance to them
 	#	- low number of other units targeting them
+	if already_chosen_target and desired_unit_target != null:
+		return
+	
 	var check_target_score: float = 0.0
 	var check_target: UnitBody = null
 	for opp in GameMother.get_opponents(unit.allegiance):
@@ -313,21 +339,23 @@ func get_standoff_helper() -> float:
 	return 0.0
 
 func validate_target() -> void:
-	if desired_unit_target and is_instance_valid(desired_unit_target):
+	if desired_unit_target and not desired_unit_target.defeated and is_instance_valid(desired_unit_target):
 		return
 	desired_unit_target = null
 
 """ Supers """
+func being_hit_ai() -> void:
+	quick_cede_attack()
+
 func end_combo_ai() -> void:
-	# pure virtual
-	move_loaded = false
-	obtained_attack_permission = false
+	quick_cede_attack()
 
 func get_direction_input() -> Vector2:
 	# Returns the vector that the unitBody wants to move in
 	var current_agent_position: Vector2 = position
 	# if you are close enough that you are within standoff distance, don't move any more.
-	if current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
+	if my_intention == Intention.ADVANCE and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
+		my_intention = Intention.SLEEP
 		return Vector2.ZERO
 	# otherwise, just move where you like.
 	return current_agent_position.direction_to(nav.get_next_path_position())
@@ -354,10 +382,11 @@ func get_boost_input(direction: Vector2) -> bool:
 	return false
 
 func _physics_process(delta):
-	validate_target()
-	update_intention()
-	execute_intention()
-	set_nav_movement_target()
+	if not defeated:
+		validate_target()
+		update_intention()
+		execute_intention()
+		set_nav_movement_target()
 	
 	super(delta)
 	

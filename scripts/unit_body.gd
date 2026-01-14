@@ -60,6 +60,14 @@ func _ready() -> void:
 	
 	# Label colours
 	output_label.self_modulate = unit_colour
+	
+	# setup unit's physical collision
+	if unit.allegiance == 2:  # if enemy
+		set_collision_layer_value(2, true)
+		set_collision_mask_value(2, true)
+	elif unit.allegiance == 1:  # if ally
+		set_collision_layer_value(3, true)
+		set_collision_mask_value(3, true)
 
 """ Input """
 func get_direction_input_helper() -> Vector2:

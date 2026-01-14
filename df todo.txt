@@ -1,13 +1,16 @@
 commit notes:
--randomized grace period at start for ai units
--adjusted attack permission to be delay based instead of Boolean based, so units have their attacks delayed depending on how many other units are attacking at the same time. It's not perfect, will have to come to this.
--adjusted speed down, things felt too fast.
+-overhauled attack permission mechanic to have more unit coordination, where permission is ceded immediately when a unit is unable to continue attacking for any reason, and passed on to the nearest other unit
+-changed standoff behavior in advance intention to be switching to sleep intention
+-updated unit collision date to only be between units of the same side
+-small fix to stop units from oscillating between targets
 
 ======= NOTES
 collision layers/masks notes:
 	layer: gets hit
 	mask: hits others
-	- 1: everything related to units moving and hitting world border or obstacles.
+	- 1: everything related to units moving and hitting world border or obstacles. (all units)
+	- 2: enemy unit physical collision layer (all enemies)
+	- 3: ally unit physical collision layer (all allies, NOT player)
 	- 9: everything related to RANGED ANTI-ENEMY projectiles hitting units and obstacles.
 	- 10: everything related to MELEE ANTI-ENEMY projectiles
 	- 17: everything related to ANTI-ALLY projectiles hitting units and obstacles
@@ -18,6 +21,7 @@ collision layers/masks notes:
 What is this game's thing? Here is what it is:
 	- the preset sequences of moves of the loadout system.
 	- the on the fly selection of loadouts as you go. A mix of preparation and improvisation.
+	- swapping target mid-combo, that feeling of like weaving through a horde of enemies, fighting them all but making it through, stopping them as they launch themselves at you.
 	(you can select this by pressing a number key at any time while the loadout is active/swapping)
 	so you can decide how you want to continue the combo in the moment.
 
@@ -30,7 +34,11 @@ d. randomize grace period.........................................[DONE]
 1. attack permission issue........................................[DONE]
 a. units switching targets weird..................................[DONE]
 2. test finished ai overhaul......................................[DONE]
-3. fix hp bar visual bug..........................................[]
+a. address ai issues..............................................[DONE]
+3. fix hp bar visual bug..........................................[DONE]
+4. changed unit collision layers..................................[DONE]
+a. target switching fix...........................................[DONE]
+
 4. generalize ai unit scene.......................................[]
 5. recreate units with generalized ai scene.......................[]
 
@@ -38,8 +46,15 @@ a. units switching targets weird..................................[DONE]
 . test battles with visual overhaul..............................[]
 
 
-- fix hp bar:
-	- displaying weirdly. Flashing up and down.
+- stricter ai patterns?:
+	- when a guy gets hit, immediately force swap into retreat intention (doing this)
+	- cannot get the same intention twice in a row (could try doing this)
+		- could force units into sleep more, so they don't just stand there.
+	- if start in standoff, then sleep intention instead for the wander
+
+- individual ai unit behaviour?
+	- create a different behaviour for ai units from scratch?
+	still keep this in mind. Could make a lot of sense.
 
 - generalize ai unit scene:
 	current adelie scene into the standard 'ai unit' scene
