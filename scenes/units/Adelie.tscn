@@ -239,9 +239,6 @@ autoplay = ""
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="1"]
 texture_under = ExtResource("6_23lvc")
 
-[node name="AreaHitbox" parent="." index="3"]
-collision_layer = 768
-
 [node name="MovementHitbox" parent="." index="4"]
 position = Vector2(0, 128.99998)
 

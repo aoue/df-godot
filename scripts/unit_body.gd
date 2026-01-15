@@ -73,8 +73,8 @@ func _ready() -> void:
 func get_direction_input_helper() -> Vector2:
 	if move_stun_duration > 0.0:
 		return Vector2.ZERO
-	if boost_duration > 0.0:
-		return boost_vector
+	#if boost_duration > 0.0:
+		#return boost_vector
 	
 	return get_direction_input()
 	
@@ -349,11 +349,7 @@ func pass_duration(delta : float) -> void:
 func _physics_process(delta: float) -> void:
 	if defeated:
 		defeated_disappear_timer -= delta
-		
-		# show the knockback still, though.
-		go_move(Vector2.ZERO, 0, acceleration)
-		#GameMother.free_unit(unit.allegiance, self)
-		
+		go_move(Vector2.ZERO, 0, acceleration)  # show the knockback still, though.
 		# start fading out as well
 		# function, do nothing for 1 second, then fade out at a constant rate over 5 seconds
 		var color_alpha: Color = Color(Color.WHITE, 0.2 * defeated_disappear_timer)
@@ -372,7 +368,7 @@ func _physics_process(delta: float) -> void:
 	var speed_value = speed
 	
 	if unit.in_combo:
-		speed_value *= unit.combo_speed_mod
+		speed_value *= unit.combo_speed_mod * 2
 		
 	if is_boosting:
 		acceleration_value = boost_acceleration
@@ -382,7 +378,7 @@ func _physics_process(delta: float) -> void:
 		speed_value += (unit.active_move.move_speed_add * Coeff.speed)
 		direction = ring_direction
 	elif is_backpedaling(direction, ring_direction):
-		speed_value /= 2
+		speed_value *= Coeff.backpedaling_speed_mod
 	
 	adjust_indicators(target_pos, delta)
 	go_move(direction, speed_value, acceleration_value)

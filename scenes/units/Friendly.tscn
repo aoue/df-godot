@@ -30,9 +30,6 @@ slot2 = ExtResource("3_dinlk")
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="1"]
 texture_under = ExtResource("4_dinlk")
 
-[node name="AreaHitbox" parent="." index="3"]
-collision_layer = 196608
-
 [node name="Stun Label" type="Label" parent="Stat Labels" index="1"]
 visible = false
 offset_right = 1.0

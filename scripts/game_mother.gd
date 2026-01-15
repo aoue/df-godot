@@ -25,13 +25,11 @@ func setup_UI() -> void:
 	pass
 	#logLabel.text = "testing ui text"
 
-func add_hero(unit: UnitBody) -> void:
-	heroes.append(unit)
-	#add_child(unit)
-	
-func add_villain(unit: UnitBody) -> void:
-	villains.append(unit)
-	#add_child(unit)
+func add_unit(unitbody: UnitBody) -> void:
+	if unitbody.unit.allegiance == 2:
+		villains.append(unitbody)
+	else:
+		heroes.append(unitbody)
 
 func assign_combat_ids() -> void:
 	# given all the heroes and villains, assigns unique combat ids to all of them.
@@ -147,6 +145,8 @@ func attack_ceded(actor_unitbody, target_unitbody) -> void:
 	#for body in attackPermission_dict[target_unit_id]:
 		#if actor_unit_id == body.unit.combat_id:
 	var target_unit_id: int = target_unitbody.unit.combat_id
+	if target_unit_id not in attackPermission_dict:
+		return
 	var relevant_unit_list = attackPermission_dict[target_unit_id]
 	
 	#print("pre:" + str(relevant_unit_list.size()))
@@ -178,9 +178,6 @@ func get_attack_permission(actor_unitbody: UnitBody, target_unitbody: UnitBody) 
 		#var current_time: int = Time.get_ticks_msec()
 		# trivial case: unit does not exist
 		if target_unit_id not in attackPermission_dict:
-			#attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
-			
-			#var heroes : Array[UnitBody] = []
 			attackPermission_dict[target_unit_id] = []
 			attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return true
@@ -190,7 +187,6 @@ func get_attack_permission(actor_unitbody: UnitBody, target_unitbody: UnitBody) 
 			return true
 		else:
 			# then you have permission. Do update the attack permission dict before you go.
-			#attackPermission_dict[unit_id] = current_time + Coeff.attack_permission_timer
 			if actor_unitbody not in attackPermission_dict[target_unit_id]:
 				attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return false

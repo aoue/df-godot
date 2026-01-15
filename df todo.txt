@@ -1,8 +1,7 @@
 commit notes:
--overhauled attack permission mechanic to have more unit coordination, where permission is ceded immediately when a unit is unable to continue attacking for any reason, and passed on to the nearest other unit
--changed standoff behavior in advance intention to be switching to sleep intention
--updated unit collision date to only be between units of the same side
--small fix to stop units from oscillating between targets
+-fixed bug where i had forgotten to set a flag properly to prevent target switching so much
+-fixed bug where unit was attacking even when it was facing no one (flag was not being reset after unit ceded attack)
+-fixed bug where units acted strangely if they were acting before first intention update occurred
 
 ======= NOTES
 collision layers/masks notes:
@@ -38,6 +37,7 @@ a. address ai issues..............................................[DONE]
 3. fix hp bar visual bug..........................................[DONE]
 4. changed unit collision layers..................................[DONE]
 a. target switching fix...........................................[DONE]
+b. various bug fixes..............................................[DONE]
 
 4. generalize ai unit scene.......................................[]
 5. recreate units with generalized ai scene.......................[]
@@ -46,15 +46,7 @@ a. target switching fix...........................................[DONE]
 . test battles with visual overhaul..............................[]
 
 
-- stricter ai patterns?:
-	- when a guy gets hit, immediately force swap into retreat intention (doing this)
-	- cannot get the same intention twice in a row (could try doing this)
-		- could force units into sleep more, so they don't just stand there.
-	- if start in standoff, then sleep intention instead for the wander
 
-- individual ai unit behaviour?
-	- create a different behaviour for ai units from scratch?
-	still keep this in mind. Could make a lot of sense.
 
 - generalize ai unit scene:
 	current adelie scene into the standard 'ai unit' scene
@@ -95,13 +87,30 @@ a. target switching fix...........................................[DONE]
 	- battle is very chaotic. slowing it down a little might be beneficial.
 	- it doesn't look cool. sound, better art, effects, will do a lot for this.
 
+- lights and shadows
+	- see documentation page
+
 === [visual overhaul gate] ===
+
+- individual ai unit behaviour?
+	- create a different behaviour for ai units from scratch?
+	still keep this in mind. Could make a lot of sense.
+
+- retreat destination and pathing still needs work:
+	- lots of time units bump against walls
+	- change possible angle? or give bias towards the center?
+	- or: if near edge of map, then select retreat spot differently
+
+- stricter ai patterns?:
+	- when a guy gets hit, immediately force swap into retreat intention (doing this)
+	- cannot get the same intention twice in a row (could try doing this)
+		- could force units into sleep more, so they don't just stand there.
+	- if start in standoff, then sleep intention instead for the wander
 
 - Friday unit:
 	- object
 	- spritesheet
 	- moveset
-
 
 - another combo mechanic (low priority):
 	- a single loadout can only be used a single time in a combo
@@ -127,14 +136,6 @@ sound overhaul:
 	- unit being hit by a move
 	- music
 
-- alternate attack system, in case this falls apart:
-	you have a combo counter from 1...x
-	- you equip weapons (attack patterns) where the move differs depending on combo counter
-	- you can switch which weapon you are attacking with in the middle of the combo.
-	e.g. you can attack snaphammer1 -> snaphammer2 -> rifle3 -> box4 -> rifle5 -> ...
-	or any other combination that you want.	
-	note: this does feel like an idea where
-
 - combo routing factors:
 	in baldr sky, move order is quite technical because of launching and knockdown
 	- our system doesn't have either of these things.
@@ -145,7 +146,6 @@ sound overhaul:
 	- future 'flow': some moves do damage relative to flow generated, and may consume it.
 
 === [combat feeling gate] ====
-
 
 - grounded snow effect:
 	- when you change direction or come to a stop, pop up a snow effect? scattered dust into the air.
@@ -218,6 +218,14 @@ start of battle animation:
 
 - ai unit targeting indicator:
 	- draw a coloured line from them to the circle of their target? or just in that direction? idk.
+
+- alternate attack system, in case this falls apart:
+	you have a combo counter from 1...x
+	- you equip weapons (attack patterns) where the move differs depending on combo counter
+	- you can switch which weapon you are attacking with in the middle of the combo.
+	e.g. you can attack snaphammer1 -> snaphammer2 -> rifle3 -> box4 -> rifle5 -> ...
+	or any other combination that you want.	
+	note: this does feel like an idea where
 
 === [vn-ready gate] ===
 

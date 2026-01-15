@@ -308,8 +308,5 @@ animation = &"boost"
 frame = 1
 frame_progress = 0.422746
 
-[node name="AreaHitbox" parent="." index="4"]
-collision_layer = 196608
-
 [node name="MovementHitbox" parent="." index="5"]
 position = Vector2(0, 304.99997)

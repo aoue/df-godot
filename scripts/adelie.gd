@@ -16,6 +16,7 @@ var my_intention : Intention = Intention.SLEEP  # records the current intention 
 var last_action_timestamp : int = 0  # records the time (in ms) since the unit last acted
 var time_between_updates : int = 10  # for updating during the same intention (in ms)
 var last_update_timestamp : int = 0  # records the time (in ms) since the last update
+var grace_note : int = Coeff.time_between_intention_update
 
 ## Navigation
 var desired_unit_target : UnitBody = null
@@ -40,9 +41,6 @@ var max_range: float = 0.0
 
 """ Brain """
 func _ready() -> void:
-	# grace note
-	if unit.allegiance == 2:
-		last_action_timestamp = GameMother.rng.randi_range(500, 1500)
 	super()
 
 func update_intention() -> void:
@@ -71,6 +69,11 @@ func update_intention() -> void:
 	 
 func execute_intention() -> void:
 	# Based on the current intention, does the stuff to help us keep executing it properly.
+	
+	#if unit.allegiance == 1:
+		#print("desired_movement_location = " + str(desired_movement_location))
+		#print("desired_movement_location = " + str(desired_unit_target.position))
+	
 	if not time_to_update():
 		return
 	if not move_loaded:
@@ -91,7 +94,7 @@ func execute_intention() -> void:
 
 func feel_like_boosting() -> bool:
 	# Returns true if the unit wants to boost
-	if not allowed_to_boost:
+	if not allowed_to_boost or my_intention == Intention.ATTACK:
 		return false
 	
 	# -if your destination is too close, permission denied.
@@ -131,20 +134,24 @@ func feel_like_attacking() -> bool:
 func quick_authorize_attack() -> void:
 	## Called from gamemother to immediately authorize this guy's attack (with a slight delay though)
 	#print("quick_authorize_attack() called")
-	obtained_attack_permission = true
+	#if my_intention != Intention.RETREAT:
 	my_intention = Intention.ATTACK
+	obtained_attack_permission = true
 	last_action_timestamp = Time.get_ticks_msec()
 	attack_permission_delay = Time.get_ticks_msec() + Coeff.attack_permission_timer
-
+	
+	choose_target()
+	
 func quick_cede_attack() -> void:
 	## Informs gamemother that we no longer need to use attack permission.
 	# And thus gamemother can give it to someone else.
 	#print("quick_cede_attack() called")
 	move_loaded = false
 	obtained_attack_permission = false
+	want_to_attack = false
 	
 	my_intention = Intention.RETREAT
-	last_action_timestamp = Time.get_ticks_msec()
+	last_action_timestamp = Time.get_ticks_msec() - Coeff.time_between_intention_update
 	
 	if desired_unit_target:
 		GameMother.attack_ceded(self, desired_unit_target)
@@ -152,6 +159,7 @@ func quick_cede_attack() -> void:
 """ Execution Functions """
 
 func start_sleep() -> void:
+	#desired_movement_location = position
 	if recalculate_random_offset:
 		var random_walk: Vector2 = Vector2.ZERO
 		var random_direction = calculate_random_offset_rotation(2*PI)
@@ -192,7 +200,7 @@ func start_retreat() -> void:
 	var retreat_direction: Vector2 = position.direction_to(closest_hostile_position) * -1
 	
 	# apply randomness to retreat direction
-	var retreat_direction_offset: float = calculate_random_offset_rotation(PI)
+	var retreat_direction_offset: float = calculate_random_offset_rotation(PI/2)
 	retreat_direction = retreat_direction.rotated(retreat_direction_offset)
 	retreat_direction *= standoff_distance
 		
@@ -211,6 +219,7 @@ func start_attack() -> void:
 		return
 	
 	want_to_attack = true
+	desired_movement_location = desired_unit_target.position
 		
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
@@ -223,10 +232,8 @@ func start_attack() -> void:
 	var own_direction_vector = get_ring_indicator_vector()
 	var angle_from_self_to_target = vector_from_unit_to_target.dot(own_direction_vector)
 	#if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
-	if want_to_attack and angle_from_self_to_target < 0.98:  # (angle IS NOT narrower than [very narrow])
+	if want_to_attack and angle_from_self_to_target < 0.99:  # (angle IS NOT narrower than [very narrow])
 		want_to_attack = false
-	
-	desired_movement_location = desired_unit_target.position
 
 func feeling_threatened() -> bool:
 	# basically, if someone is within a certain distance from you
@@ -274,7 +281,7 @@ func choose_target() -> void:
 	#	- low number of other units targeting them
 	if already_chosen_target and desired_unit_target != null:
 		return
-	
+	already_chosen_target = true
 	var check_target_score: float = 0.0
 	var check_target: UnitBody = null
 	for opp in GameMother.get_opponents(unit.allegiance):
@@ -285,8 +292,8 @@ func choose_target() -> void:
 
 		# score based on the number of other units already targeting target
 		var cotargeter_count: int = GameMother.get_cotargeter_count(opp)
-		#if opp == desired_unit_target:  # if you yourself are targeting them, subtract 1.
-			#cotargeter_count -= 1
+		if opp == desired_unit_target:  # if you yourself are targeting them, subtract 1.
+			cotargeter_count -= 1
 		var cotargeter_score: float = (1.0 / max(cotargeter_count, 1))
 
 		#print("relative scores are dist | cotargeter: " + str(dist_score) + " | " + str(cotargeter_score))
@@ -352,9 +359,12 @@ func end_combo_ai() -> void:
 
 func get_direction_input() -> Vector2:
 	# Returns the vector that the unitBody wants to move in
+	if Time.get_ticks_msec() < grace_note:
+		return Vector2.ZERO
+	
 	var current_agent_position: Vector2 = position
 	# if you are close enough that you are within standoff distance, don't move any more.
-	if my_intention == Intention.ADVANCE and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
+	if (my_intention == Intention.ADVANCE or my_intention == Intention.SLEEP) and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
 		my_intention = Intention.SLEEP
 		return Vector2.ZERO
 	# otherwise, just move where you like.

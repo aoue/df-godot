@@ -18,7 +18,7 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 1
+var enemy_count: int = 2
 var call_friendly: bool = true
 var camera_mode: bool = false
 
@@ -41,7 +41,8 @@ func create_world() -> void:
 		friendly_in_world = Friendly.instantiate()
 		friendly_in_world.position = Vector2(-1250, 0)
 		add_child(friendly_in_world)
-		GameMother.add_hero(friendly_in_world)
+		#GameMother.add_hero(friendly_in_world)
+		GameMother.add_unit(friendly_in_world)
 	
 	if camera_mode:
 		fixedCamera.enabled = true
@@ -49,7 +50,7 @@ func create_world() -> void:
 		fixedCamera.enabled = false
 		anse_in_world = Anse.instantiate()
 		add_child(anse_in_world)
-		GameMother.add_hero(anse_in_world)
+		GameMother.add_unit(anse_in_world)
 	
 	var spawn_offset: int = 0
 	var flip_offset: int = 1
@@ -57,7 +58,7 @@ func create_world() -> void:
 		var adelie_in_world: UnitBody = Adelie.instantiate()
 		adelie_in_world.position = Vector2(5000 * flip_offset, spawn_offset)
 		add_child(adelie_in_world)
-		GameMother.add_villain(adelie_in_world)
+		GameMother.add_unit(adelie_in_world)
 		spawn_offset += 500
 		flip_offset = flip_offset * -1
 	
