@@ -3,13 +3,21 @@ When introduction a new system, draw at least some passable placeholder art for 
 (This includes colouring)
 This will help you stay in love and avoid becoming overwhelmed with a backlog later.
 
-spritesheets are 4500x5400, with 6 rows and 5 columns
-making each sprite slot 900x900
+spritesheets are 5000x6500, with 5 rows and 5 columns
+making each sprite slot 1300 units high, 1000 units long.
 
 == sprite breakdown ==
+(try HEAVY downsizing)
+make do with ONLY 3/4 angle still and movements.
+try that in game and see how it looks. if it looks good, we can save a ton of frames.
+
+(we have downsized; removing side stills.)
+the stills can get by with just front and back because of their angles.
+you'll have to change the math in do_anim(), but it's easy.
+
 in the combat scene, a unit has the following sprites:
 0_side_rest: 2 sprites, 1 FPS
-1_side_mov: 2 /3 sprites, 4 FPS
+1_side_mov: 2/3 sprites, 4 FPS
 
 2_front_rest: 2 sprites, 1 FPS
 3_front_rest: 2/3 sprites, 4 FPS

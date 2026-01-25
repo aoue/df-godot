@@ -1,7 +1,5 @@
 commit notes:
--fixed bug where i had forgotten to set a flag properly to prevent target switching so much
--fixed bug where unit was attacking even when it was facing no one (flag was not being reset after unit ceded attack)
--fixed bug where units acted strangely if they were acting before first intention update occurred
+-imported new unit art in
 
 ======= NOTES
 collision layers/masks notes:
@@ -26,27 +24,27 @@ What is this game's thing? Here is what it is:
 
 =======
 
-a. fix loadout swap bug...........................................[DONE]
-b. defeated move behavior.........................................[DONE]
-c. fixed freed target bug.........................................[DONE]
-d. randomize grace period.........................................[DONE]
-1. attack permission issue........................................[DONE]
-a. units switching targets weird..................................[DONE]
-2. test finished ai overhaul......................................[DONE]
-a. address ai issues..............................................[DONE]
-3. fix hp bar visual bug..........................................[DONE]
-4. changed unit collision layers..................................[DONE]
-a. target switching fix...........................................[DONE]
-b. various bug fixes..............................................[DONE]
+1. import unit art for new style test.............................[DONE]
+2. add code to manage new style test..............................[]
 
-4. generalize ai unit scene.......................................[]
-5. recreate units with generalized ai scene.......................[]
+. camera lock tech...............................................[]
+. generalize ai unit scene.......................................[]
+. recreate units with generalized ai scene.......................[]
 
-[gate]. visual overhaul...........................................[]
+. concept art for new sprites style..............................[]
+. Friday spritesheet.............................................[]
+
+[gate]. visual overhaul..........................................[]
+
 . test battles with visual overhaul..............................[]
 
 
+- new visual style test:
+	- change code that determines unit direction to match as well.
 
+- camera lock tech:
+	- make it so camera doesn't show out of bounds
+	- params set by the bg's dimensions
 
 - generalize ai unit scene:
 	current adelie scene into the standard 'ai unit' scene
