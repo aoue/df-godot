@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://66rywivm62t1"]
+[gd_scene load_steps=10 format=3 uid="uid://66rywivm62t1"]
 
 [ext_resource type="Script" uid="uid://dbckav3rqo870" path="res://scripts/encounter.gd" id="1_kqml8"]
 [ext_resource type="PackedScene" uid="uid://bheobjlecy41s" path="res://scenes/units/Anse.tscn" id="2_aaoje"]
@@ -6,19 +6,24 @@
 [ext_resource type="PackedScene" uid="uid://byjmtg2bm3o3r" path="res://scenes/units/Friendly.tscn" id="4_hov8j"]
 [ext_resource type="PackedScene" uid="uid://by800qhg41i6u" path="res://scenes/ProjectileMother.tscn" id="4_r851w"]
 [ext_resource type="PackedScene" uid="uid://cweuj6pt4a0p8" path="res://scenes/Geography.tscn" id="5_1ojfr"]
+[ext_resource type="Script" uid="uid://dcvptdx1sn8kf" path="res://scenes/camera_2d.gd" id="5_ss2td"]
 [ext_resource type="Script" uid="uid://dpw06l1jgqqfs" path="res://scripts/game_mother.gd" id="7_7msjs"]
 [ext_resource type="Texture2D" uid="uid://ftw51jn7m7ou" path="res://assets/ui/encounter_cursor.png" id="8_ev3kp"]
 
-[node name="Encounter" type="Node2D" node_paths=PackedStringArray("fixedCamera")]
+[node name="Encounter" type="Node2D" node_paths=PackedStringArray("mainCamera", "geoMap")]
 y_sort_enabled = true
 script = ExtResource("1_kqml8")
 Anse = ExtResource("2_aaoje")
 Adelie = ExtResource("4_4r8bx")
 Friendly = ExtResource("4_hov8j")
-fixedCamera = NodePath("Camera2D")
+mainCamera = NodePath("MainCamera")
+geoMap = NodePath("Geography")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.11, 0.11)
+[node name="MainCamera" type="Camera2D" parent="."]
+zoom = Vector2(0.18, 0.18)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+script = ExtResource("5_ss2td")
 
 [node name="Geography" parent="." instance=ExtResource("5_1ojfr")]
 
@@ -41,6 +46,6 @@ text = "testo"
 script = ExtResource("7_7msjs")
 logLabel = NodePath("../CanvasGroup/CanvasLayer/Log")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Red circle" type="Sprite2D" parent="."]
 scale = Vector2(5, 5)
 texture = ExtResource("8_ev3kp")

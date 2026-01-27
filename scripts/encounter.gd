@@ -10,8 +10,8 @@ var cursor_sprite = load("res://assets/ui/encounter_cursor.png")
 @export var Adelie : PackedScene
 @export var Friendly : PackedScene
 
-@export_group("Testing")
-@export var fixedCamera : Camera2D
+@export var mainCamera : Camera2D
+@export var geoMap : Geography
 
 """ Testing """
 var anse_in_world : UnitBody
@@ -44,13 +44,12 @@ func create_world() -> void:
 		#GameMother.add_hero(friendly_in_world)
 		GameMother.add_unit(friendly_in_world)
 	
-	if camera_mode:
-		fixedCamera.enabled = true
-	else:
-		fixedCamera.enabled = false
+	if not camera_mode:
 		anse_in_world = Anse.instantiate()
 		add_child(anse_in_world)
 		GameMother.add_unit(anse_in_world)
+		# pass character and map info to camera.
+		mainCamera.setup(anse_in_world, geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
 	var spawn_offset: int = 0
 	var flip_offset: int = 1

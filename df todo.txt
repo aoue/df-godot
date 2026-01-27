@@ -1,5 +1,5 @@
 commit notes:
--imported new unit art in
+-added camera script w/ limits
 
 ======= NOTES
 collision layers/masks notes:
@@ -25,9 +25,11 @@ What is this game's thing? Here is what it is:
 =======
 
 1. import unit art for new style test.............................[DONE]
-2. add code to manage new style test..............................[]
+2. camera lock tech...............................................[DONE]
+3. import rest of unit art for style test.........................[]
+4. add code to manage new style test..............................[]
 
-. camera lock tech...............................................[]
+
 . generalize ai unit scene.......................................[]
 . recreate units with generalized ai scene.......................[]
 
@@ -39,12 +41,19 @@ What is this game's thing? Here is what it is:
 . test battles with visual overhaul..............................[]
 
 
+- rest of Friday unit sprite sheet:
+	- being hit
+	- melee
+	- ranged
+	- special (what is this? 'forms', but what is that? kicking maybe?)
+
 - new visual style test:
 	- change code that determines unit direction to match as well.
 
 - camera lock tech:
 	- make it so camera doesn't show out of bounds
 	- params set by the bg's dimensions
+	- cmaera view should be a combo between player body and mouse positions? 
 
 - generalize ai unit scene:
 	current adelie scene into the standard 'ai unit' scene

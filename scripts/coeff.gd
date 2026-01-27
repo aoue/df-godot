@@ -36,6 +36,9 @@ var hit_stun_duration: float = 1.0  # base duration (s) of attacking lockout on 
 var hit_stun_shield_duration: float = 1.0  # duration (s) of stun immunity after being stunned
 var hit_stun_rotation_speed: float = 0.0  # at 0, cannot rotate when hit.
 
+"""Camera Constants"""
+var camera_speed: float = speed - 1000
+
 """Movement Constants"""
 var boost_speed_set: float = 3000.0  # boosting sets your speed to this value
 var boost_full_duration: float = 0.25  # how long the boost lasts

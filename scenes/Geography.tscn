@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cweuj6pt4a0p8"]
+[gd_scene load_steps=5 format=3 uid="uid://cweuj6pt4a0p8"]
 
+[ext_resource type="Script" uid="uid://cbrync17drd3y" path="res://scripts/geography.gd" id="1_dp2x4"]
 [ext_resource type="Texture2D" uid="uid://ch0w8dyya0wx3" path="res://assets/maps/mats/test mat.png" id="1_kus1m"]
 [ext_resource type="PackedScene" uid="uid://cx6agfwmkn6rl" path="res://scenes/Obstacle.tscn" id="2_p63s6"]
 
@@ -9,9 +10,11 @@ polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32
 outlines = Array[PackedVector2Array]([PackedVector2Array(-290, -74, 516, -606, 1892, -678, 1898, 1058, -1926, 1048, -1920, -354, -1554, -360, -1024, -90, -548, -42)])
 source_geometry_group_name = &"navigation_polygon_source_group"
 
-[node name="Geography" type="Node2D"]
+[node name="Geography" type="Node2D" node_paths=PackedStringArray("sprite_mat")]
 z_index = -1
 scale = Vector2(4, 4)
+script = ExtResource("1_dp2x4")
+sprite_mat = NodePath("SpriteMat")
 
 [node name="SpriteMat" type="Sprite2D" parent="."]
 texture = ExtResource("1_kus1m")

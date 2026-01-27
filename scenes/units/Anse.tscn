@@ -277,12 +277,7 @@ script = ExtResource("2_uger1")
 boost_anim = NodePath("CharacterAnim/BoostAnim")
 HP_max_coeff = 40.0
 
-[node name="Camera2D" type="Camera2D" parent="." index="0"]
-scale = Vector2(1.33333, 1.33333)
-zoom = Vector2(0.15, 0.15)
-position_smoothing_enabled = true
-
-[node name="Unit" parent="." index="1"]
+[node name="Unit" parent="." index="0"]
 unitName = "Anse"
 
 [node name="Loadout0" parent="Unit" index="0"]
@@ -295,7 +290,7 @@ slot0 = ExtResource("4_1tntk")
 slot1 = ExtResource("7_n7h05")
 slot2 = ExtResource("7_xswsx")
 
-[node name="CharacterAnim" parent="." index="2"]
+[node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
 animation = &"1_side_mov"
 autoplay = ""
@@ -308,5 +303,5 @@ animation = &"boost"
 frame = 1
 frame_progress = 0.422746
 
-[node name="MovementHitbox" parent="." index="5"]
+[node name="MovementHitbox" parent="." index="4"]
 position = Vector2(0, 304.99997)
