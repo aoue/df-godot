@@ -1,5 +1,6 @@
 commit notes:
--added camera script w/ limits
+-imported full Friday spritesheet
+-added flag and adjusted animation timing so that attack animations continue during combo
 
 ======= NOTES
 collision layers/masks notes:
@@ -26,8 +27,9 @@ What is this game's thing? Here is what it is:
 
 1. import unit art for new style test.............................[DONE]
 2. camera lock tech...............................................[DONE]
-3. import rest of unit art for style test.........................[]
-4. add code to manage new style test..............................[]
+3. import rest of unit art for style test.........................[DONE]
+4. add code to manage new style test..............................[DONE]
+5. stop animation canceling?......................................[DONE]
 
 
 . generalize ai unit scene.......................................[]
@@ -41,11 +43,11 @@ What is this game's thing? Here is what it is:
 . test battles with visual overhaul..............................[]
 
 
-- rest of Friday unit sprite sheet:
-	- being hit
-	- melee
-	- ranged
-	- special (what is this? 'forms', but what is that? kicking maybe?)
+- animation canceling is occurring:
+	- currently animation canceling is occurring
+	- the attack animation ends like right away when the unit goes into early exit
+	- can we devise a method where we get to see more of the animation play out?
+	sure: what if the animation continues as long as in combo, unless overwritten by another
 
 - new visual style test:
 	- change code that determines unit direction to match as well.
@@ -239,7 +241,7 @@ start of battle animation:
 -visuals (to consider)
 	-lip sync
 	-blinking
-	-breath
+	-breath, hot air in the cold (13!!!)
 	-pose changing (like sideview, or back.)
 	-small window (for anse's hands, the box, e.g. a necklace, etc)
 	-being able to animate while speaking.

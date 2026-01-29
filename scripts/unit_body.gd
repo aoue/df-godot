@@ -213,6 +213,8 @@ func show_loadout_swap(display_message: String) -> void:
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	
+	## NOTE: currently testing with single 3/4 angle, so disabling front and back rest/move anims.
+	
 	# Stunned?
 	if move_stun_duration > 0.0:
 		character_anim.play("9_being_hit")
@@ -235,6 +237,8 @@ func set_anim(direction: Vector2) -> void:
 			character_anim.play("6b_melee_finisher")
 		# Don't play any other animation while ongoing
 		return
+	if unit.in_combo:
+		return
 	
 	# check x direction for flipping
 	# Set the rest animation corresponding to the vector between yourself and the target location.
@@ -242,7 +246,7 @@ func set_anim(direction: Vector2) -> void:
 	# if y component is greater, then look up/down
 	var look_dir: Vector2 = (get_target_position() - global_position).normalized()
 	var x_power: float = look_dir.x
-	var y_power: float = look_dir.y
+	#var y_power: float = look_dir.y
 	if x_power > 0.0:
 		character_anim.flip_h = false
 	else:
@@ -250,20 +254,22 @@ func set_anim(direction: Vector2) -> void:
 	
 	# set anims according to direction vector.
 	if direction == Vector2.ZERO:
-		if abs(x_power) >= abs(y_power):
-			character_anim.play("0_side_rest")
-		else:
-			if y_power >= 0:
-				character_anim.play("2_front_rest")
-			else:
-				character_anim.play("4_back_rest")
+		character_anim.play("0_side_rest")
+		#if abs(x_power) >= abs(y_power):
+			#character_anim.play("0_side_rest")
+		#else:
+			#if y_power >= 0:
+				#character_anim.play("2_front_rest")
+			#else:
+				#character_anim.play("4_back_rest")
 	else:
-		if abs(x_power) > abs(y_power):
-			character_anim.play("1_side_mov")
-		elif y_power > 0:
-			character_anim.play("3_front_mov")
-		elif y_power < 0:
-			character_anim.play("5_back_mov")
+		character_anim.play("1_side_mov")
+		#if abs(x_power) > abs(y_power):
+			#character_anim.play("1_side_mov")
+		#elif y_power > 0:
+			#character_anim.play("3_front_mov")
+		#elif y_power < 0:
+			#character_anim.play("5_back_mov")
 
 func set_anim_plus(_isBoosting: bool) -> void:
 	# To set animations supporting the unit, but not the character animations themselves.
