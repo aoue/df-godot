@@ -16,5 +16,4 @@ proj_speed = 0.0
 proj_damage = 4.0
 proj_knockback = 5.0
 proj_lifetime = 1.5
-proj_passthrough = true
 proj_scene = ExtResource("2_5h65b")

@@ -54,6 +54,15 @@ a. generalize encounter map instantiation.........................[DONE]
 
 
 - enemy ai behavior:
+	- increased sleep walk distance [done]
+	- try super decreasing the melee area of effect lingers
+		- on hit, start turning off
+
+
+	new 'mobbing' behavior:
+	- want a scenario where there are 4 enemies starting in a group facing player
+	- they all approach the player, and spread out to form a kind of semi circle
+
 	test in both scenarios
 	- 1v8
 	- 2v8

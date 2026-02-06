@@ -121,7 +121,7 @@ func _on_area_entered(_area) -> void:
 	
 	# Hide bullet and collider (unless passthrough)
 	if not passthrough:
-		lifetime = min(lifetime, 0.5)
+		lifetime = min(lifetime, 0.25)
 		#projectile_collider.hide()
 		#projectile_sprite.hide()
 		set_deferred("monitoring", false)

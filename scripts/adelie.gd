@@ -162,8 +162,9 @@ func start_sleep() -> void:
 	#desired_movement_location = position
 	if recalculate_random_offset:
 		var random_walk: Vector2 = Vector2.ZERO
-		var random_direction = calculate_random_offset_rotation(2*PI)
-		random_walk = Vector2(1000.0, 0.0).rotated(random_direction)
+		var random_direction: float = calculate_random_offset_rotation(2*PI)
+		var sleep_walk_distance: float = 1500.0
+		random_walk = Vector2(sleep_walk_distance, 0.0).rotated(random_direction)
 		desired_movement_location = position + random_walk
 
 func start_advance() -> void:
