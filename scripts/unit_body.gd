@@ -210,6 +210,19 @@ func show_loadout_swap(display_message: String) -> void:
 	add_child(floating_loadout_swap_text)
 
 """ Running """
+func flip_unit() -> void:
+	# check x direction for flipping
+	# Set the rest animation corresponding to the vector between yourself and the target location.
+	# if x component is greater, then look to the side
+	# if y component is greater, then look up/down
+	var look_dir: Vector2 = (get_target_position() - global_position).normalized()
+	var x_power: float = look_dir.x
+	#var y_power: float = look_dir.y
+	if x_power > 0.0:
+		character_anim.flip_h = false
+	else:
+		character_anim.flip_h = true
+
 func set_anim(direction: Vector2) -> void:
 	# Control CharacterAnim
 	
@@ -224,6 +237,7 @@ func set_anim(direction: Vector2) -> void:
 	# Attacking?
 	if unit.set_attack_anim and unit.active_move:
 		# Play the corresponding animation
+		flip_unit()
 		unit.set_attack_anim = false
 		if unit.active_move.animation_type == 0:
 			character_anim.play("6_melee")
@@ -240,17 +254,7 @@ func set_anim(direction: Vector2) -> void:
 	if unit.in_combo:
 		return
 	
-	# check x direction for flipping
-	# Set the rest animation corresponding to the vector between yourself and the target location.
-	# if x component is greater, then look to the side
-	# if y component is greater, then look up/down
-	var look_dir: Vector2 = (get_target_position() - global_position).normalized()
-	var x_power: float = look_dir.x
-	#var y_power: float = look_dir.y
-	if x_power > 0.0:
-		character_anim.flip_h = false
-	else:
-		character_anim.flip_h = true
+	flip_unit()
 	
 	# set anims according to direction vector.
 	if direction == Vector2.ZERO:

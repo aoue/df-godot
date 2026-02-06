@@ -1,6 +1,8 @@
 commit notes:
--imported full Friday spritesheet
--added flag and adjusted animation timing so that attack animations continue during combo
+-updated unit visuals flip to allow flipping during a combo
+-imported and set up new encounter map scene (geography)
+-generalized encounter map instantiation
+-added very basic lighting
 
 ======= NOTES
 collision layers/masks notes:
@@ -23,6 +25,11 @@ What is this game's thing? Here is what it is:
 	(you can select this by pressing a number key at any time while the loadout is active/swapping)
 	so you can decide how you want to continue the combo in the moment.
 
+some more mechanically deep things:
+	- you also want to use your movesets to defend yourself
+	- things like the bubble is great for protecting you from counterattacks
+	- things like lingering melee hitboxes are also great at this
+
 =======
 
 1. import unit art for new style test.............................[DONE]
@@ -30,32 +37,36 @@ What is this game's thing? Here is what it is:
 3. import rest of unit art for style test.........................[DONE]
 4. add code to manage new style test..............................[DONE]
 5. stop animation canceling?......................................[DONE]
+a. anim flip fix..................................................[DONE]
+6. new background map art and import..............................[DONE]
+a. generalize encounter map instantiation.........................[DONE]
+7. lighting setup and test........................................[DONE]
 
+. adelie spritesheet art and import..............................[]
+. anse spritesheet art and import................................[]
 
 . generalize ai unit scene.......................................[]
 . recreate units with generalized ai scene.......................[]
-
-. concept art for new sprites style..............................[]
-. Friday spritesheet.............................................[]
 
 [gate]. visual overhaul..........................................[]
 
 . test battles with visual overhaul..............................[]
 
 
-- animation canceling is occurring:
-	- currently animation canceling is occurring
-	- the attack animation ends like right away when the unit goes into early exit
-	- can we devise a method where we get to see more of the animation play out?
-	sure: what if the animation continues as long as in combo, unless overwritten by another
-
-- new visual style test:
-	- change code that determines unit direction to match as well.
-
-- camera lock tech:
-	- make it so camera doesn't show out of bounds
-	- params set by the bg's dimensions
-	- cmaera view should be a combo between player body and mouse positions? 
+- enemy ai behavior:
+	test in both scenarios
+	- 1v8
+	- 2v8
+	movement ai in particular:
+	- the enemy should feel hostile and like they're coming to get you
+	- make the enemy try to spread out and surround you
+	attacking ai in particular:
+	- when sufficient units are going after you:
+		- allow multiple attackers?
+		- decrease attack delay?
+	- instead of giving up attack permission when in_combo ends
+		- could give it as soon as an attack misses completely?
+		- could give it as soon as your first attack completes?
 
 - generalize ai unit scene:
 	current adelie scene into the standard 'ai unit' scene

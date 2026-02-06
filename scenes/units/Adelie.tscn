@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://c2ibc55iafa7i"]
+[gd_scene load_steps=30 format=3 uid="uid://c2ibc55iafa7i"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_ixxd5"]
 [ext_resource type="Script" uid="uid://bmst8a51kia2m" path="res://scripts/adelie.gd" id="2_opqaw"]
@@ -210,6 +210,9 @@ animations = [{
 "speed": 2.0
 }]
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_iwsur"]
+polygon = PackedVector2Array(-127, 413, 65, 429, 89, 461, -135, 445)
+
 [node name="Adelie" node_paths=PackedStringArray("nav") instance=ExtResource("1_ixxd5")]
 position = Vector2(0, -217)
 script = ExtResource("2_opqaw")
@@ -235,6 +238,9 @@ position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_id33x")
 animation = &"0_side_rest"
 autoplay = ""
+
+[node name="CharacterShadow" parent="CharacterAnim" index="0"]
+occluder = SubResource("OccluderPolygon2D_iwsur")
 
 [node name="TimingBar" parent="RingAnim/RingIndicator" index="1"]
 texture_under = ExtResource("6_23lvc")

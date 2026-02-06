@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://cqjpp3tlfdufe"]
+
+[ext_resource type="Script" uid="uid://cbrync17drd3y" path="res://scripts/geography.gd" id="1_0uhrp"]
+[ext_resource type="Texture2D" uid="uid://c26fvr5ybt4vd" path="res://assets/maps/mats/huge mat test.png" id="2_0uhrp"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_nn2ru"]
+vertices = PackedVector2Array(7738.1406, -1360.1016, 7825.789, 3309.039, 6315.8906, 3173.9531, 4234.461, -2214.0703, -4128.8516, 3053.7266, -5674.1016, 3173.2031, -5713.8906, -917.7422, -4730.3203, -893.96094, -2473.4063, -1734.2891, 1348.5703, -2389.9375, 3291.3438, 3510.0078, -3344.6172, 3677.8984)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 7), PackedInt32Array(7, 8, 9, 3, 2, 10, 11, 4)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-5724, -928, -4732, -904, -2476, -1744, 1348, -2400, 4236, -2224, 7748, -1368, 7836, 3320, 6316, 3184, 3292, 3520, -3348, 3688, -4132, 3064, -5684, 3184)])
+
+[sub_resource type="Gradient" id="Gradient_0uhrp"]
+offsets = PackedFloat32Array(0, 0.04607046, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.01897019, 0.01897019, 0.01897019, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nn2ru"]
+gradient = SubResource("Gradient_0uhrp")
+width = 640
+height = 500
+fill_from = Vector2(0, 0.25356126)
+fill_to = Vector2(0.986022, 0.41025642)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_0uhrp"]
+polygon = PackedVector2Array(-6786, 3389, -5152, 3276, -4261, 3905, 2137, 3625, 3702, 3748, 5266, 3337, 6778, 3599, 6787, 6037, -6786, 6020)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_nn2ru"]
+polygon = PackedVector2Array(-6798, -890, -5187, -1251, -3547, -1938, 281, -2617, 3343, -2349, 6754, -1415, 6762, -5986, -6828, -5986)
+
+[node name="Geography" type="Node2D" node_paths=PackedStringArray("sprite_mat")]
+z_index = -1
+script = ExtResource("1_0uhrp")
+sprite_mat = NodePath("SpriteMat")
+
+[node name="SpriteMat" type="Sprite2D" parent="."]
+texture = ExtResource("2_0uhrp")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(14, -78)
+scale = Vector2(0.249385, 0.249385)
+collision_layer = 7
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(-11732.862, -2317.7017)
+scale = Vector2(37.45, 33.1)
+build_mode = 1
+polygon = PackedVector2Array(-410.7303, -66.144745, -161.46553, -126.23215, -62.958847, -181.47379, 284.81256, -249.31439, 667.70374, -240.59201, 1038.6028, -136.8928, 1044.5989, 472.7035, 876.7092, 441.69064, 553.7786, 477.54922, -172.60109, 485.30246, -224.85246, 431.9991, -409.0171, 440.7215)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(-1024, -250)
+navigation_polygon = SubResource("NavigationPolygon_nn2ru")
+
+[node name="LightNodes" type="Node2D" parent="."]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="LightNodes"]
+color = Color(0.598525, 0.59852445, 0.598525, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="LightNodes"]
+position = Vector2(6776, 24.500244)
+scale = Vector2(1.0595411, 1.1932999)
+energy = 0.5
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_nn2ru")
+offset = Vector2(-6400, 0)
+texture_scale = 20.0
+
+[node name="LightOccluder2D BottomWall" type="LightOccluder2D" parent="LightNodes"]
+occluder = SubResource("OccluderPolygon2D_0uhrp")
+
+[node name="LightOccluder2D TopWall" type="LightOccluder2D" parent="LightNodes"]
+occluder = SubResource("OccluderPolygon2D_nn2ru")

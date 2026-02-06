@@ -11,14 +11,15 @@ var cursor_sprite = load("res://assets/ui/encounter_cursor.png")
 @export var Friendly : PackedScene
 
 @export var mainCamera : Camera2D
-@export var geoMap : Geography
+@export var geoMapPacked : PackedScene
+var geoMap : Geography
 
 """ Testing """
 var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 1
+var enemy_count: int = 4
 var call_friendly: bool = false
 var camera_mode: bool = false
 
@@ -27,16 +28,17 @@ func _ready():
 	#Input.set_custom_mouse_cursor(cursor_sprite)
 	create_world.call_deferred()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
-
 func create_world() -> void:
 	# hardcoded
 	# will do things like: load encounter 
 	# (includes geography, units/enemies starting positions, gamerules, etc)
 	GameMother.setup_UI()
 	
+	# Setup world
+	geoMap = geoMapPacked.instantiate()
+	add_child(geoMap)
+	
+	# Setup Units	
 	if call_friendly:
 		friendly_in_world = Friendly.instantiate()
 		friendly_in_world.position = Vector2(-1250, 0)

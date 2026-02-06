@@ -11,6 +11,8 @@ Follows player but avoids map boundaries.
 
 """
 var followThisGuy : UnitBody = null
+var player_followWeight : float = 0.75
+var pointer_followWeight : float = 0.25
 
 func setup(toFollow: UnitBody, x_limit: int, y_limit: int) -> void:
 	followThisGuy = toFollow
@@ -29,5 +31,4 @@ func _physics_process(_delta) -> void:
 	if followThisGuy:
 		# position is a mix between guy and mouse
 		#var mouse_pos = get_global_mouse_position()
-		self.position = ((followThisGuy.position * 3/4) + (get_global_mouse_position() * 1/4)) / 2.0
-		
+		self.position = ((followThisGuy.position * player_followWeight) + (get_global_mouse_position() * pointer_followWeight)) / 2.0		

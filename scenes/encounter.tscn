@@ -5,27 +5,33 @@
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
 [ext_resource type="PackedScene" uid="uid://byjmtg2bm3o3r" path="res://scenes/units/Friendly.tscn" id="4_hov8j"]
 [ext_resource type="PackedScene" uid="uid://by800qhg41i6u" path="res://scenes/ProjectileMother.tscn" id="4_r851w"]
-[ext_resource type="PackedScene" uid="uid://cweuj6pt4a0p8" path="res://scenes/Geography.tscn" id="5_1ojfr"]
+[ext_resource type="PackedScene" uid="uid://cqjpp3tlfdufe" path="res://scenes/Geography_alt.tscn" id="5_ev3kp"]
 [ext_resource type="Script" uid="uid://dcvptdx1sn8kf" path="res://scenes/camera_2d.gd" id="5_ss2td"]
 [ext_resource type="Script" uid="uid://dpw06l1jgqqfs" path="res://scripts/game_mother.gd" id="7_7msjs"]
-[ext_resource type="Texture2D" uid="uid://ftw51jn7m7ou" path="res://assets/ui/encounter_cursor.png" id="8_ev3kp"]
 
-[node name="Encounter" type="Node2D" node_paths=PackedStringArray("mainCamera", "geoMap")]
+[sub_resource type="Environment" id="Environment_ev3kp"]
+background_mode = 3
+background_energy_multiplier = 0.2
+tonemap_mode = 3
+tonemap_exposure = 0.8
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.5
+
+[node name="Encounter" type="Node2D" node_paths=PackedStringArray("mainCamera")]
 y_sort_enabled = true
 script = ExtResource("1_kqml8")
 Anse = ExtResource("2_aaoje")
 Adelie = ExtResource("4_4r8bx")
 Friendly = ExtResource("4_hov8j")
 mainCamera = NodePath("MainCamera")
-geoMap = NodePath("Geography")
+geoMapPacked = ExtResource("5_ev3kp")
 
 [node name="MainCamera" type="Camera2D" parent="."]
-zoom = Vector2(0.18, 0.18)
+zoom = Vector2(0.165, 0.165)
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 script = ExtResource("5_ss2td")
-
-[node name="Geography" parent="." instance=ExtResource("5_1ojfr")]
 
 [node name="ProjectileMother" parent="." instance=ExtResource("4_r851w")]
 
@@ -46,6 +52,5 @@ text = "testo"
 script = ExtResource("7_7msjs")
 logLabel = NodePath("../CanvasGroup/CanvasLayer/Log")
 
-[node name="Red circle" type="Sprite2D" parent="."]
-scale = Vector2(5, 5)
-texture = ExtResource("8_ev3kp")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ev3kp")
