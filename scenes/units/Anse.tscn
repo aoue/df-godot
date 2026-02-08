@@ -199,7 +199,7 @@ slot0 = ExtResource("4_1tntk")
 slot1 = ExtResource("7_n7h05")
 slot2 = ExtResource("7_xswsx")
 
-[node name="CharacterAnim" parent="." index="2"]
+[node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
 animation = &"0_side_rest"
 autoplay = ""
@@ -214,5 +214,5 @@ frame_progress = 0.422746
 position = Vector2(76, 411)
 occluder = SubResource("OccluderPolygon2D_1y1fi")
 
-[node name="MovementHitbox" parent="." index="5"]
+[node name="MovementHitbox" parent="." index="4"]
 position = Vector2(0, 304.99997)

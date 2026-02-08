@@ -58,6 +58,7 @@ color = Color(0.598525, 0.59852445, 0.598525, 1)
 position = Vector2(6776, 24.500244)
 scale = Vector2(1.0595411, 1.1932999)
 energy = 0.5
+range_item_cull_mask = 3
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_nn2ru")
 offset = Vector2(-6400, 0)

@@ -44,6 +44,7 @@ all_loadouts = [NodePath("Loadout0"), NodePath("Loadout1")]
 loadoutID = 1
 
 [node name="CharacterAnim" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 animation = &""
 autoplay = "still"
 

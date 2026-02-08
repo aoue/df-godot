@@ -1,8 +1,5 @@
 commit notes:
--updated unit visuals flip to allow flipping during a combo
--imported and set up new encounter map scene (geography)
--generalized encounter map instantiation
--added very basic lighting
+
 
 ======= NOTES
 collision layers/masks notes:
@@ -41,6 +38,7 @@ a. anim flip fix..................................................[DONE]
 6. new background map art and import..............................[DONE]
 a. generalize encounter map instantiation.........................[DONE]
 7. lighting setup and test........................................[DONE]
+a. tweaked combat parameters (sleep walk).........................[DONE]
 
 . adelie spritesheet art and import..............................[]
 . anse spritesheet art and import................................[]
@@ -52,14 +50,12 @@ a. generalize encounter map instantiation.........................[DONE]
 
 . test battles with visual overhaul..............................[]
 
+- enemy ai sometimes choosing not to continue a combo if slightly off
+	- make them a bit smarter than that
+	- maybe involves updating target position vector after hit?
 
 - enemy ai behavior:
-	- increased sleep walk distance [done]
-	- try super decreasing the melee area of effect lingers
-		- on hit, start turning off
-
-
-	new 'mobbing' behavior:
+	'mobbing' behavior:
 	- want a scenario where there are 4 enemies starting in a group facing player
 	- they all approach the player, and spread out to form a kind of semi circle
 
