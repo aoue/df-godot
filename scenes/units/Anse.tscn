@@ -82,7 +82,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_aq6ft")
 }],
 "loop": true,
-"name": &"0_side_rest",
+"name": &"0_rest",
 "speed": 1.0
 }, {
 "frames": [{
@@ -99,7 +99,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_nqkus")
 }],
 "loop": true,
-"name": &"1_side_mov",
+"name": &"1_move",
 "speed": 4.0
 }, {
 "frames": [{
@@ -110,7 +110,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_qufyk")
 }],
 "loop": false,
-"name": &"6_melee",
+"name": &"2_melee",
 "speed": 4.0
 }, {
 "frames": [{
@@ -118,7 +118,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_6e1gu")
 }],
 "loop": false,
-"name": &"6b_melee_finisher",
+"name": &"2b_melee_finisher",
 "speed": 1.0
 }, {
 "frames": [{
@@ -129,7 +129,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_uhfn0")
 }],
 "loop": false,
-"name": &"7_ranged",
+"name": &"3_ranged",
 "speed": 4.0
 }, {
 "frames": [{
@@ -140,7 +140,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_l78ug")
 }],
 "loop": false,
-"name": &"8_special",
+"name": &"4_special",
 "speed": 4.0
 }, {
 "frames": [{
@@ -151,7 +151,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_3mxlt")
 }],
 "loop": false,
-"name": &"9_being_hit",
+"name": &"5_being_hit",
 "speed": 2.0
 }, {
 "frames": [{
@@ -159,7 +159,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_84glw")
 }],
 "loop": false,
-"name": &"9b_defeated",
+"name": &"5b_defeated",
 "speed": 1.0
 }]
 
@@ -204,7 +204,7 @@ slot2 = ExtResource("7_xswsx")
 
 [node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
-animation = &"9b_defeated"
+animation = &"5b_defeated"
 autoplay = ""
 
 [node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim" index="0"]

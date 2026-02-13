@@ -136,7 +136,7 @@ func go_be_defeated() -> void:
 	# few things to do:
 	# you can never act again, so set that flag
 	defeated = true
-	character_anim.play("9b_defeated")
+	character_anim.play("5b_defeated")
 	# hide hpbar and ring stuff
 	ring.hide()
 	hp_bar.hide()
@@ -230,7 +230,7 @@ func set_anim(direction: Vector2) -> void:
 	
 	# Stunned?
 	if move_stun_duration > 0.0:
-		character_anim.play("9_being_hit")
+		character_anim.play("5_being_hit")
 		return
 	# if dead and death delay passed: play("9b_defeated")
 	
@@ -240,15 +240,15 @@ func set_anim(direction: Vector2) -> void:
 		flip_unit()
 		unit.set_attack_anim = false
 		if unit.active_move.animation_type == 0:
-			character_anim.play("6_melee")
+			character_anim.play("2_melee")
 		elif unit.active_move.animation_type == 1:
-			character_anim.play("7_ranged")
+			character_anim.play("3_ranged")
 		else:
-			character_anim.play("8_special")
+			character_anim.play("4_special")
 		return
 	elif unit.attacking_duration_left > 0.0:
 		if unit.scored_hit and unit.active_move.animation_type == 0:
-			character_anim.play("6b_melee_finisher")
+			character_anim.play("2b_melee_finisher")
 		# Don't play any other animation while ongoing
 		return
 	if unit.in_combo:
@@ -258,7 +258,7 @@ func set_anim(direction: Vector2) -> void:
 	
 	# set anims according to direction vector.
 	if direction == Vector2.ZERO:
-		character_anim.play("0_side_rest")
+		character_anim.play("0_rest")
 		#if abs(x_power) >= abs(y_power):
 			#character_anim.play("0_side_rest")
 		#else:
@@ -267,7 +267,7 @@ func set_anim(direction: Vector2) -> void:
 			#else:
 				#character_anim.play("4_back_rest")
 	else:
-		character_anim.play("1_side_mov")
+		character_anim.play("1_move")
 		#if abs(x_power) > abs(y_power):
 			#character_anim.play("1_side_mov")
 		#elif y_power > 0:

@@ -4,7 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://b2tqdrjsgb6h1" path="res://scenes/projectiles/Circle_projectile.tscn" id="2_51qpy"]
 
 [node name="Move (Shock)" instance=ExtResource("1_refom")]
-max_range = 2.5
+standoff_distance = 3.0
+max_range = 3.5
 fire_table = Array[float]([1.0])
 accuracy_deviation_label = 0
 animation_type = 2

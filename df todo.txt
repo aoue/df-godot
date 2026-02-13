@@ -1,7 +1,7 @@
 commit notes:
--tweaked projectile hitboxes to be rectangles
--imported and set up anse spritesheet
--removed friendly unit scene in prep for ai unit generalization
+-generalized ai units and recreated guys
+-simplified anim code to match overhauled sprites
+-added clip for readme
 
 ======= NOTES
 collision layers/masks notes:
@@ -33,12 +33,10 @@ some more mechanically deep things:
 
 1. generalize move scene for player and ai sharing................[DONE]
 2. anse spritesheet art and import................................[DONE]
+3. generalize ai unit scene.......................................[DONE]
+4. recreate units with generalized ai scene.......................[DONE]
 
 . adelie spritesheet art and import..............................[]
-
-(wait until we have the art for them, might as well.)
-. generalize ai unit scene.......................................[]
-. recreate units with generalized ai scene.......................[]
 
 . combat scene effects...........................................[]
 . combat scene sound.............................................[]

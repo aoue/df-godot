@@ -16,23 +16,15 @@ the stills can get by with just front and back because of their angles.
 you'll have to change the math in do_anim(), but it's easy.
 
 in the combat scene, a unit has the following sprites:
-0_side_rest: 2 sprites, 1 FPS
-1_side_mov: 2/3 sprites, 4 FPS
+0_rest, 1 FPS looped
+1_move, 4 FPS looped
+2_melee, 4 FPS
+2b_melee_finisher, 1 FPS
+3_ranged, 4 FPS
+4_special, 4 FPS
+5_being_hit, 2 FPS
+5b_defeated, 1 FPS
 
-2_front_rest: 2 sprites, 1 FPS
-3_front_rest: 2/3 sprites, 4 FPS
-
-4_back_rest: 2 sprites, 1 FPS
-5_back_move: 2/3 sprites, 4 FPS
-
-6_melee: 2 sprites, 2 FPS
-6b_melee_finisher: 1 sprites, 1 FPS, does not loop
-7_ranged: 2 sprites, 2 FPS
-8_special: 2 sprites, 2 FPS
-
-9_being_hit: 2 frames, 2 FPS, does not loop
-9b_defeated: 1 frame, 1 FPS, does not loop
-total: 28 frames
 
 potential more:
 10a_emote1

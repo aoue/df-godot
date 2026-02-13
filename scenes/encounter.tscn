@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://66rywivm62t1"]
+[gd_scene load_steps=10 format=3 uid="uid://66rywivm62t1"]
 
 [ext_resource type="Script" uid="uid://dbckav3rqo870" path="res://scripts/encounter.gd" id="1_kqml8"]
 [ext_resource type="PackedScene" uid="uid://bheobjlecy41s" path="res://scenes/units/Anse.tscn" id="2_aaoje"]
-[ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
+[ext_resource type="PackedScene" uid="uid://dcuiwgl12qvuy" path="res://scenes/units/Adelie.tscn" id="4_4r8bx"]
+[ext_resource type="PackedScene" uid="uid://d4etgbaksxo23" path="res://scenes/units/Friday.tscn" id="4_ev3kp"]
 [ext_resource type="PackedScene" uid="uid://by800qhg41i6u" path="res://scenes/ProjectileMother.tscn" id="4_r851w"]
 [ext_resource type="PackedScene" uid="uid://cqjpp3tlfdufe" path="res://scenes/Geography_alt.tscn" id="5_ev3kp"]
 [ext_resource type="Script" uid="uid://dcvptdx1sn8kf" path="res://scenes/camera_2d.gd" id="5_ss2td"]
@@ -22,6 +23,7 @@ y_sort_enabled = true
 script = ExtResource("1_kqml8")
 Anse = ExtResource("2_aaoje")
 Adelie = ExtResource("4_4r8bx")
+Friendly = ExtResource("4_ev3kp")
 mainCamera = NodePath("MainCamera")
 geoMapPacked = ExtResource("5_ev3kp")
 
