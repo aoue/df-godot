@@ -37,7 +37,7 @@ func get_attack_input() -> bool:
 	return false
 
 """ Reacting """
-
+# He doesn't do that.
 
 """ Running """
 func get_mouse() -> Vector2:

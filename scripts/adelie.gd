@@ -195,7 +195,6 @@ func start_retreat() -> void:
 	# then multiply by a magnitude of 1000 or whatever
 	var closest_hostile_position: Vector2 = GameMother.get_closest_hostile_position(unit.allegiance, unit.combat_id, position)
 	if closest_hostile_position == Vector2.ZERO:
-		
 		return
 	
 	var retreat_direction: Vector2 = position.direction_to(closest_hostile_position) * -1

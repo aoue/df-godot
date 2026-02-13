@@ -16,8 +16,8 @@ colors = PackedColorArray(0, 0, 0, 1, 0.01897019, 0.01897019, 0.01897019, 1, 1, 
 gradient = SubResource("Gradient_0uhrp")
 width = 640
 height = 500
-fill_from = Vector2(0, 0.25356126)
-fill_to = Vector2(0.986022, 0.41025642)
+fill_from = Vector2(0.104611814, 0.65242165)
+fill_to = Vector2(1, 0.5641026)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_0uhrp"]
 polygon = PackedVector2Array(-6786, 3389, -5152, 3276, -4261, 3905, 2137, 3625, 3702, 3748, 5266, 3337, 6778, 3599, 6787, 6037, -6786, 6020)
@@ -52,7 +52,7 @@ navigation_polygon = SubResource("NavigationPolygon_nn2ru")
 [node name="LightNodes" type="Node2D" parent="."]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="LightNodes"]
-color = Color(0.598525, 0.59852445, 0.598525, 1)
+color = Color(0.6665689, 0.66656864, 0.66656864, 1)
 
 [node name="PointLight2D" type="PointLight2D" parent="LightNodes"]
 position = Vector2(6776, 24.500244)

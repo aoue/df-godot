@@ -11,13 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://t756x0x1sbjf" path="res://assets/ui/ring indicator blue.png" id="7_ngfjm"]
 [ext_resource type="Script" uid="uid://ncn3y2c8qoro" path="res://scripts/hit_reporter.gd" id="8_5clpj"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ieh1m"]
-height = 27.3418
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2xxu"]
+size = Vector2(12.833576, 16.283813)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j2xxu"]
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "stat_labels", "output_label", "utility_label", "speed_label")]
-collision_layer = 0
 script = ExtResource("1_eqrot")
 unit = NodePath("Unit")
 character_anim = NodePath("CharacterAnim")
@@ -49,10 +48,10 @@ animation = &""
 autoplay = "still"
 
 [node name="CharacterShadow" type="LightOccluder2D" parent="CharacterAnim"]
-show_behind_parent = true
 position = Vector2(0, 8)
 
 [node name="RingAnim" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.48235294)
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("4_pvg52")
 
@@ -91,7 +90,7 @@ bodyChief = NodePath("..")
 [node name="ProjectileHitbox" type="CollisionShape2D" parent="AreaHitbox"]
 position = Vector2(0, -89.8695)
 scale = Vector2(-20.8048, 25.711)
-shape = SubResource("CapsuleShape2D_ieh1m")
+shape = SubResource("RectangleShape2D_j2xxu")
 
 [node name="MovementHitbox" type="CollisionShape2D" parent="."]
 scale = Vector2(13.363773, 13.363773)

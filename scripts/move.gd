@@ -8,7 +8,12 @@ enum Move_Anim_Type {MELEE, RANGED, SPECIAL}
 enum Accuracy_Labels {NONE, SLIM, MINOR, MODERATE, MAJOR, SPRAY}
 enum Recoil_Moments {NA, WHEN_PROJECTILE_IS_FIRED, WHEN_PROJECTILE_CONNECTS}
 
-# Usage 
+@export_group("AI")
+@export var miss_delay: float  # forced wait (unmoving) on miss
+@export var min_range: float
+@export var standoff_distance: float
+@export var max_range: float
+
 @export_group("Usage Variables") 
 @export var fire_table : Array[float]
 @export var output_on_fire : float  # added to unit's output when a projectile is fired.
@@ -67,4 +72,15 @@ func spawn_projectiles(proj_spawn_loc : Vector2, direction : Vector2, knockback_
 	return proj
 
 func get_miss_delay() -> float:
-	return 0.0
+	return miss_delay
+
+# AI Helpers
+func get_standoff_distance() -> float:
+	return standoff_distance * Coeff.standoff
+	
+func get_min_range() -> float:
+	return min_range * Coeff.move_range
+	
+func get_max_range() -> float:
+	return max_range * Coeff.move_range
+	

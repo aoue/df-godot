@@ -1,5 +1,7 @@
 commit notes:
-
+-tweaked projectile hitboxes to be rectangles
+-imported and set up anse spritesheet
+-removed friendly unit scene in prep for ai unit generalization
 
 ======= NOTES
 collision layers/masks notes:
@@ -29,30 +31,33 @@ some more mechanically deep things:
 
 =======
 
-1. import unit art for new style test.............................[DONE]
-2. camera lock tech...............................................[DONE]
-3. import rest of unit art for style test.........................[DONE]
-4. add code to manage new style test..............................[DONE]
-5. stop animation canceling?......................................[DONE]
-a. anim flip fix..................................................[DONE]
-6. new background map art and import..............................[DONE]
-a. generalize encounter map instantiation.........................[DONE]
-7. lighting setup and test........................................[DONE]
-a. tweaked combat parameters (sleep walk).........................[DONE]
+1. generalize move scene for player and ai sharing................[DONE]
+2. anse spritesheet art and import................................[DONE]
 
 . adelie spritesheet art and import..............................[]
-. anse spritesheet art and import................................[]
 
+(wait until we have the art for them, might as well.)
 . generalize ai unit scene.......................................[]
 . recreate units with generalized ai scene.......................[]
 
-[gate]. visual overhaul..........................................[]
+. combat scene effects...........................................[]
+. combat scene sound.............................................[]
+
 
 . test battles with visual overhaul..............................[]
+[gate]. visual overhaul..........................................[]
 
-- enemy ai sometimes choosing not to continue a combo if slightly off
-	- make them a bit smarter than that
-	- maybe involves updating target position vector after hit?
+
+- generalize move scene so that player and ai units can use the same stuff
+	- i guess all moves will have ai information attached.
+
+- generalize ai unit scene:
+	current adelie scene into the standard 'ai unit' scene
+
+- add create new units from ai unit scene:
+	- sharp beaked adelie
+	- wired Adelie
+	- friday unit (with art)
 
 - enemy ai behavior:
 	'mobbing' behavior:
@@ -72,13 +77,6 @@ a. tweaked combat parameters (sleep walk).........................[DONE]
 	- instead of giving up attack permission when in_combo ends
 		- could give it as soon as an attack misses completely?
 		- could give it as soon as your first attack completes?
-
-- generalize ai unit scene:
-	current adelie scene into the standard 'ai unit' scene
-
-- add create new units from ai unit scene:
-	- sharp beaked adelie
-	- wired Adelie
 
 - notes for iterating on art:
 	(see new refs folder featuring the work of the amazing [frider])
