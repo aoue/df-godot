@@ -1,6 +1,5 @@
 # df-godot
-Dear Friday, 
+Dear Friday.
 
-how have you been?
-
-<video src="[path/to/video.mp4](https://github.com/aoue/df-godot/blob/main/clips/DF_clip.mov)" width="320" height="240" controls></video>
+https://github.com/user-attachments/assets/f373d2e9-53b4-4603-8846-0c22eb6663d3
+(small WIP clip, in the middle of an overhaul so some things are a little wonky)
