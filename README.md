@@ -3,4 +3,4 @@ Dear Friday,
 
 how have you been?
 
-![game clip](https://github.com/aoue/df-godot/blob/main/clips/DF_clip.mov)
+<video src='https://github.com/aoue/df-godot/blob/main/clips/DF_clip.mov' width=180/>
