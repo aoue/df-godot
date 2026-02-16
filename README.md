@@ -1,5 +1,8 @@
 # df-godot
-Dear Friday, how have you been?
+Dear Friday.
 
-![(https://github.com/aoue/df-godot/blob/main/clips/DF_clip.mkv)]
-(small clip of the combat system I'm working on.)
+
+https://github.com/user-attachments/assets/f373d2e9-53b4-4603-8846-0c22eb6663d3
+
+
+(small WIP clip, in the middle of an overhaul so some things are a little wonky)
