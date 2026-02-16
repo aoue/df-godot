@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cdwps6uouefeu" path="res://scenes/projectiles/Slim_arc_projectile.tscn" id="2_dlk62"]
 
 [node name="Move (Ram)" instance=ExtResource("1_j1jpj")]
-standoff_distance = 4.0
+standoff_distance = 5.0
 max_range = 8.0
 fire_table = Array[float]([0.9])
 accuracy_deviation_label = 0

@@ -19,7 +19,7 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 3
+var enemy_count: int = 5
 var call_friendly: bool = true
 var camera_mode: bool = false
 
@@ -61,6 +61,7 @@ func create_world() -> void:
 		GameMother.add_unit(adelie_in_world)
 		spawn_offset += 500
 		#flip_offset = flip_offset * -1
+	
 	
 	# Once all units are created. Necessary for proper hit register.
 	GameMother.assign_combat_ids()

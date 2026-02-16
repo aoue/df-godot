@@ -1,7 +1,5 @@
 commit notes:
--generalized ai units and recreated guys
--simplified anim code to match overhauled sprites
--added clip for readme
+-added adelie spritesheet and set it up
 
 ======= NOTES
 collision layers/masks notes:
@@ -35,27 +33,19 @@ some more mechanically deep things:
 2. anse spritesheet art and import................................[DONE]
 3. generalize ai unit scene.......................................[DONE]
 4. recreate units with generalized ai scene.......................[DONE]
+5. adelie spritesheet art and import..............................[DONE]
 
-. adelie spritesheet art and import..............................[]
-
+. ai adjustments for smoothness..................................[]
 . combat scene effects...........................................[]
 . combat scene sound.............................................[]
-
 
 . test battles with visual overhaul..............................[]
 [gate]. visual overhaul..........................................[]
 
+. real game scenes...............................................[]
 
-- generalize move scene so that player and ai units can use the same stuff
-	- i guess all moves will have ai information attached.
-
-- generalize ai unit scene:
-	current adelie scene into the standard 'ai unit' scene
-
-- add create new units from ai unit scene:
-	- sharp beaked adelie
-	- wired Adelie
-	- friday unit (with art)
+- add in adelie units spritesheet:
+	(when ready)
 
 - enemy ai behavior:
 	'mobbing' behavior:
@@ -76,26 +66,14 @@ some more mechanically deep things:
 		- could give it as soon as an attack misses completely?
 		- could give it as soon as your first attack completes?
 
-- notes for iterating on art:
-	(see new refs folder featuring the work of the amazing [frider])
-	overall darker and more muted visual style.
-	- new background too
-	- look at sketchbook drawings 
-	- see if we can go for a more serious style (remember people are going to die)
-	- a lot of it is colours and moody lighting
-	you can use Friday as the case study? or maybe anse, idk
-	
-	- consider increasing sprite size to like 1200x or 1500x to allow for more detailed drawings.
-	- and place emphasis on backpacks/engines and hip jets. bulkier, like old infantry designs.
-	- named characters should have hair poking through and unique/strong/distinctive designs.
+	'dash away' behavior:
+	- some kind of detection when you are being combo-ed.
+	- and then you want to dash away asap
 
-- visual overhaul:
-	- the spritesheet for anse will need to be redone at some point. 
-	Probably by adding his hair and changing colours to the brown/tan of his coat.
-	- maybe could do something like tall lined collar but no hood; go back to big collared anse.
-	(symbolic, etc, after all.)
-	Here's a general idea. For generic FSes, they can wear full hoods.
-	But for important characters, they should have their hair visible somewhere.
+	'pick off' behavior:
+	- prefer targeting units that are, on average, distant from their friends
+	- enable/disable this. additional weight during target selection function.
+	should help ally units survive for longer maybe.
 
 - test battles:
 	- anse vs 2/3/4 adelie
@@ -108,14 +86,17 @@ some more mechanically deep things:
 	- battle is very chaotic. slowing it down a little might be beneficial.
 	- it doesn't look cool. sound, better art, effects, will do a lot for this.
 
-- lights and shadows
-	- see documentation page
+- real game scenes:
+	what is the first scene of the game? What do you need to make it.
+	- get started on that.
+	plot out the first few scenes (let's not redo stuff.)
+	- then, make them. This is the best test.
 
 === [visual overhaul gate] ===
 
 - individual ai unit behaviour?
 	- create a different behaviour for ai units from scratch?
-	still keep this in mind. Could make a lot of sense.
+	still keep this in mind, maybe we will want this.
 
 - retreat destination and pathing still needs work:
 	- lots of time units bump against walls

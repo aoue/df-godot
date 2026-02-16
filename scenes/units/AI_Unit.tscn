@@ -49,7 +49,7 @@ animations = [{
 }]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_iwsur"]
-polygon = PackedVector2Array(-127, 413, 65, 429, 89, 461, -135, 445)
+polygon = PackedVector2Array(-200, 328, 216, 288, 232, 424, -176, 472)
 
 [node name="Unit Body" node_paths=PackedStringArray("nav") instance=ExtResource("1_ixxd5")]
 position = Vector2(0, -217)
@@ -69,7 +69,7 @@ all_loadouts = [NodePath("Loadout0")]
 [node name="CharacterAnim" parent="." index="1"]
 position = Vector2(31, -236)
 sprite_frames = SubResource("SpriteFrames_pt67n")
-animation = &"5b_defeated"
+animation = &"0_rest"
 autoplay = ""
 
 [node name="CharacterShadow" parent="CharacterAnim" index="0"]

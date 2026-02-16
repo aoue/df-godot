@@ -63,8 +63,8 @@ var damage_text_slowdown: float = 0.01  # affects the short continued moving eff
 var hp_bar_update_speed: int = 50  # affects the speed at which the hp bar updates
 var attack_colour_dict = {	# colours projectiles and damage numbers according to user.
 	0: Color.DARK_BLUE, 	# used by player.
-	1: Color.CORNFLOWER_BLUE,	# used by ally.
-	2: Color.RED		# used by enemy.
+	1: Color.MEDIUM_BLUE,	# used by ally.
+	2: Color.DARK_RED		# used by enemy.
 }
 
 """Move Animation Helper"""

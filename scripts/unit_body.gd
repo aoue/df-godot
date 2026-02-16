@@ -56,7 +56,8 @@ func _ready() -> void:
 	# Colour ring
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
 	ring.self_modulate = unit_colour
-	ring_indicator.self_modulate = unit_colour
+	#ring_indicator.self_modulate = unit_colour
+	ring_indicator.modulate = unit_colour
 	
 	# Label colours
 	output_label.self_modulate = unit_colour

@@ -204,7 +204,7 @@ slot2 = ExtResource("7_xswsx")
 
 [node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_o17l1")
-animation = &"5b_defeated"
+animation = &"0_rest"
 autoplay = ""
 
 [node name="BoostAnim" type="AnimatedSprite2D" parent="CharacterAnim" index="0"]

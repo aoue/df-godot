@@ -184,4 +184,6 @@ slot2 = ExtResource("6_sn8fd")
 
 [node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_loq4u")
-animation = &"2_melee"
+
+[node name="CharacterShadow" parent="CharacterAnim" index="0"]
+position = Vector2(-15, 197)
