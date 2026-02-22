@@ -19,7 +19,7 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 5
+var enemy_count: int = 4
 var call_friendly: bool = true
 var camera_mode: bool = false
 
@@ -53,14 +53,14 @@ func create_world() -> void:
 		mainCamera.setup(anse_in_world, geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
 	var spawn_offset: int = 0
-	var flip_offset: int = 1
+	var flip_offset: int = 1000
 	for i in range(0, enemy_count):
 		var adelie_in_world: UnitBody = Adelie.instantiate()
-		adelie_in_world.position = Vector2(5000 * flip_offset, spawn_offset)
+		adelie_in_world.position = Vector2(5000 + flip_offset, spawn_offset)
 		add_child(adelie_in_world)
 		GameMother.add_unit(adelie_in_world)
 		spawn_offset += 500
-		#flip_offset = flip_offset * -1
+		flip_offset = flip_offset * -1
 	
 	
 	# Once all units are created. Necessary for proper hit register.

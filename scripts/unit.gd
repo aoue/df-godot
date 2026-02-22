@@ -45,6 +45,7 @@ var early_exit_taken : bool = false
 var display_loadout_swap_message: bool = false
 
 # Combo
+var combo_start_loadout_id: int = -1  # the loadout id the combo started at. Prevents looping.
 var in_combo : bool = false  # marks whether the unit is currently performing a combo or not.
 var combo_cancel : bool = false  # a flag set when the unit is hit to tell it to cancel the combo right away.
 var combo_exit_timer : float = 0.0  # a timer that tracks how long until the unit can go without atttack before their combo ends.
@@ -124,11 +125,13 @@ func update_loadout_status(display_message: bool = true) -> void:
 		
 		# switch loadout
 		loadout.do_not_refresh()
+		combo_start_loadout_id = loadout_pointer
 		loadout_pointer += 1
 		if loadout_pointer == len(all_loadouts):
 			loadout_pointer = 0
 		loadout = all_loadouts[loadout_pointer]
 		loadout_gate_time = Coeff.loadout_cooldown
+				
 	loadout.refresh()
 
 func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
@@ -158,8 +161,13 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	var next_move = loadout.get_next_move()
 	update_loadout_status()
 	
+	# prevent combo loadout looping
+	if combo_start_loadout_id == loadout_pointer:
+		end_combo()
+	
 	# enter 'new active move' state
 	active_move = next_move.instantiate()
+	combo_start_loadout_id = -1
 	
 	# set timers
 	combo_exit_timer = Coeff.combo_timeout_duration
@@ -194,19 +202,11 @@ func fire(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_ob
 	if active_move.spawn_type != 1:
 		spawn_direction = ((unit_pos + offset * ring_indicator_vector) - unit_pos).normalized()
 	var proj_spawn_loc : Vector2 = unit_pos + (spawn_direction * offset)
-	
-	# bug with knockback and spawn_direction
-	# problem: spawn direction is used to specify the direction of knockback as well.
-	
-	#var temp = unit_pos - proj_spawn_loc
-	#print("proj spawn loc relative = " + str(temp))
-	
+
 	# calculate recoil too
 	if recoil_moment == 1:
 		recoil = spawn_direction * active_move.recoil_knockback * Coeff.knockback
-	
-	# instantiate projectile 'proj'
-	
+
 	# give attack priority (but only for on ring moves)
 	if active_move.spawn_type == 1:
 		attack_priority = GameMother.assign_attack_priority()
@@ -224,6 +224,8 @@ func report_hit(hit_body_position : Vector2) -> void:
 	# Called by projectile when it scores a hit to let the unit know what's happened.
 	# (This is for when the unit's projectile hits something, not when the unit is hit.)
 	#print("Scored hit!")
+	#print("combo exit timer = " + str(combo_exit_timer))
+	#print("in combo = " + str(in_combo))
 	scored_hit = true
 	
 	# report knockback, if 'on_hit' type

@@ -42,6 +42,16 @@ func assign_combat_ids() -> void:
 		villain.unit.combat_id = id_value
 		id_value += 1
 
+func get_unit_matching_combat_id(find_this_id: int) -> UnitBody:
+	# returns the unit matching the given unique unit_id
+	for body in heroes:
+		if find_this_id == body.unit.combat_id:
+			return body
+	for body in villains:
+		if find_this_id == body.unit.combat_id:
+			return body
+	return null
+
 """ Assisting AI Decision-Making Functions """
 func assign_attack_priority() -> int:
 	attack_priority_counter += 1
@@ -106,7 +116,25 @@ func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_p
 	else:
 		relevant_unit_list = heroes
 	return get_closest_unit_position(my_combat_id, my_pos, relevant_unit_list)
+
+func get_average_friendly_distance(some_unitbody: UnitBody):
+	# Returns the average distance between the body and all its allied units.
+	var relevant_unit_list: Array[UnitBody]
+	# {PLAYER, ALLY, ENEMY}
+	var user_allegiance: int = some_unitbody.unit.allegiance
+	if user_allegiance == 2:
+		relevant_unit_list = villains
+	else:
+		relevant_unit_list = heroes
+	var average_distance: float = 0.0
+	for body in relevant_unit_list:
+		if some_unitbody == body:
+			continue
+		average_distance += (some_unitbody.position - body.position).length()
 	
+	average_distance = average_distance / relevant_unit_list.size()
+	return average_distance
+
 func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list: Array[UnitBody]) -> Vector2:
 	var closest_position: Vector2 = Vector2.ZERO
 	for check_unit in relevant_unit_list:
@@ -118,28 +146,48 @@ func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list
 	return closest_position
 
 """ Attack Permission Mechanic """
-#func get_attack_permission_delay(attacker_combat_id: int, some_unitbody: UnitBody) -> int:
-	## To stop enemy units from attacking the player literally all at once.
-	## Coordinates attackers instead so they may attack in sequence but not all at once.
-	## The delay is larger the more enemies are trying to attack the same unit.
-	#if some_unitbody:
-		#var unit_id: int = some_unitbody.unit.combat_id
-		#if unit_id not in cotargeting_dict:
-			#return 0
-		#@warning_ignore("integer_division")
-		##return cotargeting_dict[unit_id] * (Coeff.time_between_intention_update)
-		### delay function: delay = sqrt(units cotargeting) * constant (more gradual growth)
-		##return sqrt(cotargeting_dict[unit_id]) * Coeff.attack_delay_per_cotargeter
-		### delay function: delay = (attacker's unit id) % (units cotargeting) * constant
-		#return (attacker_combat_id % max(1, cotargeting_dict[unit_id])) * Coeff.attack_delay_per_cotargeter
-	#return 0
+func clean_attackPermissionDictList(target_unit_id: int) -> void:
+	# removes any defeated units from the list.
+	# further, makes sure that SOMEBODY has attack permission so the ai doesnt get locked.
+	var check_obtained_attack_permission: bool = false
+	if target_unit_id in attackPermission_dict:
+		var i: int = 0
+		while i < attackPermission_dict[target_unit_id].size():
+			if not is_instance_valid(attackPermission_dict[target_unit_id][i]):
+				attackPermission_dict[target_unit_id].remove_at(i)
+			else:
+				check_obtained_attack_permission = check_obtained_attack_permission or attackPermission_dict[target_unit_id][i].obtained_attack_permission
+				i += 1
+			
+		if not check_obtained_attack_permission:
+			# give it to someone, anyone!
+			var chosen_unit: UnitBody = choose_unit_to_receive_attack_permission(target_unit_id)
+			if chosen_unit == null:
+				# then we can remove it from the dictionary; if it's a mistake, it can just add itself back later.
+				attackPermission_dict.erase(target_unit_id)
+			else:
+				chosen_unit.quick_authorize_attack()
 
-func attack_ceded(actor_unitbody, target_unitbody) -> void:
+func choose_unit_to_receive_attack_permission(target_unit_id: int) -> UnitBody:
+	var closest_position: Vector2 = Vector2.ZERO
+	var chosen_unit: UnitBody = null
+	var target_pos: Vector2 = get_unit_matching_combat_id(target_unit_id).position
+	for check_unit in attackPermission_dict[target_unit_id]:
+		if check_unit:
+			var diff: float = (target_pos - check_unit.position).length()
+			if closest_position == Vector2.ZERO or diff < (target_pos - closest_position).length():
+				chosen_unit = check_unit
+				closest_position = check_unit.position
+	return chosen_unit
+
+func attack_ceded(actor_unitbody: UnitBody, target_unitbody: UnitBody, obtained_attack_permission: bool) -> void:
 	"""
 	remove the unitbody with ceder's id from the list
 		for all unitbodies that want to hit the target:
 			find the closest
 		finally, closest.quick_authorize_attack()
+	
+	but only authorize attack if the one ceding had permission!
 	"""
 	#var actor_unit_id: int = actor_unitbody.unit.combat_id
 	#for body in attackPermission_dict[target_unit_id]:
@@ -147,25 +195,19 @@ func attack_ceded(actor_unitbody, target_unitbody) -> void:
 	var target_unit_id: int = target_unitbody.unit.combat_id
 	if target_unit_id not in attackPermission_dict:
 		return
-	var relevant_unit_list = attackPermission_dict[target_unit_id]
 	
-	#print("pre:" + str(relevant_unit_list.size()))
-	relevant_unit_list.erase(actor_unitbody)
-	#print("post:" + str(relevant_unit_list.size()))
+	#print("pre:" + str(attackPermission_dict[target_unit_id].size()))
+	attackPermission_dict[target_unit_id].erase(actor_unitbody)
+	#print("post:" + str(attackPermission_dict[target_unit_id].size()))
 
 	# get the unit in the list that is closest to target_unitbody and give them attack permission
-	var closest_position: Vector2 = Vector2.ZERO
-	var saved_unit: UnitBody = null
-	var target_pos: Vector2 = target_unitbody.position
-	for check_unit in relevant_unit_list:
-		if check_unit:
-			var diff: float = (target_pos - check_unit.position).length()
-			if closest_position == Vector2.ZERO or diff < (target_pos - closest_position).length():
-				saved_unit = check_unit
-				closest_position = check_unit.position
+	var chosen_unit: UnitBody = choose_unit_to_receive_attack_permission(target_unit_id)
 	
-	if saved_unit:
-		saved_unit.quick_authorize_attack()
+	# only quick authorize if the one ceding actually held permission
+	if chosen_unit and obtained_attack_permission:
+		chosen_unit.quick_authorize_attack()
+		
+	clean_attackPermissionDictList(target_unit_id)
 
 func get_attack_permission(actor_unitbody: UnitBody, target_unitbody: UnitBody) -> bool:
 	# Stop enemies from attacking a single target all at once. They have to take their turn, in a way.
@@ -173,24 +215,26 @@ func get_attack_permission(actor_unitbody: UnitBody, target_unitbody: UnitBody) 
 	# Returns false if the asker is not given permission to attack. Does nothing.
 	# (each dict entry[unit id] is tied to a time value. When enough time has passed, give permission to attack.)
 	#print(attackPermission_dict)
+	
 	if target_unitbody:
+		# clean list of units
 		var target_unit_id: int = target_unitbody.unit.combat_id
-		#var current_time: int = Time.get_ticks_msec()
+		
 		# trivial case: unit does not exist
 		if target_unit_id not in attackPermission_dict:
 			attackPermission_dict[target_unit_id] = []
 			attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return true
-		# normal case: unit exists; compare current time to recorded time of last attack permission given
+		# successful case: target unit exists and no one is currently targeting, so you are given permission
 		elif attackPermission_dict[target_unit_id].size() == 0:
 			attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return true
-		else:
-			# then you have permission. Do update the attack permission dict before you go.
-			if actor_unitbody not in attackPermission_dict[target_unit_id]:
-				attackPermission_dict[target_unit_id].append(actor_unitbody)
-			return false
+		# failure case: someone else is already holding permission. 
+		elif actor_unitbody not in attackPermission_dict[target_unit_id]:
+			# your request is refused, put get in the pool before you go.
+			attackPermission_dict[target_unit_id].append(actor_unitbody)
 	
+		clean_attackPermissionDictList(target_unit_id)
 	return false
 
 """ UI Functions """

@@ -6,7 +6,8 @@
 [node name="Move (Ram)" instance=ExtResource("1_j1jpj")]
 standoff_distance = 5.0
 max_range = 8.0
-fire_table = Array[float]([0.9])
+fire_table = Array[float]([1.0])
+output_on_fire = 20.0
 accuracy_deviation_label = 0
 move_speed_add_duration = 0.35
 move_speed_add = 1.75

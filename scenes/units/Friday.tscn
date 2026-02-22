@@ -162,7 +162,8 @@ animations = [{
 
 [node name="Friday" instance=ExtResource("1_loq4u")]
 allowed_to_boost = true
-HP_max_coeff = 40.0
+allowed_to_pick_off = true
+HP_max_coeff = 60.0
 speed_coeff = 1.0
 rotation_coeff = 1.0
 acceleration_coeff = 1.0

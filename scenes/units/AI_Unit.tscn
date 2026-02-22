@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c2ibc55iafa7i"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_ixxd5"]
-[ext_resource type="Script" uid="uid://bmst8a51kia2m" path="res://scripts/adelie.gd" id="2_opqaw"]
+[ext_resource type="Script" uid="uid://bmst8a51kia2m" path="res://scripts/ai_brain.gd" id="2_opqaw"]
 [ext_resource type="Texture2D" uid="uid://x1l4r7wjcnlk" path="res://assets/ui/ring indicator red.png" id="6_23lvc"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_pt67n"]
@@ -56,6 +56,7 @@ position = Vector2(0, -217)
 script = ExtResource("2_opqaw")
 nav = NodePath("NavigationAgent2D")
 allowed_to_boost = false
+allowed_to_pick_off = false
 HP_max_coeff = 15.0
 speed_coeff = 0.25
 rotation_coeff = 0.5

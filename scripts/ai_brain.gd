@@ -9,6 +9,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 
 @export_group("AI")
 @export var allowed_to_boost: bool
+@export var allowed_to_pick_off: bool
 
 """ Saved variables for brain """
 ## Behaviour constants
@@ -29,7 +30,7 @@ var already_chosen_target: bool = false  # to not constantly osciallate between 
 
 var want_to_boost: bool = false
 var want_to_attack: bool = false
-var obtained_attack_permission: bool = true
+var obtained_attack_permission: bool = false
 var attack_permission_delay: int = 0
 
 ## Loaded Move Records
@@ -147,14 +148,14 @@ func quick_cede_attack() -> void:
 	# And thus gamemother can give it to someone else.
 	#print("quick_cede_attack() called")
 	move_loaded = false
-	obtained_attack_permission = false
 	want_to_attack = false
 	
 	my_intention = Intention.RETREAT
 	last_action_timestamp = Time.get_ticks_msec() - Coeff.time_between_intention_update
 	
 	if desired_unit_target:
-		GameMother.attack_ceded(self, desired_unit_target)
+		GameMother.attack_ceded(self, desired_unit_target, obtained_attack_permission)
+	obtained_attack_permission = false
 
 """ Execution Functions """
 
@@ -295,9 +296,14 @@ func choose_target() -> void:
 		if opp == desired_unit_target:  # if you yourself are targeting them, subtract 1.
 			cotargeter_count -= 1
 		var cotargeter_score: float = (1.0 / max(cotargeter_count, 1))
+		
+		# score based on how supported the enemy is (more isolated being better)
+		var pick_off_score: float = 0.0
+		if allowed_to_pick_off:
+			pick_off_score = GameMother.get_average_friendly_distance(opp)
 
 		#print("relative scores are dist | cotargeter: " + str(dist_score) + " | " + str(cotargeter_score))
-		var temp_score: float = (1000 * dist_score) + (cotargeter_score)
+		var temp_score: float = (1000 * dist_score) + (cotargeter_score) + (pick_off_score / 2500)
 		if temp_score > check_target_score:
 			check_target_score = temp_score
 			check_target = opp
@@ -308,6 +314,10 @@ func choose_target() -> void:
 	desired_unit_target = check_target
 
 func time_to_act() -> bool:
+	# prevent units from interrupting themselves in the middle of executing a combo
+	if unit.in_combo:
+		return false
+	
 	var current_time: int = Time.get_ticks_msec()
 	if current_time > last_action_timestamp + Coeff.time_between_intention_update:
 		last_action_timestamp = current_time
@@ -364,8 +374,13 @@ func get_direction_input() -> Vector2:
 	
 	var current_agent_position: Vector2 = position
 	# if you are close enough that you are within standoff distance, don't move any more.
-	if (my_intention == Intention.ADVANCE or my_intention == Intention.SLEEP) and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
-		my_intention = Intention.SLEEP
+	if my_intention == Intention.ADVANCE and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
+		
+		# you are in range now, so convert intention to attack
+		if feel_like_attacking():
+			my_intention = Intention.ATTACK
+		else:
+			my_intention = Intention.SLEEP
 		return Vector2.ZERO
 	# otherwise, just move where you like.
 	return current_agent_position.direction_to(nav.get_next_path_position())
