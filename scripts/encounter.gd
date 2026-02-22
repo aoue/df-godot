@@ -19,9 +19,9 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 4
+var enemy_count: int = 1
 var call_friendly: bool = true
-var camera_mode: bool = false
+var camera_mode: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

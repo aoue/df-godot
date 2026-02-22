@@ -1,8 +1,5 @@
 commit notes:
--fixed bug where ai units were dropping combos because of untimely intention updates
--added mechanic to prevent looping back to the same loadout in a single combo
--added ai unit approach conversion from advance to attack intentions for smoother action
--fixed bug where attack permission could sometimes be beyond the reach of any ai unit and attacking would break down. It's now robust and watertight with central management that will ensure someone always is given permission, if possible.
+-added standoff not just for positioning pre-attack but into attacks themselves for more effective unit action
 
 ======= NOTES
 collision layers/masks notes:
@@ -42,6 +39,7 @@ some more mechanically deep things:
 8. added mechanic to prevent loadout looping......................[DONE]
 9. added ai unit approach conversion from advance to attack.......[DONE]
 10. added ai unit attack permission lockout prevention............[DONE]
+11. Friday facerushing fix pls....................................[]
 
 . create second enemy type (ranged adelie).......................[]
 
@@ -53,9 +51,17 @@ some more mechanically deep things:
 
 . real game scenes...............................................[]
 
+- facerushing:
+	- undesirable. because of standoff calc error?
+
 - visuals next steps:
 	- shadows, try baking them in again. or use a separate sprite in the unit scene.
 	- map backgrounds, walls are good but floors look like a different style
+
+- unit bodies:
+	- expand unit size colliders? could make sense.
+	on contact, we do get maybe a bit too close.
+	use a circle.
 
 - enemy ai behavior:
 	'mobbing' behavior:
@@ -63,6 +69,7 @@ some more mechanically deep things:
 	- they all approach the player, and spread out to form a kind of semi circle
 	idea: take player position
 	- get direction vector, dest = player pos - direction*standoff
+	would this work?
 
 	test in both scenarios
 	- 1v8

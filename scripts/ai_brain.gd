@@ -53,6 +53,7 @@ func update_intention() -> void:
 		return
 	
 	# Reset once-per-intention variables
+	GameMother.attack_ceded(self, desired_unit_target, obtained_attack_permission)
 	recalculate_random_offset = true
 	already_chosen_target = false
 	want_to_boost = false
@@ -160,7 +161,6 @@ func quick_cede_attack() -> void:
 """ Execution Functions """
 
 func start_sleep() -> void:
-	#desired_movement_location = position
 	if recalculate_random_offset:
 		var random_walk: Vector2 = Vector2.ZERO
 		var random_direction: float = calculate_random_offset_rotation(2*PI)
@@ -220,7 +220,15 @@ func start_attack() -> void:
 		return
 	
 	want_to_attack = true
-	desired_movement_location = desired_unit_target.position
+	# add in standoff too
+	# 1. find vector from target to you
+	# 2. normalize it
+	# 3. multiply by standoff
+	# 4. that is your desired movement location, tada
+	var standoff_vector: Vector2 = (desired_unit_target.position - position).normalized() * get_standoff_helper()
+	desired_movement_location = desired_unit_target.position - standoff_vector
+	#print("raw target position = " + str(desired_unit_target.position))
+	#print("with standoff it is = " + str(desired_movement_location))
 		
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
@@ -349,7 +357,7 @@ func load_move_stats() -> void:
 func get_standoff_helper() -> float:
 	if my_intention == Intention.SLEEP:
 		return 100.0
-	if my_intention == Intention.ADVANCE:
+	if my_intention == Intention.ADVANCE or my_intention == Intention.ATTACK:
 		return standoff_distance
 	elif my_intention == Intention.RETREAT:
 		return standoff_distance / 2
@@ -375,13 +383,13 @@ func get_direction_input() -> Vector2:
 	var current_agent_position: Vector2 = position
 	# if you are close enough that you are within standoff distance, don't move any more.
 	if my_intention == Intention.ADVANCE and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
-		
 		# you are in range now, so convert intention to attack
 		if feel_like_attacking():
 			my_intention = Intention.ATTACK
 		else:
 			my_intention = Intention.SLEEP
 		return Vector2.ZERO
+	
 	# otherwise, just move where you like.
 	return current_agent_position.direction_to(nav.get_next_path_position())
 

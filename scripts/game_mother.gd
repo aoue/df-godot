@@ -192,6 +192,8 @@ func attack_ceded(actor_unitbody: UnitBody, target_unitbody: UnitBody, obtained_
 	#var actor_unit_id: int = actor_unitbody.unit.combat_id
 	#for body in attackPermission_dict[target_unit_id]:
 		#if actor_unit_id == body.unit.combat_id:
+	if not target_unitbody:
+		return
 	var target_unit_id: int = target_unitbody.unit.combat_id
 	if target_unit_id not in attackPermission_dict:
 		return
