@@ -19,9 +19,9 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 1
+var enemy_count: int = 0
 var call_friendly: bool = true
-var camera_mode: bool = true
+var camera_mode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -52,7 +52,7 @@ func create_world() -> void:
 		# pass character and map info to camera.
 		mainCamera.setup(anse_in_world, geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
-	var spawn_offset: int = 0
+	var spawn_offset: int = -1000
 	var flip_offset: int = 1000
 	for i in range(0, enemy_count):
 		var adelie_in_world: UnitBody = Adelie.instantiate()

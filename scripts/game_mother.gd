@@ -45,12 +45,24 @@ func assign_combat_ids() -> void:
 func get_unit_matching_combat_id(find_this_id: int) -> UnitBody:
 	# returns the unit matching the given unique unit_id
 	for body in heroes:
-		if find_this_id == body.unit.combat_id:
-			return body
+		if body and find_this_id == body.unit.combat_id:
+				return body
 	for body in villains:
-		if find_this_id == body.unit.combat_id:
-			return body
+		if body and find_this_id == body.unit.combat_id:
+				return body
 	return null
+
+""" Managing the Battle Directly """
+func send_cease_order(relevant_unit_list: Array[UnitBody]) -> void:
+	for body in relevant_unit_list:
+		body.cease()
+
+func is_battle_over() -> bool:
+	if villains.size() == 0 or heroes.size() == 0:
+		send_cease_order(villains)
+		send_cease_order(heroes)	
+		return true
+	return false
 
 """ Assisting AI Decision-Making Functions """
 func assign_attack_priority() -> int:
@@ -69,6 +81,7 @@ func free_unit(flag: int, unit_to_remove: UnitBody) -> void:
 		villains.erase(unit_to_remove)
 	else:
 		heroes.erase(unit_to_remove)
+	is_battle_over()
 
 func update_cotargeting(old_unitbody: UnitBody, new_unitbody: UnitBody) -> void:
 	# remove a targeting occurrence
@@ -171,13 +184,15 @@ func clean_attackPermissionDictList(target_unit_id: int) -> void:
 func choose_unit_to_receive_attack_permission(target_unit_id: int) -> UnitBody:
 	var closest_position: Vector2 = Vector2.ZERO
 	var chosen_unit: UnitBody = null
-	var target_pos: Vector2 = get_unit_matching_combat_id(target_unit_id).position
-	for check_unit in attackPermission_dict[target_unit_id]:
-		if check_unit:
-			var diff: float = (target_pos - check_unit.position).length()
-			if closest_position == Vector2.ZERO or diff < (target_pos - closest_position).length():
-				chosen_unit = check_unit
-				closest_position = check_unit.position
+	var target_guy: UnitBody = get_unit_matching_combat_id(target_unit_id)
+	if target_guy:
+		var target_pos: Vector2 = target_guy.position
+		for check_unit in attackPermission_dict[target_unit_id]:
+			if check_unit:
+				var diff: float = (target_pos - check_unit.position).length()
+				if closest_position == Vector2.ZERO or diff < (target_pos - closest_position).length():
+					chosen_unit = check_unit
+					closest_position = check_unit.position
 	return chosen_unit
 
 func attack_ceded(actor_unitbody: UnitBody, target_unitbody: UnitBody, obtained_attack_permission: bool) -> void:
@@ -231,6 +246,10 @@ func get_attack_permission(actor_unitbody: UnitBody, target_unitbody: UnitBody) 
 		elif attackPermission_dict[target_unit_id].size() == 0:
 			attackPermission_dict[target_unit_id].append(actor_unitbody)
 			return true
+		# successful case 2: target exists and someone is in it--you!
+		elif attackPermission_dict[target_unit_id].size() == 1:
+			if attackPermission_dict[target_unit_id][0].unit.combat_id == actor_unitbody.unit.combat_id:
+				return true
 		# failure case: someone else is already holding permission. 
 		elif actor_unitbody not in attackPermission_dict[target_unit_id]:
 			# your request is refused, put get in the pool before you go.

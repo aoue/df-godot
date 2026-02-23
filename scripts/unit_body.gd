@@ -42,8 +42,10 @@ var boost_cooldown: float = 0.0
 var move_stun_duration: float = 0.0  # remaining stun duration on unit, impedes movement.
 var hit_stun_duration: float = 0.0  # remaining stun duration on unit, impedes attacking.
 
-# Moveset
-#@export var move1: move
+# Stopping the action
+var grace_note : int  # stops action at the start.
+var cease_note: int  # stops action at the end, slightly delayed from last unit going down.
+
 
 """ Setup """
 func _ready() -> void:
@@ -52,7 +54,10 @@ func _ready() -> void:
 	hp_bar.value = unit.HP_max
 	speed = speed_coeff * Coeff.speed
 	acceleration = acceleration_coeff * Coeff.acceleration
-		
+	@warning_ignore("integer_division")
+	grace_note = Time.get_ticks_msec() + Coeff.time_between_intention_update / 4
+	cease_note = -1
+	
 	# Colour ring
 	var unit_colour: Color = Coeff.attack_colour_dict[unit.allegiance]
 	ring.self_modulate = unit_colour
@@ -70,9 +75,14 @@ func _ready() -> void:
 		set_collision_layer_value(3, true)
 		set_collision_mask_value(3, true)
 
+func must_cease() -> bool:
+	if cease_note != -1 and Time.get_ticks_msec() > cease_note:
+		return true
+	return false
+
 """ Input """
 func get_direction_input_helper() -> Vector2:
-	if move_stun_duration > 0.0:
+	if move_stun_duration > 0.0 or must_cease():
 		return Vector2.ZERO
 	#if boost_duration > 0.0:
 		#return boost_vector
@@ -86,7 +96,7 @@ func get_boost_input(_direction: Vector2) -> bool:
 	return false
 
 func get_attack_input_helper() -> bool:	
-	if hit_stun_duration > 0.0:
+	if hit_stun_duration > 0.0 or must_cease():
 		return false
 	if unit.output_exceeding_limit():
 		return false
@@ -146,6 +156,10 @@ func go_be_defeated() -> void:
 	# turn off collision for movement and projectiles
 	set_collision_layer_value(1, false)
 	set_collision_mask_value(1, false)
+
+func cease() -> void:
+	# stops everything, for ending the battle.
+	cease_note = Time.get_ticks_msec() + Coeff.time_between_intention_update
 
 func get_delay_between_actions() -> float:
 	return 0.0
@@ -358,6 +372,10 @@ func pass_duration(delta : float) -> void:
 	hit_stun_duration = max(0, hit_stun_duration - delta)
 
 func _physics_process(delta: float) -> void:
+	if Time.get_ticks_msec() < grace_note:
+		go_anim(delta, Vector2.ZERO, false)
+		return
+	
 	if defeated:
 		defeated_disappear_timer -= delta
 		go_move(Vector2.ZERO, 0, acceleration)  # show the knockback still, though.

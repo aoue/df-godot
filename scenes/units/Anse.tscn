@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bheobjlecy41s"]
+[gd_scene load_steps=32 format=3 uid="uid://bheobjlecy41s"]
 
 [ext_resource type="PackedScene" uid="uid://8f6wd8hvqtfp" path="res://scenes/_UnitBody.tscn" id="1_8i7ei"]
 [ext_resource type="Script" uid="uid://bimatxb4m50eb" path="res://scripts/anse.gd" id="2_uger1"]
@@ -181,7 +181,10 @@ animations = [{
 polygon = PackedVector2Array(-280, 151, 100, 83, 165, 281, -307, 333)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1y1fi"]
-size = Vector2(20, 30.704727)
+size = Vector2(16.15012, 30.704727)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1y1fi"]
+radius = 19.5317
 
 [node name="Anse" node_paths=PackedStringArray("boost_anim") instance=ExtResource("1_8i7ei")]
 position = Vector2(0, -451)
@@ -218,10 +221,12 @@ position = Vector2(76, 411)
 occluder = SubResource("OccluderPolygon2D_1y1fi")
 
 [node name="ProjectileHitbox" parent="AreaHitbox" index="0"]
-position = Vector2(7.999998, -66.6448)
+visible = false
+position = Vector2(9.000004, -66.644775)
 rotation = -3.1415925
 scale = Vector2(20.8048, -25.711)
 shape = SubResource("RectangleShape2D_1y1fi")
 
 [node name="MovementHitbox" parent="." index="4"]
-position = Vector2(0, 304.99997)
+position = Vector2(4.999998, 96.999985)
+shape = SubResource("CircleShape2D_1y1fi")

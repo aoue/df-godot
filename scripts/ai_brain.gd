@@ -17,12 +17,11 @@ var my_intention : Intention = Intention.SLEEP  # records the current intention 
 var last_action_timestamp : int = 0  # records the time (in ms) since the unit last acted
 var time_between_updates : int = 10  # for updating during the same intention (in ms)
 var last_update_timestamp : int = 0  # records the time (in ms) since the last update
-var grace_note : int = Coeff.time_between_intention_update
 
 ## Navigation
 var desired_unit_target : UnitBody = null
 var desired_movement_location : Vector2 = Vector2.ZERO
-var desired_distance_from_allies : int = 2000
+var desired_distance_from_allies : int = 3000
 
 var recalculate_random_offset : bool = false  # to not constantly recalculate random elements. Once per intention is fine.
 var saved_random_offset: float = 0.0
@@ -276,12 +275,16 @@ func calculate_ally_offset_vector() -> Vector2:
 	var closest_friendly_position: Vector2 = GameMother.get_closest_friendly_position(unit.allegiance, unit.combat_id, position)
 	if closest_friendly_position != Vector2.ZERO:
 		closest_friendly_mag = (position - closest_friendly_position).length() * desired_distance_from_allies
+		#closest_friendly_mag = desired_distance_from_allies
 		direction_away = global_position.direction_to(closest_friendly_position)
-		# rotate by 90
+		# rotate by a random value in range PI/4 to 3 PI/4 (45 degrees to 135 degrees)
+		#var random_rotation: float = GameMother.rng.randf_range(PI/4, 3 * PI/4)
+		#direction_away_rotated = direction_away.rotated(random_rotation)
 		direction_away_rotated = direction_away.rotated(PI/2)
 	
 	# calculate position with respect to target's position, move standoff, and closeness to allies
 	var spacing_vector: Vector2 = (direction_away_rotated * closest_friendly_mag)
+	#print(str(spacing_vector))
 	return spacing_vector
 
 func choose_target() -> void:
@@ -376,10 +379,7 @@ func end_combo_ai() -> void:
 	quick_cede_attack()
 
 func get_direction_input() -> Vector2:
-	# Returns the vector that the unitBody wants to move in
-	if Time.get_ticks_msec() < grace_note:
-		return Vector2.ZERO
-	
+	# Returns the vector that the unitBody wants to move in	
 	var current_agent_position: Vector2 = position
 	# if you are close enough that you are within standoff distance, don't move any more.
 	if my_intention == Intention.ADVANCE and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
@@ -401,6 +401,7 @@ func get_target_position() -> Vector2:
 		return nav.get_next_path_position()
 	
 func get_attack_input() -> bool:
+	#return false  # for testing, uncomment for peaceful guys.
 	if want_to_attack:
 		return true
 	return false

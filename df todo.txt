@@ -1,5 +1,8 @@
 commit notes:
--added standoff not just for positioning pre-attack but into attacks themselves for more effective unit action
+-expanded unit body colliders to have less overlap
+-added grace note on battle start
+-added cease note on battle end
+-adjusted attack permission to account for one more case, done with ai behavior for now
 
 ======= NOTES
 collision layers/masks notes:
@@ -39,7 +42,11 @@ some more mechanically deep things:
 8. added mechanic to prevent loadout looping......................[DONE]
 9. added ai unit approach conversion from advance to attack.......[DONE]
 10. added ai unit attack permission lockout prevention............[DONE]
-11. Friday facerushing fix pls....................................[]
+11. Friday facerushing fix pls....................................[DONE]
+12. expand unitbodies for better collision........................[DONE]
+13. grace note for everyone.......................................[DONE]
+14. end battle signal.............................................[DONE]
+15. enemy ai mobbing behavior.....................................[DONE]
 
 . create second enemy type (ranged adelie).......................[]
 
@@ -51,48 +58,28 @@ some more mechanically deep things:
 
 . real game scenes...............................................[]
 
-- facerushing:
-	- undesirable. because of standoff calc error?
 
 - visuals next steps:
 	- shadows, try baking them in again. or use a separate sprite in the unit scene.
 	- map backgrounds, walls are good but floors look like a different style
 
-- unit bodies:
-	- expand unit size colliders? could make sense.
-	on contact, we do get maybe a bit too close.
-	use a circle.
-
-- enemy ai behavior:
-	'mobbing' behavior:
-	- want a scenario where there are 4 enemies starting in a group facing player
-	- they all approach the player, and spread out to form a kind of semi circle
-	idea: take player position
-	- get direction vector, dest = player pos - direction*standoff
-	would this work?
-
-	test in both scenarios
-	- 1v8
-	- 2v8
-
-- ranged adelie:
-	swings cables? throws ice pieces/snowballs?
-	- could call it adelie cabler OR adelie snowballer
-	should have different spritesheet though, so you easily tell.
-	maybe a recolour is enough? nah, draw something totally new.
+- more enemies:
+	recolor and draw something new.
 	- the cabler is dragging cables from a wing behind it. Beat up.
-	- or the snowballer is pushing a ball of snow in front of it always.
+	[adelie cabler]
+	1 loadout:
+	- move 1: cable fling, sends out some slow projectiles
+	- move 2: shock, creates a shock area right in front of them, like the shock move
+	so they fire, then create a field to defend themselves
 
-- test battles:
-	- anse vs 2/3/4 adelie
-	- anse + friendly vs 2/3/4 adelie
-	check the feeling...
-	honestly i can't tell right now. There's some good stuff, some bad stuff.
-	it clearly feels incomplete right now. Part is mechanics, part is how it looks.
-	i definitely think some issues are:
-	- combos are not especially satisfying to pull off. No mechanical challenge.
-	- battle is very chaotic. slowing it down a little might be beneficial.
-	- it doesn't look cool. sound, better art, effects, will do a lot for this.
+	[adelie snowroller]
+	1 loadout:
+	- move 1: snowball, sends out a slow and large projectile, a big ball of snow
+
+	[emperor adelie]
+	(actually not an adelie, but the name is too strong. emperor penguin guy)
+	bigger and tougher. hits harder, idk.
+	
 
 - real game scenes:
 	what is the first scene of the game? What do you need to make it.

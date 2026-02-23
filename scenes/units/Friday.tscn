@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://d4etgbaksxo23"]
+[gd_scene load_steps=26 format=3 uid="uid://d4etgbaksxo23"]
 
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/AI_Unit.tscn" id="1_loq4u"]
 [ext_resource type="PackedScene" uid="uid://7o4ppb3nmby7" path="res://scenes/moves/Ram.tscn" id="2_mcwj3"]
@@ -160,6 +160,12 @@ animations = [{
 "speed": 1.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gdof5"]
+size = Vector2(14.996538, 31.104874)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gdof5"]
+radius = 18.557632
+
 [node name="Friday" instance=ExtResource("1_loq4u")]
 allowed_to_boost = true
 allowed_to_pick_off = true
@@ -188,3 +194,13 @@ sprite_frames = SubResource("SpriteFrames_loq4u")
 
 [node name="CharacterShadow" parent="CharacterAnim" index="0"]
 position = Vector2(-15, 197)
+
+[node name="ProjectileHitbox" parent="AreaHitbox" index="0"]
+position = Vector2(16, -309.99927)
+rotation = -3.1415925
+scale = Vector2(20.8048, -25.711)
+shape = SubResource("RectangleShape2D_gdof5")
+
+[node name="MovementHitbox" parent="." index="4"]
+position = Vector2(15.999999, -151)
+shape = SubResource("CircleShape2D_gdof5")

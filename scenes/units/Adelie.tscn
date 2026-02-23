@@ -1,7 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://dcuiwgl12qvuy"]
+[gd_scene load_steps=19 format=3 uid="uid://dcuiwgl12qvuy"]
 
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/AI_Unit.tscn" id="1_76e3r"]
-[ext_resource type="PackedScene" uid="uid://7o4ppb3nmby7" path="res://scenes/moves/Ram.tscn" id="3_iwsur"]
+[ext_resource type="PackedScene" uid="uid://naeb44cois0d" path="res://scenes/moves/Shock.tscn" id="3_q18xv"]
 [ext_resource type="Texture2D" uid="uid://ytxnp47pc7vt" path="res://assets/anims/adelie sheet.png" id="4_q18xv"]
 [ext_resource type="PackedScene" uid="uid://bg324cc2cyi5h" path="res://scenes/moves/Rifle.tscn" id="4_xra2p"]
 
@@ -129,15 +129,30 @@ animations = [{
 "speed": 1.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q18xv"]
+size = Vector2(14.996538, 22.39896)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q18xv"]
+radius = 14.3672
+
 [node name="Unit Body" instance=ExtResource("1_76e3r")]
 
 [node name="Loadout0" parent="Unit" index="0"]
-slot0 = ExtResource("3_iwsur")
-slot1 = ExtResource("4_xra2p")
-slot2 = ExtResource("3_iwsur")
+slot0 = ExtResource("4_xra2p")
+slot1 = ExtResource("3_q18xv")
 
 [node name="CharacterAnim" parent="." index="1"]
 sprite_frames = SubResource("SpriteFrames_wsjq1")
 
 [node name="CharacterShadow" parent="CharacterAnim" index="0"]
 position = Vector2(89, 205)
+
+[node name="ProjectileHitbox" parent="AreaHitbox" index="0"]
+position = Vector2(27.999992, 111.240204)
+rotation = -3.1415925
+scale = Vector2(20.8048, -25.711)
+shape = SubResource("RectangleShape2D_q18xv")
+
+[node name="MovementHitbox" parent="." index="4"]
+position = Vector2(32, 169.00002)
+shape = SubResource("CircleShape2D_q18xv")

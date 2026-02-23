@@ -12,9 +12,9 @@
 [ext_resource type="Script" uid="uid://ncn3y2c8qoro" path="res://scripts/hit_reporter.gd" id="8_5clpj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j2xxu"]
-size = Vector2(12.833576, 16.283813)
+size = Vector2(12.833576, 23.747143)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_j2xxu"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_biwqe"]
 
 [node name="Unit Body" type="CharacterBody2D" node_paths=PackedStringArray("unit", "character_anim", "hp_bar", "timing_bar", "ring", "ring_indicator", "stat_labels", "output_label", "utility_label", "speed_label")]
 script = ExtResource("1_eqrot")
@@ -94,7 +94,7 @@ shape = SubResource("RectangleShape2D_j2xxu")
 
 [node name="MovementHitbox" type="CollisionShape2D" parent="."]
 scale = Vector2(13.363773, 13.363773)
-shape = SubResource("CircleShape2D_j2xxu")
+shape = SubResource("CircleShape2D_biwqe")
 
 [node name="Stat Labels" type="Node2D" parent="."]
 position = Vector2(-387, -155)
