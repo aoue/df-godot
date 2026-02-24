@@ -1,6 +1,7 @@
 commit notes:
--changed ai retreat logic to be more unpredictable
--fixed oversight where unit move params considered for targeting were not updated properly during combos, leading to units using moves they were wildly out of range for.
+-allow for ai target switching behavior
+-loosen angle reqs when a unit is mid combo
+-added real quit button
 
 ======= NOTES
 collision layers/masks notes:
@@ -46,34 +47,42 @@ some more mechanically deep things:
 14. end battle signal.............................................[DONE]
 15. enemy ai mobbing behavior.....................................[DONE]
 16. better retreating.............................................[DONE]
-17. stricter usage parameters.....................................[]
+17. stricter move usage parameters................................[DONE]
+19. allow for ai target switching behavior........................[DONE]
+20. loosen angle reqs when a unit is mid combo....................[DONE]
 
+
+. combat audio 101...............................................[prog]
+. visual next steps..............................................[]
 . create second enemy type (adelie cabler).......................[]
 
-. combat scene effects...........................................[]
-. combat scene sound.............................................[]
 
-. test battles with visual overhaul..............................[]
-[gate]. visual overhaul..........................................[]
+- real game scenes:
+	what is the first scene of the game? What do you need to make it.
+	- get started on that.
+	plot out the first few scenes (let's not redo stuff.)
+	- then, make them. This is the best test.
 
-. real game scenes...............................................[]
+=== [real scenes gate] ===
 
-
-- stricter combos:
-	- dont just always follow up
-	- if next move not in range, then dont use it
-	test with Friday: rifle into snapswing (should stop after rifle at range)
-	- this should be handled directly in start_attack(), since it gets called all the time
-	right?
-	- issue is max range is not getting updated after first move ends.
+- combat audio 101:
+	AudioStreamPlayer2D object does this for effects, and also panning
+	- you would attach this to objects, like units or obstacles/etc in geography.
+	- they say that .wav is best for short SEs because they load faster
+	unitSoundPlayer: component attached to unitbody:
+	when/what should it play?
+	- a quiet movement sound if just moving
+	- a move-dependent sound on move use
+	- a unit-dependent sound when getting hit
 
 - visuals next steps:
 	- shadows, try baking them in again. or use a separate sprite in the unit scene.
-	- map backgrounds, walls are good but floors look like a different style
+	- map backgrounds, floors look like a different style. 
+	Try drawing smaller and with direct ref to units.
 
 - more enemies:
 	recolor and draw something new.
-	- the cabler is dragging cables from a wing behind it. Beat up.
+	- the cabler is dragging cables from a wing behind it, bit beaten up.
 	[adelie cabler]
 	1 loadout:
 	- move 1: cable fling, sends out some slow projectiles
@@ -87,59 +96,6 @@ some more mechanically deep things:
 	[emperor adelie]
 	(actually not an adelie, but the name is too strong. emperor penguin guy)
 	bigger and tougher. hits harder, idk.
-	
-
-- real game scenes:
-	what is the first scene of the game? What do you need to make it.
-	- get started on that.
-	plot out the first few scenes (let's not redo stuff.)
-	- then, make them. This is the best test.
-
-=== [visual overhaul gate] ===
-
-- individual ai unit behaviour?
-	- create a different behaviour for ai units from scratch?
-	still keep this in mind, maybe we will want this.
-
-- retreat destination and pathing still needs work:
-	- lots of time units bump against walls
-	- change possible angle? or give bias towards the center?
-	- or: if near edge of map, then select retreat spot differently
-
-- stricter ai patterns?:
-	- when a guy gets hit, immediately force swap into retreat intention (doing this)
-	- cannot get the same intention twice in a row (could try doing this)
-		- could force units into sleep more, so they don't just stand there.
-	- if start in standoff, then sleep intention instead for the wander
-
-- Friday unit:
-	- object
-	- spritesheet
-	- moveset
-
-- another combo mechanic (low priority):
-	- a single loadout can only be used a single time in a combo
-	- you can't loop back around to the same loadout twice in one go
-
-- combat feeling review:
-	- it's not enough to just work, it must also feel right.
-	we will be able to judge it feels right if we're in a situation where:
-	- we have a scene in a pretty encounter map with anse + Friday vs like 4 adelie.
-	- also test a scene against a more boss-like enemy. Faster to react, does combos, etc
-	do these feel good?
-	
-	important things:
-	- does it feel slick? like you know what's happening? what's going on?
-	- moves should have weight behind them. it should feel like: Bang! to bang! to bang!
-	each thing you do, you're doing on purpose, and the game clearly reacts to you doing it.
-
-sound overhaul:
-	lots of things need sound:
-	- units moving
-	- environment (wind, snow, rain, creaking, etc)
-	- unit using a move
-	- unit being hit by a move
-	- music
 
 - combo routing factors:
 	in baldr sky, move order is quite technical because of launching and knockdown

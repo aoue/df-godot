@@ -11,6 +11,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 @export var allowed_to_boost: bool
 @export var allowed_to_pick_off: bool
 @export var allowed_to_actively_dodge: bool
+@export var allowed_to_target_swap: bool
 
 """ Saved variables for brain """
 ## Behaviour constants
@@ -228,7 +229,6 @@ func start_attack() -> void:
 		#my_intention = Intention.SLEEP
 		start_sleep()
 		return
-	print("start attack caleld")
 	want_to_attack = true
 	# add in standoff too
 	# 1. find vector from target to you
@@ -243,9 +243,6 @@ func start_attack() -> void:
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
 	if (dist_to_target < max_range):
-		print("i confirm dist to target is less than max range")
-		print(dist_to_target)
-		print(max_range)
 		want_to_attack = true
 	else:
 		want_to_attack = false
@@ -255,9 +252,14 @@ func start_attack() -> void:
 	var vector_from_unit_to_target = global_position.direction_to(desired_unit_target.position)
 	var own_direction_vector = get_ring_indicator_vector()
 	var angle_from_self_to_target = vector_from_unit_to_target.dot(own_direction_vector)
-	#if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
-	if want_to_attack and angle_from_self_to_target < 0.99:  # (angle IS NOT narrower than [very narrow])
+	
+	# if not in combo, much stricter angle requirement
+	var angle_req: float = 0.99  # (angle IS NOT narrower than [very narrow])
+	if unit.in_combo:
+		angle_req = 0.7
+	if want_to_attack and angle_from_self_to_target < angle_req:  
 		want_to_attack = false
+		
 	
 func feeling_threatened() -> bool:
 	# basically, if someone is within a certain distance from you
@@ -391,6 +393,8 @@ func validate_target() -> void:
 func report_hit_ai() -> void:
 	# you hit, so start prepping for the next move
 	load_move_stats()
+	if allowed_to_target_swap:
+		choose_target()
 
 func being_hit_ai() -> void:
 	getting_beat = true
@@ -416,7 +420,7 @@ func get_direction_input() -> Vector2:
 
 func get_target_position() -> Vector2:
 	# Returns the vector that the unitBody wants to look at
-	if desired_unit_target and my_intention == Intention.ATTACK:  # if you're attacking, look em in the eye
+	if desired_unit_target and (my_intention == Intention.ATTACK or unit.in_combo):  # if you're attacking, look em in the eye
 		return desired_unit_target.position
 	else:  # otherwise, look where you're going
 		return nav.get_next_path_position()

@@ -1,9 +1,10 @@
-[gd_scene load_steps=25 format=3 uid="uid://d4etgbaksxo23"]
+[gd_scene load_steps=26 format=3 uid="uid://d4etgbaksxo23"]
 
 [ext_resource type="PackedScene" uid="uid://c2ibc55iafa7i" path="res://scenes/units/AI_Unit.tscn" id="1_loq4u"]
 [ext_resource type="Texture2D" uid="uid://dn62r8cwh8emx" path="res://assets/anims/friday sheet.png" id="2_rh1iu"]
 [ext_resource type="PackedScene" uid="uid://c34vmtosa8veg" path="res://scenes/moves/Snap_swing.tscn" id="3_areiy"]
 [ext_resource type="PackedScene" uid="uid://bg324cc2cyi5h" path="res://scenes/moves/Rifle.tscn" id="4_gdof5"]
+[ext_resource type="PackedScene" uid="uid://bsv1rx2hbytve" path="res://scenes/moves/Pandora.tscn" id="4_sn8fd"]
 [ext_resource type="PackedScene" uid="uid://naeb44cois0d" path="res://scenes/moves/Shock.tscn" id="5_gdof5"]
 [ext_resource type="PackedScene" uid="uid://c45oj7xo480yr" path="res://scenes/moves/Beam.tscn" id="6_sn8fd"]
 
@@ -169,6 +170,7 @@ radius = 18.557632
 allowed_to_boost = true
 allowed_to_pick_off = true
 allowed_to_actively_dodge = true
+allowed_to_target_swap = true
 HP_max_coeff = 60.0
 speed_coeff = 1.0
 rotation_coeff = 1.0
@@ -176,10 +178,12 @@ acceleration_coeff = 1.0
 
 [node name="Unit" parent="." index="0"]
 unitName = "Friday"
+allegiance = 1
 
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("4_gdof5")
 slot1 = ExtResource("3_areiy")
+slot2 = ExtResource("4_sn8fd")
 
 [node name="Loadout1" parent="Unit" index="1"]
 slot0 = ExtResource("4_gdof5")

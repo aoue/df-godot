@@ -5,13 +5,21 @@ var cursor_sprite = load("res://assets/ui/encounter_cursor.png")
 #@export_group("World")
 #@export var proj_mother : Node2D
 
+
+@export var mainCamera : Camera2D
+@export var musicPlayer: AudioStreamPlayer
+@export var uiManager: EncounterUI
+
+""" Specific encounter setup """
+@export var levelSong : AudioStream
+@export var geoMapPacked : PackedScene
+
 @export_group("Units")
 @export var Anse : PackedScene
 @export var Adelie : PackedScene
 @export var Friendly : PackedScene
 
-@export var mainCamera : Camera2D
-@export var geoMapPacked : PackedScene
+
 var geoMap : Geography
 
 """ Testing """
@@ -19,7 +27,7 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 0
+var enemy_count: int = 4
 var call_friendly: bool = true
 var auto_mode: bool = false
 
@@ -38,6 +46,8 @@ func create_world() -> void:
 	geoMap = geoMapPacked.instantiate()
 	add_child(geoMap)
 	GameMother.setup_map_info(geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
+	
+	musicPlayer.play()
 	
 	# Setup Units	
 	if call_friendly:

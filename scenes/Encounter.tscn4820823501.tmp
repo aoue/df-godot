@@ -20,12 +20,11 @@ glow_enabled = true
 glow_normalized = true
 glow_bloom = 0.5
 
-[node name="Encounter" type="Node2D" node_paths=PackedStringArray("mainCamera", "musicPlayer", "uiManager")]
+[node name="Encounter" type="Node2D" node_paths=PackedStringArray("mainCamera", "musicPlayer")]
 y_sort_enabled = true
 script = ExtResource("1_kqml8")
 mainCamera = NodePath("MainCamera")
 musicPlayer = NodePath("AudioStreamPlayer")
-uiManager = NodePath("Encounter UI")
 levelSong = ExtResource("9_ss2td")
 geoMapPacked = ExtResource("5_ev3kp")
 Anse = ExtResource("2_aaoje")

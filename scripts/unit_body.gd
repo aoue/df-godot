@@ -311,7 +311,7 @@ func go_boost(direction_value: Vector2) -> void:
 	boost_duration = Coeff.boost_full_duration
 	boost_cooldown = Coeff.boost_full_cooldown + Coeff.boost_full_duration  # wow that's pretty smart (it was my idea)
 
-func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float) -> void:
+func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float, delta: float) -> void:
 	if direction_input.length() > 0:
 		velocity = velocity.lerp(direction_input * speed_input, acceleration_input)
 	else:
@@ -330,6 +330,7 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	velocity += (unit.recoil * speed_compensation_value)
 
 	move_and_slide()
+	#move_and_collide(velocity * delta)  # much easier to get stuck like this
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:
@@ -382,7 +383,7 @@ func _physics_process(delta: float) -> void:
 	
 	if defeated:
 		defeated_disappear_timer -= delta
-		go_move(Vector2.ZERO, 0, acceleration)  # show the knockback still, though.
+		go_move(Vector2.ZERO, 0, acceleration, delta)  # show the knockback still, though.
 		# start fading out as well
 		# function, do nothing for 1 second, then fade out at a constant rate over 5 seconds
 		var color_alpha: Color = Color(Color.WHITE, 0.2 * defeated_disappear_timer)
@@ -414,7 +415,7 @@ func _physics_process(delta: float) -> void:
 		speed_value *= Coeff.backpedaling_speed_mod
 	
 	adjust_indicators(target_pos, delta)
-	go_move(direction, speed_value, acceleration_value)
+	go_move(direction, speed_value, acceleration_value, delta)
 	go_attack(is_attacking, global_position, ring_direction)
 	go_anim(delta, direction, is_boosting)
 	update_labels(speed_value)
