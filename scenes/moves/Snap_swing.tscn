@@ -5,7 +5,7 @@
 
 [node name="Move (Snap swing)" instance=ExtResource("1_l34j8")]
 standoff_distance = 1.0
-max_range = 4.0
+max_range = 3.0
 fire_table = Array[float]([1.0])
 accuracy_deviation_label = 0
 user_rotation_mod = 0.2

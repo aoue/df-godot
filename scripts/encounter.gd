@@ -21,7 +21,7 @@ var friendly_in_world : UnitBody
 var enemy_group : Array[UnitBody] = []
 var enemy_count: int = 0
 var call_friendly: bool = true
-var camera_mode: bool = false
+var auto_mode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,11 +32,12 @@ func create_world() -> void:
 	# hardcoded
 	# will do things like: load encounter 
 	# (includes geography, units/enemies starting positions, gamerules, etc)
-	GameMother.setup_UI()
+	#GameMother.setup_UI()
 	
 	# Setup world
 	geoMap = geoMapPacked.instantiate()
 	add_child(geoMap)
+	GameMother.setup_map_info(geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
 	# Setup Units	
 	if call_friendly:
@@ -44,8 +45,10 @@ func create_world() -> void:
 		friendly_in_world.position = Vector2(-5000, 0)
 		add_child(friendly_in_world)
 		GameMother.add_unit(friendly_in_world)
+		if auto_mode:
+			mainCamera.setup(friendly_in_world, geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
-	if not camera_mode:
+	if not auto_mode:
 		anse_in_world = Anse.instantiate()
 		add_child(anse_in_world)
 		GameMother.add_unit(anse_in_world)

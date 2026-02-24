@@ -133,6 +133,7 @@ func update_loadout_status(display_message: bool = true) -> void:
 		loadout_gate_time = Coeff.loadout_cooldown
 				
 	loadout.refresh()
+	
 
 func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_indicator_obj : Node2D):
 	# This function is called like all the time when you are in an attack; as soon as you click to attack.
@@ -161,7 +162,7 @@ func use_active_move(unit_pos : Vector2, ring_indicator_vector : Vector2, ring_i
 	var next_move = loadout.get_next_move()
 	update_loadout_status()
 	
-	# prevent combo loadout looping
+	# prevent complete looping
 	if combo_start_loadout_id == loadout_pointer:
 		end_combo()
 	
@@ -227,6 +228,7 @@ func report_hit(hit_body_position : Vector2) -> void:
 	#print("combo exit timer = " + str(combo_exit_timer))
 	#print("in combo = " + str(in_combo))
 	scored_hit = true
+	body.report_hit_ai()
 	
 	# report knockback, if 'on_hit' type
 	if recoil_moment == 2:

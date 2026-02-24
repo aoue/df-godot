@@ -10,6 +10,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 @export_group("AI")
 @export var allowed_to_boost: bool
 @export var allowed_to_pick_off: bool
+@export var allowed_to_actively_dodge: bool
 
 """ Saved variables for brain """
 ## Behaviour constants
@@ -31,6 +32,7 @@ var want_to_boost: bool = false
 var want_to_attack: bool = false
 var obtained_attack_permission: bool = false
 var attack_permission_delay: int = 0
+var getting_beat: bool = false
 
 ## Loaded Move Records
 var move_loaded: bool = false
@@ -57,12 +59,14 @@ func update_intention() -> void:
 	already_chosen_target = false
 	want_to_boost = false
 	want_to_attack = false
+	getting_beat = false
 	obtained_attack_permission = false
 	attack_permission_delay = 0
 				
 	# Choose intention here based on situation.
 	if unit.output_exceeding_limit() and feeling_threatened():
 		my_intention = Intention.RETREAT
+		#print("i INTEND to retreat haha")
 	elif feel_like_attacking():
 		my_intention = Intention.ATTACK
 	else:  # idk, maybe advance permission
@@ -98,10 +102,16 @@ func feel_like_boosting() -> bool:
 	if not allowed_to_boost or my_intention == Intention.ATTACK:
 		return false
 	
+	if allowed_to_actively_dodge and getting_beat:
+		# maybe add a little delay before it though?
+		return true
+	
 	# -if your destination is too close, permission denied.
 	var dist_to_destination: float = position.distance_to(desired_movement_location)
 	if dist_to_destination < Coeff.boost_min_distance_to_trigger:
 		return false
+
+	
 	
 	# -if it hasn't been long enough in this intention, denied.
 	var current_time: int = Time.get_ticks_msec()
@@ -198,9 +208,10 @@ func start_retreat() -> void:
 		return
 	
 	var retreat_direction: Vector2 = position.direction_to(closest_hostile_position) * -1
+	# actually
 	
 	# apply randomness to retreat direction
-	var retreat_direction_offset: float = calculate_random_offset_rotation(PI/2)
+	var retreat_direction_offset: float = calculate_random_offset_rotation(2 * PI)
 	retreat_direction = retreat_direction.rotated(retreat_direction_offset)
 	retreat_direction *= standoff_distance
 		
@@ -217,7 +228,7 @@ func start_attack() -> void:
 		#my_intention = Intention.SLEEP
 		start_sleep()
 		return
-	
+	print("start attack caleld")
 	want_to_attack = true
 	# add in standoff too
 	# 1. find vector from target to you
@@ -231,7 +242,12 @@ func start_attack() -> void:
 		
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
-	if want_to_attack and not (dist_to_target > min_range and dist_to_target < max_range):
+	if (dist_to_target < max_range):
+		print("i confirm dist to target is less than max range")
+		print(dist_to_target)
+		print(max_range)
+		want_to_attack = true
+	else:
 		want_to_attack = false
 		
 	# check that the angle is right
@@ -242,7 +258,7 @@ func start_attack() -> void:
 	#if angle_from_self_to_target < 0.95:  # (angle IS NOT narrower than [very narrow])
 	if want_to_attack and angle_from_self_to_target < 0.99:  # (angle IS NOT narrower than [very narrow])
 		want_to_attack = false
-
+	
 func feeling_threatened() -> bool:
 	# basically, if someone is within a certain distance from you
 	var closest_hostile_position: Vector2 = GameMother.get_closest_hostile_position(unit.allegiance, unit.combat_id, position)
@@ -372,7 +388,12 @@ func validate_target() -> void:
 	desired_unit_target = null
 
 """ Supers """
+func report_hit_ai() -> void:
+	# you hit, so start prepping for the next move
+	load_move_stats()
+
 func being_hit_ai() -> void:
+	getting_beat = true
 	quick_cede_attack()
 
 func end_combo_ai() -> void:

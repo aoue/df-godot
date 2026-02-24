@@ -20,10 +20,22 @@ var attack_priority_counter: int = 0
 var cotargeting_dict = {}  # records targeting info, 'id being targeted': count
 var attackPermission_dict = {}  # records active attacking info, 'id being targeted': time since last attack on them
 
+""" Map info """
+var top_bound: float
+var bottom_bound: float
+var left_bound: float
+var right_bound: float
+
 """ Encounter Setup Functions """
-func setup_UI() -> void:
-	pass
-	#logLabel.text = "testing ui text"
+func setup_map_info(x_limit: int, y_limit: int) -> void:
+	@warning_ignore("integer_division")
+	top_bound = -y_limit / 2
+	@warning_ignore("integer_division")
+	bottom_bound = y_limit / 2
+	@warning_ignore("integer_division")
+	left_bound = -x_limit / 2
+	@warning_ignore("integer_division")
+	right_bound = x_limit / 2
 
 func add_unit(unitbody: UnitBody) -> void:
 	if unitbody.unit.allegiance == 2:
@@ -51,6 +63,15 @@ func get_unit_matching_combat_id(find_this_id: int) -> UnitBody:
 		if body and find_this_id == body.unit.combat_id:
 				return body
 	return null
+
+""" Helping units check out of bounds """
+#func out_of_bounds_destination(dest: Vector2) -> bool:
+	## Returns true if the given dest is out of bounds by a certain margin.
+	## Otherwise, returns false.
+	## Supposed to help units avoid being trapped in corners.
+	#
+	#
+	#return false
 
 """ Managing the Battle Directly """
 func send_cease_order(relevant_unit_list: Array[UnitBody]) -> void:

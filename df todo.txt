@@ -1,8 +1,6 @@
 commit notes:
--expanded unit body colliders to have less overlap
--added grace note on battle start
--added cease note on battle end
--adjusted attack permission to account for one more case, done with ai behavior for now
+-changed ai retreat logic to be more unpredictable
+-fixed oversight where unit move params considered for targeting were not updated properly during combos, leading to units using moves they were wildly out of range for.
 
 ======= NOTES
 collision layers/masks notes:
@@ -47,8 +45,10 @@ some more mechanically deep things:
 13. grace note for everyone.......................................[DONE]
 14. end battle signal.............................................[DONE]
 15. enemy ai mobbing behavior.....................................[DONE]
+16. better retreating.............................................[DONE]
+17. stricter usage parameters.....................................[]
 
-. create second enemy type (ranged adelie).......................[]
+. create second enemy type (adelie cabler).......................[]
 
 . combat scene effects...........................................[]
 . combat scene sound.............................................[]
@@ -58,6 +58,14 @@ some more mechanically deep things:
 
 . real game scenes...............................................[]
 
+
+- stricter combos:
+	- dont just always follow up
+	- if next move not in range, then dont use it
+	test with Friday: rifle into snapswing (should stop after rifle at range)
+	- this should be handled directly in start_attack(), since it gets called all the time
+	right?
+	- issue is max range is not getting updated after first move ends.
 
 - visuals next steps:
 	- shadows, try baking them in again. or use a separate sprite in the unit scene.
