@@ -311,6 +311,7 @@ func go_boost(direction_value: Vector2) -> void:
 	boost_duration = Coeff.boost_full_duration
 	boost_cooldown = Coeff.boost_full_cooldown + Coeff.boost_full_duration  # wow that's pretty smart (it was my idea)
 
+@warning_ignore("unused_parameter")  # we have this for mvoe_and_collider(), if we do use that.
 func go_move(direction_input: Vector2, speed_input: int, acceleration_input: float, delta: float) -> void:
 	if direction_input.length() > 0:
 		velocity = velocity.lerp(direction_input * speed_input, acceleration_input)

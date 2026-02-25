@@ -12,6 +12,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 @export var allowed_to_pick_off: bool
 @export var allowed_to_actively_dodge: bool
 @export var allowed_to_target_swap: bool
+@export var allowed_to_know_enemy_permission: bool
 
 """ Saved variables for brain """
 ## Behaviour constants
@@ -34,6 +35,7 @@ var want_to_attack: bool = false
 var obtained_attack_permission: bool = false
 var attack_permission_delay: int = 0
 var getting_beat: bool = false
+var cornered: bool = false
 
 ## Loaded Move Records
 var move_loaded: bool = false
@@ -61,8 +63,12 @@ func update_intention() -> void:
 	want_to_boost = false
 	want_to_attack = false
 	getting_beat = false
+	cornered = false
 	obtained_attack_permission = false
 	attack_permission_delay = 0
+	
+	#my_intention = Intention.RETREAT
+	#return
 				
 	# Choose intention here based on situation.
 	if unit.output_exceeding_limit() and feeling_threatened():
@@ -72,7 +78,7 @@ func update_intention() -> void:
 		my_intention = Intention.ATTACK
 	else:  # idk, maybe advance permission
 		my_intention = Intention.ADVANCE
-	 
+	
 func execute_intention() -> void:
 	# Based on the current intention, does the stuff to help us keep executing it properly.
 	
@@ -161,8 +167,10 @@ func quick_cede_attack() -> void:
 	move_loaded = false
 	want_to_attack = false
 	
+	# retreat and update your action right away!
 	my_intention = Intention.RETREAT
-	last_action_timestamp = Time.get_ticks_msec() - Coeff.time_between_intention_update
+	#last_action_timestamp = Time.get_ticks_msec() - Coeff.time_between_intention_update
+	last_update_timestamp = Time.get_ticks_msec() - Coeff.time_between_intention_update  
 	
 	if desired_unit_target:
 		GameMother.attack_ceded(self, desired_unit_target, obtained_attack_permission)
@@ -201,6 +209,10 @@ func start_retreat() -> void:
 	# For retreat, they want to create space from the closest unit.
 	# This means pick a spot away from the closest target and also some randomness.
 	
+	if cornered:
+		# commit to escaping the corner for at least like 200 ms
+		#if not GameMother.is_cornered(position):
+		return
 	
 	# take the direction to the closest hostile, flip it around
 	# then multiply by a magnitude of 1000 or whatever
@@ -208,16 +220,26 @@ func start_retreat() -> void:
 	if closest_hostile_position == Vector2.ZERO:
 		return
 	
-	var retreat_direction: Vector2 = position.direction_to(closest_hostile_position) * -1
-	# actually
+	var retreat_direction: Vector2 = closest_hostile_position.direction_to(position) * -1
 	
 	# apply randomness to retreat direction
-	var retreat_direction_offset: float = calculate_random_offset_rotation(2 * PI)
-	retreat_direction = retreat_direction.rotated(retreat_direction_offset)
 	retreat_direction *= standoff_distance
+	if GameMother.is_cornered(position):
+		retreat_direction *= -1
+		cornered = true
+		# commit to trying to escape the corner for the next __ ms
+		# if Time.get_ticks_msec() > last_action_timestamp + Coeff.time_between_intention_update:
+		# 2000 > 1000 + 2000: you will act in 1000 ms
+		# now i want to set it to act in 200 ms from now. I want:
+		# last_action_timestamp + Coeff.time_between_intention_update = 2200
+		last_action_timestamp = 500 + Time.get_ticks_msec() - Coeff.time_between_intention_update
+	else:
+		var retreat_direction_offset: float = calculate_random_offset_rotation(PI / 4)
+		retreat_direction = retreat_direction.rotated(retreat_direction_offset)
 		
 	# update target position
-	desired_movement_location = position + retreat_direction
+	desired_movement_location = position + (retreat_direction * 2.5)
+	#print(desired_movement_location)
 
 func start_attack() -> void:
 	# the 'advance' intention got us into a starting spot.
@@ -226,7 +248,6 @@ func start_attack() -> void:
 	#	^actually, add another field to accompany 'standoff', 'execution_standoff'
 	#	this one tells us how close you want to be during execution itself.
 	if not desired_unit_target or Time.get_ticks_msec() < attack_permission_delay:
-		#my_intention = Intention.SLEEP
 		start_sleep()
 		return
 	want_to_attack = true
@@ -330,15 +351,21 @@ func choose_target() -> void:
 		var pick_off_score: float = 0.0
 		if allowed_to_pick_off:
 			pick_off_score = GameMother.get_average_friendly_distance(opp)
+			
+		var counterattack_score: float = 0.0
+		if allowed_to_know_enemy_permission:
+			var well_are_they: bool = GameMother.is_opp_holding_permission_on_me(unit.combat_id, opp)
+			if well_are_they:
+				counterattack_score = 1000.0
 
 		#print("relative scores are dist | cotargeter: " + str(dist_score) + " | " + str(cotargeter_score))
-		var temp_score: float = (1000 * dist_score) + (cotargeter_score) + (pick_off_score / 2500)
+		var temp_score: float = (1000 * dist_score) + (cotargeter_score) + (pick_off_score / 2500) + (counterattack_score * 50)
 		if temp_score > check_target_score:
 			check_target_score = temp_score
 			check_target = opp
 	
-	if not check_target:
-		return
+	#if not check_target:
+		#return
 	GameMother.update_cotargeting(desired_unit_target, check_target)
 	desired_unit_target = check_target
 
@@ -355,7 +382,7 @@ func time_to_act() -> bool:
 
 func time_to_update() -> bool:
 	var current_time: int = Time.get_ticks_msec()
-	if current_time > last_update_timestamp + time_between_updates:
+	if current_time > last_update_timestamp + time_between_updates: 
 		last_update_timestamp = current_time
 		return true
 	return false
@@ -393,8 +420,9 @@ func validate_target() -> void:
 func report_hit_ai() -> void:
 	# you hit, so start prepping for the next move
 	load_move_stats()
-	if allowed_to_target_swap:
-		choose_target()
+	#if allowed_to_target_swap:
+		#already_chosen_target = false
+		#choose_target()
 
 func being_hit_ai() -> void:
 	getting_beat = true
@@ -427,7 +455,11 @@ func get_target_position() -> Vector2:
 	
 func get_attack_input() -> bool:
 	#return false  # for testing, uncomment for peaceful guys.
-	if want_to_attack:
+	
+	if want_to_attack and desired_unit_target:
+		if allowed_to_target_swap:
+			already_chosen_target = false
+			choose_target()
 		return true
 	return false
 

@@ -1,7 +1,7 @@
 commit notes:
--allow for ai target switching behavior
--loosen angle reqs when a unit is mid combo
--added real quit button
+-added some stuff to stop units from targeting dead guys
+-tweaked post attack retreat behavior to be more drastic
+-add ai option to know who is targeting you and prioritize them
 
 ======= NOTES
 collision layers/masks notes:
@@ -26,42 +26,58 @@ What is this game's thing? Here is what it is:
 
 some more mechanically deep things:
 	- you also want to use your movesets to defend yourself
-	- things like the bubble is great for protecting you from counterattacks
+	- things like the bubble are great at protecting you from counterattacks
 	- things like lingering melee hitboxes are also great at this
+	- things like flow are generated in one moveset to set you up for another
 
 =======
 
-1. generalize move scene for player and ai sharing................[DONE]
-2. anse spritesheet art and import................................[DONE]
-3. generalize ai unit scene.......................................[DONE]
-4. recreate units with generalized ai scene.......................[DONE]
-5. adelie spritesheet art and import..............................[DONE]
-6. add pick-off ai behavior.......................................[DONE]
-7. fixed a bug where units were dropping their combos.............[DONE]
-8. added mechanic to prevent loadout looping......................[DONE]
-9. added ai unit approach conversion from advance to attack.......[DONE]
-10. added ai unit attack permission lockout prevention............[DONE]
-11. Friday facerushing fix pls....................................[DONE]
-12. expand unitbodies for better collision........................[DONE]
-13. grace note for everyone.......................................[DONE]
-14. end battle signal.............................................[DONE]
-15. enemy ai mobbing behavior.....................................[DONE]
-16. better retreating.............................................[DONE]
-17. stricter move usage parameters................................[DONE]
-19. allow for ai target switching behavior........................[DONE]
-20. loosen angle reqs when a unit is mid combo....................[DONE]
+1. last minute ai tweaks..........................................[]
+
+. first scene mockup.............................................[]
+. scene plan map for good chunk of prologue......................[]
+. [real scenes gate].............................................[]
+. story combat transitions.......................................[]
 
 
-. combat audio 101...............................................[prog]
-. visual next steps..............................................[]
-. create second enemy type (adelie cabler).......................[]
 
+- last minute ai tweaks:
+	- retreating: avoid getting stuck in the corner.
+	this is pretty important, so let's do it.
+
+
+- first scene mockup:
+	- take this onto paper my friend
 
 - real game scenes:
-	what is the first scene of the game? What do you need to make it.
-	- get started on that.
-	plot out the first few scenes (let's not redo stuff.)
+	what is the first scene of the game?
+	-what does it look like?
+	-what happens?
+	-text/audio/art, etc.
+	plot out the first few scenes (let's focus on making the real stuff we need.)
 	- then, make them. This is the best test.
+	- what systems will we need to actually show this stuff properly
+
+
+-visuals (to consider)
+	-lip movement/not sync though, not necessary
+	-blinking
+	-breath, hot air in the cold (13!!!)
+	-pose changing (like sideview, or back.)
+	-small window (for anse's hands, the box, e.g. a necklace, etc)
+	-being able to animate while speaking.
+	-variable text bubble location, like near the speaker.
+	-weather
+
+- audio (to consider)
+	-breathing
+	-snow crunching/footsteps
+	-wind, etc
+	-secret language (try to create a program that converts?)
+		or look into how fictional language people do it?
+		remember, we usually just want like 2 to 5 words.
+	-music
+
 
 === [real scenes gate] ===
 
@@ -117,10 +133,6 @@ some more mechanically deep things:
 - weather effect:
 	- snow or rain particle effect on screen, at programmable intensity.
 
-- debris effect:
-	- when a unit is defeated, create some relevant debris on the ground near them
-	ferra leave parts, Friday will leave her coat, etc.
-
 - system to fire projectiles in multiple directions:
 	of course we want moves that are able to shoot in every direction.
 	in addition to the projectile list, there is a projectile offset list
@@ -128,28 +140,12 @@ some more mechanically deep things:
 	- entries in the list range from 0-359 are correspond to a position around the unit relative to the position
 	  of the unit circle arrow.
 
-- camera manager:
-	-zoom and move camera so that it can capture everything we want in frame at the same time
-	-always the player, and it will expand to try to fit the last _ units you have hit within _ time
-
 - flow mechanic:
 	-some moves generate 'flow'
 	-some moves can consume 'flow' to change their effect
 	just a little something for players to think about when building a combo, that's it.
 	-losing flow: if you get hit? if you miss a move?
 	-showing flow: something around the player, visually. Like orbs or lines?
-
-- encounter scene expansion:
-	a given encounter will be made up of the following:
-	- geography: the scene that holds the mat and the obstacles placed on it.
-	- army setup: given the geography, this is where all units are placed initially.
-	- plot: potential intro and ending cutscene sequences. Kept simple, usually.
-	- encounter: rules that dictate how the encounter will play out in terms of combat, like:
-		- when to spawn additional enemies/allies (timing, defeated x, etc)
-		- unusual victory/defeat conditions (time elapses, ally/boss defeated, etc)
-		- scrolling, the route and the speed, if applicable.
-		this could end up being complicated, with scrolling, then a room, then more scrolling, etc.
-	so create a full encounter scene with all this stuff defined.
 
 - backgrounds and collision (graphical)
 	- it would be really cool if objects and background borders had an indicator of where
@@ -162,12 +158,12 @@ some more mechanically deep things:
 	- should we draw a line between mouse position and player to help with aiming?
 	- or is it just cool?
 
-- encounter ai:
-	-there is an encounter manager which helps with:
-		-spawning reinforcements, timing, objectives, ending on death/victory.
+- encounter management:
+	there is an encounter manager which accepts information and handles:
+	-spawning reinforcements, timing, objectives, ending on defeat/victory.
 
 start of battle animation:
-	-if would be cool if there was an animation with all the rings coming on as the fight began. Like a bootup. Like, rapidly increase the ring's scale from 0 to 1 over a time window.
+	-if would be cool if there was an animation with all the rings coming on as the fight began. Like a bootup. Could do it by rapidly increasing the ring's scale from 0 to 1 over a time window.
 
 - loadout system swap choice:
 	- a simple and elegant way to determine which loadout you're switching to next
@@ -183,25 +179,10 @@ start of battle animation:
 - ai unit targeting indicator:
 	- draw a coloured line from them to the circle of their target? or just in that direction? idk.
 
-- alternate attack system, in case this falls apart:
-	you have a combo counter from 1...x
-	- you equip weapons (attack patterns) where the move differs depending on combo counter
-	- you can switch which weapon you are attacking with in the middle of the combo.
-	e.g. you can attack snaphammer1 -> snaphammer2 -> rifle3 -> box4 -> rifle5 -> ...
-	or any other combination that you want.	
-	note: this does feel like an idea where
 
 === [vn-ready gate] ===
 
--visuals (to consider)
-	-lip sync
-	-blinking
-	-breath, hot air in the cold (13!!!)
-	-pose changing (like sideview, or back.)
-	-small window (for anse's hands, the box, e.g. a necklace, etc)
-	-being able to animate while speaking.
-	-variable text bubble location, like near the speaker.
-	-weather
+
 
 
 

@@ -27,7 +27,7 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 4
+var enemy_count: int = 6
 var call_friendly: bool = true
 var auto_mode: bool = false
 
@@ -52,7 +52,7 @@ func create_world() -> void:
 	# Setup Units	
 	if call_friendly:
 		friendly_in_world = Friendly.instantiate()
-		friendly_in_world.position = Vector2(-5000, 0)
+		friendly_in_world.position = Vector2(500, 0)
 		add_child(friendly_in_world)
 		GameMother.add_unit(friendly_in_world)
 		if auto_mode:
@@ -66,10 +66,10 @@ func create_world() -> void:
 		mainCamera.setup(anse_in_world, geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
 	var spawn_offset: int = -1000
-	var flip_offset: int = 1000
+	var flip_offset: int = 1
 	for i in range(0, enemy_count):
 		var adelie_in_world: UnitBody = Adelie.instantiate()
-		adelie_in_world.position = Vector2(5000 + flip_offset, spawn_offset)
+		adelie_in_world.position = Vector2(5000 * flip_offset, spawn_offset)
 		add_child(adelie_in_world)
 		GameMother.add_unit(adelie_in_world)
 		spawn_offset += 500

@@ -21,10 +21,10 @@ var cotargeting_dict = {}  # records targeting info, 'id being targeted': count
 var attackPermission_dict = {}  # records active attacking info, 'id being targeted': time since last attack on them
 
 """ Map info """
-var top_bound: float
-var bottom_bound: float
-var left_bound: float
-var right_bound: float
+var top_bound: float  # negative (remember this)
+var bottom_bound: float  # positive
+var left_bound: float  # negative
+var right_bound: float  # positive
 
 """ Encounter Setup Functions """
 func setup_map_info(x_limit: int, y_limit: int) -> void:
@@ -36,6 +36,10 @@ func setup_map_info(x_limit: int, y_limit: int) -> void:
 	left_bound = -x_limit / 2
 	@warning_ignore("integer_division")
 	right_bound = x_limit / 2
+	#print(top_bound)
+	#print(bottom_bound)
+	#print(left_bound)
+	#print(right_bound)
 
 func add_unit(unitbody: UnitBody) -> void:
 	if unitbody.unit.allegiance == 2:
@@ -65,13 +69,28 @@ func get_unit_matching_combat_id(find_this_id: int) -> UnitBody:
 	return null
 
 """ Helping units check out of bounds """
-#func out_of_bounds_destination(dest: Vector2) -> bool:
-	## Returns true if the given dest is out of bounds by a certain margin.
-	## Otherwise, returns false.
-	## Supposed to help units avoid being trapped in corners.
-	#
-	#
-	#return false
+func is_cornered(dest: Vector2) -> bool:
+	# Returns true if the given dest is trapped in the corner (within 1000? something like that)
+	# Otherwise, returns false.
+	# Supposed to help units avoid being trapped in corners.
+	"""
+	out of bounds means anything of the following is true:
+		dest.x is LESS THAN left_bound
+		dest.x is GREATER THAN right_bound
+		dest.y is LESS THAN top_bound
+		dest.y is GREATER THAN bottom_bound
+	"""
+	var corner_check_const: int = 1000
+	if (dest.x - left_bound / 10) < left_bound:
+		return true
+	if (dest.x + right_bound / 10) > right_bound:
+		return true
+	if (dest.y - top_bound / 10) < top_bound:
+		return true
+	if (dest.y + bottom_bound / 10) > bottom_bound:
+		return true
+	
+	return false
 
 """ Managing the Battle Directly """
 func send_cease_order(relevant_unit_list: Array[UnitBody]) -> void:
@@ -151,6 +170,16 @@ func get_closest_friendly_position(user_allegiance: int, my_combat_id: int, my_p
 		relevant_unit_list = heroes
 	return get_closest_unit_position(my_combat_id, my_pos, relevant_unit_list)
 
+func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list: Array[UnitBody]) -> Vector2:
+	var closest_position: Vector2 = Vector2.ZERO
+	for check_unit in relevant_unit_list:
+		if check_unit and my_combat_id != check_unit.unit.combat_id:
+			var diff: float = (my_pos - check_unit.position).length()
+			if closest_position == Vector2.ZERO or diff < (my_pos - closest_position).length():
+				closest_position = check_unit.position
+		
+	return closest_position
+	
 func get_average_friendly_distance(some_unitbody: UnitBody):
 	# Returns the average distance between the body and all its allied units.
 	var relevant_unit_list: Array[UnitBody]
@@ -168,18 +197,19 @@ func get_average_friendly_distance(some_unitbody: UnitBody):
 	
 	average_distance = average_distance / relevant_unit_list.size()
 	return average_distance
-
-func get_closest_unit_position(my_combat_id, my_pos: Vector2, relevant_unit_list: Array[UnitBody]) -> Vector2:
-	var closest_position: Vector2 = Vector2.ZERO
-	for check_unit in relevant_unit_list:
-		if check_unit and my_combat_id != check_unit.unit.combat_id:
-			var diff: float = (my_pos - check_unit.position).length()
-			if closest_position == Vector2.ZERO or diff < (my_pos - closest_position).length():
-				closest_position = check_unit.position
-		
-	return closest_position
-
+	
 """ Attack Permission Mechanic """
+func is_opp_holding_permission_on_me(asker_combat_id, opp) -> bool:
+	# returns true if opp is holding permission to attack the unit matching unit.combat_id
+	# check the dict; if the target id is there.
+	# check all the people in the corresponding targeters list.
+	# find the guy who is opp; then check if opp has attack permission; return true if so.
+	if asker_combat_id in attackPermission_dict:
+		for targeter_body in attackPermission_dict[asker_combat_id]:
+			if opp.unit.combat_id == targeter_body.unit.combat_id and opp.obtained_attack_permission:
+				return true
+	return false
+
 func clean_attackPermissionDictList(target_unit_id: int) -> void:
 	# removes any defeated units from the list.
 	# further, makes sure that SOMEBODY has attack permission so the ai doesnt get locked.

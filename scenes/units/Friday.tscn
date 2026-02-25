@@ -171,6 +171,7 @@ allowed_to_boost = true
 allowed_to_pick_off = true
 allowed_to_actively_dodge = true
 allowed_to_target_swap = true
+allowed_to_know_enemy_permission = true
 HP_max_coeff = 60.0
 speed_coeff = 1.0
 rotation_coeff = 1.0

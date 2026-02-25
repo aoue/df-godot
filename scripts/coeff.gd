@@ -50,9 +50,9 @@ var backpedaling_speed_mod: float = 1.0 / 3.0  # speed modifier applied to unit 
 """AI Parameters"""
 var boost_min_distance_to_trigger: float = 3500.0  # the minimum distance a unit must want to travel to consider boosting
 var feel_threatened_at_distance: float = 5000.0  # how close a hostile may be to a unit before it feels threatened
-var time_before_boost_permitted: int = 1000  # how long (ms) a unit must be in a given intention before it may boost.
+var time_before_boost_permitted: int = 200  # how long (ms) a unit must be in a given intention before it may boost.
 var time_between_intention_update: int = 2000  # in ms. temp for now.
-var attack_permission_timer: int = 1500  # lockout time on giving permission for another unit to attack a unit (in milliseconds)
+var attack_permission_timer: int = 4000  # lockout time on giving permission for another unit to attack a unit (in milliseconds)
 var retreat_randomness_range: float = PI/2.0  # how far a unit may veer off from its retreat course.
 var standoff: float = 1000.0  # base distance ai units want between themselves and their targets
 var move_range: float = 1000.0  # base value for min range and max range of ai moves
