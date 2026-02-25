@@ -331,7 +331,7 @@ func go_move(direction_input: Vector2, speed_input: int, acceleration_input: flo
 	velocity += (unit.recoil * speed_compensation_value)
 
 	move_and_slide()
-	#move_and_collide(velocity * delta)  # much easier to get stuck like this
+	#move_and_collide(velocity * delta)  # much easier to get stuck on walls like this
 
 func go_attack(is_attacking: bool, unit_pos: Vector2, ring_indicator_vector: Vector2) -> void:
 	if is_attacking or unit.attacking_duration_left > 0.0:

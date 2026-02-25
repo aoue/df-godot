@@ -165,7 +165,7 @@ animations = [{
 size = Vector2(14.996538, 31.104874)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gdof5"]
-radius = 18.557632
+radius = 11.374032
 
 [node name="Friday" instance=ExtResource("1_loq4u")]
 allowed_to_boost = true
@@ -173,6 +173,7 @@ allowed_to_pick_off = true
 allowed_to_actively_dodge = true
 allowed_to_target_swap = true
 allowed_to_know_enemy_permission = true
+allowed_to_advance_into_attack = true
 HP_max_coeff = 60.0
 speed_coeff = 1.0
 rotation_coeff = 1.0

@@ -27,9 +27,9 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 6
+var enemy_count: int = 3
 var call_friendly: bool = true
-var auto_mode: bool = false
+var auto_mode: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -47,12 +47,12 @@ func create_world() -> void:
 	add_child(geoMap)
 	GameMother.setup_map_info(geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
-	musicPlayer.play()
+	#musicPlayer.play()
 	
 	# Setup Units	
 	if call_friendly:
 		friendly_in_world = Friendly.instantiate()
-		friendly_in_world.position = Vector2(500, 0)
+		friendly_in_world.position = Vector2(-5000, 0)
 		add_child(friendly_in_world)
 		GameMother.add_unit(friendly_in_world)
 		if auto_mode:
@@ -69,7 +69,7 @@ func create_world() -> void:
 	var flip_offset: int = 1
 	for i in range(0, enemy_count):
 		var adelie_in_world: UnitBody = Adelie.instantiate()
-		adelie_in_world.position = Vector2(5000 * flip_offset, spawn_offset)
+		adelie_in_world.position = Vector2(-5000 * flip_offset, spawn_offset)
 		add_child(adelie_in_world)
 		GameMother.add_unit(adelie_in_world)
 		spawn_offset += 500

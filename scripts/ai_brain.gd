@@ -13,6 +13,7 @@ enum Intention {SLEEP, ADVANCE, RETREAT, ATTACK}
 @export var allowed_to_actively_dodge: bool
 @export var allowed_to_target_swap: bool
 @export var allowed_to_know_enemy_permission: bool
+@export var allowed_to_advance_into_attack: bool
 
 """ Saved variables for brain """
 ## Behaviour constants
@@ -38,7 +39,6 @@ var getting_beat: bool = false
 var cornered: bool = false
 
 ## Loaded Move Records
-var move_loaded: bool = false
 var standoff_distance: float = 0.0
 var min_range: float = 0.0
 var max_range: float = 0.0
@@ -47,6 +47,7 @@ var max_range: float = 0.0
 """ Brain """
 func _ready() -> void:
 	super()
+	load_move_stats()
 
 func update_intention() -> void:
 	# Updates/maintains the unit's current intention.
@@ -66,10 +67,7 @@ func update_intention() -> void:
 	cornered = false
 	obtained_attack_permission = false
 	attack_permission_delay = 0
-	
-	#my_intention = Intention.RETREAT
-	#return
-				
+					
 	# Choose intention here based on situation.
 	if unit.output_exceeding_limit() and feeling_threatened():
 		my_intention = Intention.RETREAT
@@ -88,8 +86,6 @@ func execute_intention() -> void:
 	
 	if not time_to_update():
 		return
-	if not move_loaded:
-		load_move_stats()
 	
 	# Based on the situation, chooses where the unit wants to walk to and look at.
 	if my_intention == Intention.SLEEP:
@@ -157,15 +153,15 @@ func quick_authorize_attack() -> void:
 	obtained_attack_permission = true
 	last_action_timestamp = Time.get_ticks_msec()
 	attack_permission_delay = Time.get_ticks_msec() + Coeff.attack_permission_timer
-	
 	choose_target()
+	load_move_stats()
 	
 func quick_cede_attack() -> void:
 	## Informs gamemother that we no longer need to use attack permission.
 	# And thus gamemother can give it to someone else.
 	#print("quick_cede_attack() called")
-	move_loaded = false
 	want_to_attack = false
+	load_move_stats()
 	
 	# retreat and update your action right away!
 	my_intention = Intention.RETREAT
@@ -175,6 +171,8 @@ func quick_cede_attack() -> void:
 	if desired_unit_target:
 		GameMother.attack_ceded(self, desired_unit_target, obtained_attack_permission)
 	obtained_attack_permission = false
+	# load move's stats!
+	
 
 """ Execution Functions """
 
@@ -222,10 +220,10 @@ func start_retreat() -> void:
 	if closest_hostile_position == Vector2.ZERO:
 		return
 	
-	var retreat_direction: Vector2 = closest_hostile_position.direction_to(position) * -1
+	var retreat_direction: Vector2 = closest_hostile_position.direction_to(position)
 	
 	# apply randomness to retreat direction
-	retreat_direction *= standoff_distance
+	retreat_direction *= get_standoff_helper()
 	if GameMother.is_cornered(position):
 		retreat_direction *= -1
 		cornered = true
@@ -260,8 +258,9 @@ func start_attack() -> void:
 	# 4. that is your desired movement location, tada
 	var standoff_vector: Vector2 = (desired_unit_target.position - position).normalized() * get_standoff_helper()
 	desired_movement_location = desired_unit_target.position - standoff_vector
-	#print("raw target position = " + str(desired_unit_target.position))
-	#print("with standoff it is = " + str(desired_movement_location))
+	if unit.allegiance == 1:
+		print("raw target position = " + str(desired_unit_target.position))
+		print("with standoff it is = " + str(desired_movement_location))
 		
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
@@ -279,8 +278,8 @@ func start_attack() -> void:
 	# if not in combo, much stricter angle requirement
 	var angle_req: float = 0.99  # (angle IS NOT narrower than [very narrow])
 	if unit.in_combo:
-		angle_req = 0.7
-	if want_to_attack and angle_from_self_to_target < angle_req:  
+		angle_req = 0.75
+	if want_to_attack and angle_from_self_to_target < angle_req: 
 		want_to_attack = false
 		
 	
@@ -402,7 +401,6 @@ func load_move_stats() -> void:
 	min_range = loaded_move.get_min_range()
 	max_range = loaded_move.get_max_range()
 	loaded_move.queue_free()
-	move_loaded = true
 
 func get_standoff_helper() -> float:
 	if my_intention == Intention.SLEEP:
@@ -410,7 +408,7 @@ func get_standoff_helper() -> float:
 	if my_intention == Intention.ADVANCE or my_intention == Intention.ATTACK:
 		return standoff_distance
 	elif my_intention == Intention.RETREAT:
-		return standoff_distance / 2
+		return standoff_distance
 	return 0.0
 
 func validate_target() -> void:
@@ -439,11 +437,10 @@ func get_direction_input() -> Vector2:
 	# if you are close enough that you are within standoff distance, don't move any more.
 	if my_intention == Intention.ADVANCE and current_agent_position.distance_to(desired_movement_location) < get_standoff_helper():
 		# you are in range now, so convert intention to attack
-		if feel_like_attacking():
+		if my_intention != Intention.ATTACK and allowed_to_advance_into_attack and feel_like_attacking():
 			my_intention = Intention.ATTACK
 		else:
 			my_intention = Intention.SLEEP
-		return Vector2.ZERO
 	
 	# otherwise, just move where you like.
 	return current_agent_position.direction_to(nav.get_next_path_position())
@@ -480,6 +477,10 @@ func _physics_process(delta):
 		update_intention()
 		execute_intention()
 		set_nav_movement_target()
+		#if unit.allegiance == 1:
+			#if my_intention == Intention.ADVANCE:
+				#print("in advance intention")
+			##print("standoff = " + str(get_standoff_helper()))
 	
 	super(delta)
 	

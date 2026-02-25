@@ -132,9 +132,10 @@ animations = [{
 size = Vector2(14.996538, 22.39896)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q18xv"]
-radius = 14.3672
+radius = 11.987622
 
 [node name="Unit Body" instance=ExtResource("1_76e3r")]
+allowed_to_advance_into_attack = false
 
 [node name="Loadout0" parent="Unit" index="0"]
 slot0 = ExtResource("2_q18xv")

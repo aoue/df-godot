@@ -1,7 +1,5 @@
 commit notes:
--added some stuff to stop units from targeting dead guys
--tweaked post attack retreat behavior to be more drastic
--add ai option to know who is targeting you and prioritize them
+-fixed some small but important bugs in ai logic involving retreat logic where i missed cleaning up a bit around a code simplification, and so a vector was reversed twice!
 
 ======= NOTES
 collision layers/masks notes:
@@ -38,8 +36,7 @@ some more mechanically deep things:
 . story combat transitions.......................................[]
 
 
-
-
+(work on paper for these things, i think.)
 
 - first scene mockup:
 	- take this onto paper my friend
@@ -77,6 +74,10 @@ some more mechanically deep things:
 === [real scenes gate] ===
 
 - combat thoughts:
+	- maybe it's too fast? can't react?
+	- enemies are clumping up like crazy; bad
+	- Friday is facehugging; bad
+
 	maybe we should take a break and then go back for some big changes.
 	- idea 1: a gridless tactical game where you move units and decide what they do.
 		turn-based but gridless, yeah. you would control the squad of 4.
