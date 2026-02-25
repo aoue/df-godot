@@ -32,8 +32,6 @@ some more mechanically deep things:
 
 =======
 
-1. last minute ai tweaks..........................................[]
-
 . first scene mockup.............................................[]
 . scene plan map for good chunk of prologue......................[]
 . [real scenes gate].............................................[]
@@ -41,9 +39,6 @@ some more mechanically deep things:
 
 
 
-- last minute ai tweaks:
-	- retreating: avoid getting stuck in the corner.
-	this is pretty important, so let's do it.
 
 
 - first scene mockup:
@@ -80,6 +75,42 @@ some more mechanically deep things:
 
 
 === [real scenes gate] ===
+
+- combat thoughts:
+	maybe we should take a break and then go back for some big changes.
+	- idea 1: a gridless tactical game where you move units and decide what they do.
+		turn-based but gridless, yeah. you would control the squad of 4.
+		- the emphasis would be on moving together and fighting against a swarm
+		  while surrounded.
+		- on a unit's turn, you move them and then order them to act.
+		- movement takes time. acting takes time. 
+		- if you schedule movement + action, you can save some time 
+		  (instead of doing them in two separate moves.)
+		- you might order them to move and then shoot here. 
+			you have to choose the firing angle ahead of time.
+		- and you would have to dodge attacks in real time too.
+		the main idea is everything takes time to execute, so weave your way through.
+		kind of like grandia 2, i guess.
+		example interaction:
+		1. enemy activates dash move towards friday.
+		2. you order friday to move a little bit off course to dodge.
+		3. the enemy still hasn't made it, but you order friday to fire where it'll be
+		4. the enemy arrives and whiffes the attack, going into recovery.
+		5. friday's bullets slam home.
+	game flow would be: 
+	- each tick, (if any units need new decisions, then open player ui for them)
+	- right click to cancel a unit's action. but enters cancel recovery, making their next move have increased prep.
+	- otherwise units simply continue acting with their last orders
+	all actions units can take have:
+	- prep (time you wait before the execution begins)
+	- exec (how long the execution lasts)
+	when exec finishes, unit is ready for a new command.
+	
+	do a paper prototype first.
+	since we already have assets made, you could make a mock up of this idea.
+	pretty quickly, probably: units need to move, use attack 1 and attack 2.
+	but that's it. a very simple and elegant battle system.
+	but first, take a break. focus on story stuff for a while and return centered.
 
 - combat audio 101:
 	AudioStreamPlayer2D object does this for effects, and also panning

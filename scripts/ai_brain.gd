@@ -201,6 +201,8 @@ func start_advance() -> void:
 	var ally_offset_vector: Vector2 = Vector2.ZERO
 	if too_close_to_ally():
 		ally_offset_vector = calculate_ally_offset_vector()
+		if unit.allegiance == 1:
+			ally_offset_vector = ally_offset_vector / 2
 	
 	# update target position
 	desired_movement_location = desired_unit_target.position + ally_offset_vector
