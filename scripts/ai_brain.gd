@@ -258,9 +258,6 @@ func start_attack() -> void:
 	# 4. that is your desired movement location, tada
 	var standoff_vector: Vector2 = (desired_unit_target.position - position).normalized() * get_standoff_helper()
 	desired_movement_location = desired_unit_target.position - standoff_vector
-	if unit.allegiance == 1:
-		print("raw target position = " + str(desired_unit_target.position))
-		print("with standoff it is = " + str(desired_movement_location))
 		
 	# check that you will be able to properly hit the target
 	var dist_to_target: float = position.distance_to(desired_unit_target.position)
@@ -357,10 +354,10 @@ func choose_target() -> void:
 		if allowed_to_know_enemy_permission:
 			var well_are_they: bool = GameMother.is_opp_holding_permission_on_me(unit.combat_id, opp)
 			if well_are_they:
-				counterattack_score = 1000.0
+				counterattack_score = 1.0
 
 		#print("relative scores are dist | cotargeter: " + str(dist_score) + " | " + str(cotargeter_score))
-		var temp_score: float = (1000 * dist_score) + (cotargeter_score) + (pick_off_score / 2500) + (counterattack_score * 50)
+		var temp_score: float = (1000 * dist_score) + (cotargeter_score) + (pick_off_score / 2500) + (counterattack_score * 3)
 		if temp_score > check_target_score:
 			check_target_score = temp_score
 			check_target = opp

@@ -1,5 +1,5 @@
 commit notes:
--fixed some small but important bugs in ai logic involving retreat logic where i missed cleaning up a bit around a code simplification, and so a vector was reversed twice!
+-change holding attack weight, it could make you prematurely drop a combo if you decided suddenly you want to hit someone else
 
 ======= NOTES
 collision layers/masks notes:
