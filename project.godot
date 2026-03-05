@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Dear Friday"
-run/main_scene="res://scenes/Encounter.tscn"
+run/main_scene="uid://dp82bivpkbrj7"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
 [autoload]
 
-Coeff="*res://scenes/Coeff.tscn"
-ProjectileMother="*res://scenes/ProjectileMother.tscn"
-GameMother="*res://scripts/game_mother.gd"
+Coeff="*res://combatScenes/Coeff.tscn"
+ProjectileMother="*res://combatScenes/ProjectileMother.tscn"
+GameMother="*res://combatScripts/game_mother.gd"
 
 [display]
 

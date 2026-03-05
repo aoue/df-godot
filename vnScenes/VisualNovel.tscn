@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dp82bivpkbrj7"]
+
+[ext_resource type="Script" uid="uid://jm5uriamlkb2" path="res://vnScripts/visual_novel.gd" id="1_66ufc"]
+[ext_resource type="Texture2D" uid="uid://dvg2bijucjlnf" path="res://assets/vn/bg0.png" id="2_2wbxf"]
+[ext_resource type="PackedScene" uid="uid://cpr8py16wiuwb" path="res://vnScenes/SnowSystem.tscn" id="3_2wbxf"]
+[ext_resource type="Texture2D" uid="uid://bv1s1ofk78y3p" path="res://assets/vn/cut0.png" id="4_tf1we"]
+
+[node name="VisualNovel" type="Node2D" node_paths=PackedStringArray("back_sprite", "snowStuff", "fore_sprite", "cutIn_sprite")]
+script = ExtResource("1_66ufc")
+back_sprite = NodePath("BG_Back")
+snowStuff = NodePath("SnowSystem")
+fore_sprite = NodePath("BG_Fore")
+cutIn_sprite = NodePath("CutIn")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="BG_Back" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_2wbxf")
+
+[node name="SnowSystem" parent="." instance=ExtResource("3_2wbxf")]
+position = Vector2(0, -540)
+
+[node name="BG_Fore" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+
+[node name="CutIn" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_tf1we")

@@ -1,5 +1,6 @@
 commit notes:
--change holding attack weight, it could make you prematurely drop a combo if you decided suddenly you want to hit someone else
+-added visual novel setup with background, foreground, particle system, cut in and starter assets
+
 
 ======= NOTES
 collision layers/masks notes:
@@ -30,6 +31,8 @@ some more mechanically deep things:
 
 =======
 
+1. visual scene basic setup......................................[DONE]
+
 . first scene mockup.............................................[]
 . scene plan map for good chunk of prologue......................[]
 . [real scenes gate].............................................[]
@@ -38,8 +41,22 @@ some more mechanically deep things:
 
 (work on paper for these things, i think.)
 
-- first scene mockup:
-	- take this onto paper my friend
+- first scene into game:
+	- script draft.......................[DONE]
+	- art list ..........................[]
+		- snow dunes bg (done)
+		- snow falling effect in engine (done)
+		- cut-in: box cradled in hands (done)
+	- sound effect list..................[]
+		- snow crunching under boots
+		- falling into the snow (spof)
+	- music list.........................[]
+		- wastes of ulma thule
+		- snowstorm effect
+	- into game proper...................[]
+		- create scripting process w/ script
+		- backgrounds ordering: background < weather effects < foreground (done)
+		- connect everything
 
 - real game scenes:
 	what is the first scene of the game?
@@ -68,6 +85,7 @@ some more mechanically deep things:
 	-secret language (try to create a program that converts?)
 		or look into how fictional language people do it?
 		remember, we usually just want like 2 to 5 words.
+		-in masks, apply an effect to them to sound different, strange.
 	-music
 
 
