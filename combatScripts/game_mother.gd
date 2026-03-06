@@ -19,6 +19,7 @@ var villains : Array[UnitBody] = []  # Opponents to Anse and friends
 var attack_priority_counter: int = 0
 var cotargeting_dict = {}  # records targeting info, 'id being targeted': count
 var attackPermission_dict = {}  # records active attacking info, 'id being targeted': time since last attack on them
+var encounter_ref
 
 """ Map info """
 var top_bound: float  # negative (remember this)
@@ -27,6 +28,9 @@ var left_bound: float  # negative
 var right_bound: float  # positive
 
 """ Encounter Setup Functions """
+func grab_encounter(enc) -> void:
+	encounter_ref = enc
+
 func setup_map_info(x_limit: int, y_limit: int) -> void:
 	@warning_ignore("integer_division")
 	top_bound = -y_limit / 2
@@ -52,11 +56,13 @@ func assign_combat_ids() -> void:
 	# necessary so we don't hit the same unit more than once with a single attack.
 	var id_value: int = 0
 	for hero in heroes:
-		hero.unit.combat_id = id_value
-		id_value += 1
+		if hero.unit.combat_id == 0:
+			hero.unit.combat_id = id_value
+			id_value += 1
 	for villain in villains:
-		villain.unit.combat_id = id_value
-		id_value += 1
+		if villain.unit.combat_id == 0:
+			villain.unit.combat_id = id_value
+			id_value += 1
 
 func get_unit_matching_combat_id(find_this_id: int) -> UnitBody:
 	# returns the unit matching the given unique unit_id
@@ -99,8 +105,13 @@ func send_cease_order(relevant_unit_list: Array[UnitBody]) -> void:
 
 func is_battle_over() -> bool:
 	if villains.size() == 0 or heroes.size() == 0:
+		# temp; reinforcements
+		call_deferred(encounter_ref.spawn_reinforcements())
+		return false
+		
+		
 		send_cease_order(villains)
-		send_cease_order(heroes)	
+		send_cease_order(heroes)
 		return true
 	return false
 

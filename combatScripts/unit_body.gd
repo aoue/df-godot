@@ -402,7 +402,8 @@ func _physics_process(delta: float) -> void:
 	var acceleration_value = acceleration
 	var speed_value = speed
 	
-	if unit.in_combo:
+	#if unit.in_combo:
+	if unit.attacking_duration_left > 0.0:
 		speed_value *= unit.combo_speed_mod * 2
 		
 	if is_boosting:

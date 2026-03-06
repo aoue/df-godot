@@ -27,9 +27,9 @@ var anse_in_world : UnitBody
 var friendly_in_world : UnitBody
 
 var enemy_group : Array[UnitBody] = []
-var enemy_count: int = 6
+var enemy_count: int = 2
 var call_friendly: bool = true
-var auto_mode: bool = true
+var auto_mode: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -52,7 +52,7 @@ func create_world() -> void:
 	# Setup Units	
 	if call_friendly:
 		friendly_in_world = Friendly.instantiate()
-		friendly_in_world.position = Vector2(-5000, 0)
+		friendly_in_world.position = Vector2(-500, 0)
 		add_child(friendly_in_world)
 		GameMother.add_unit(friendly_in_world)
 		if auto_mode:
@@ -65,6 +65,12 @@ func create_world() -> void:
 		# pass character and map info to camera.
 		mainCamera.setup(anse_in_world, geoMap.get_sprite_mat_x(), geoMap.get_sprite_mat_y())
 	
+	spawn_reinforcements()
+	# Once all units are created. Necessary for proper hit register.
+	GameMother.assign_combat_ids()
+	GameMother.grab_encounter(self)
+	
+func spawn_reinforcements() -> void:
 	var spawn_offset: int = -1000
 	var flip_offset: int = 1
 	for i in range(0, enemy_count):
@@ -74,11 +80,11 @@ func create_world() -> void:
 		GameMother.add_unit(adelie_in_world)
 		spawn_offset += 500
 		flip_offset = flip_offset * -1
-	
-	
-	# Once all units are created. Necessary for proper hit register.
 	GameMother.assign_combat_ids()
+	enemy_count += 1
 	
+func _process(delta: float) -> void:
 	
-
+	pass
+	
 	

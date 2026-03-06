@@ -1,6 +1,5 @@
 commit notes:
--added visual novel setup with background, foreground, particle system, cut in and starter assets
-
+-
 
 ======= NOTES
 collision layers/masks notes:
@@ -41,15 +40,20 @@ some more mechanically deep things:
 
 (work on paper for these things, i think.)
 
+- new combat mechanic:
+	- on perfect combo end (reach > 100%, immediately end combo)
+	- or, you can press right click, which will also immediately end combo
+	but only if you are not in the middle of an attack. so you can end early, type of thing.
+
 - first scene into game:
 	- script draft.......................[DONE]
-	- art list ..........................[]
+	- art list ..........................[DONE]
 		- snow dunes bg (done)
 		- snow falling effect in engine (done)
 		- cut-in: box cradled in hands (done)
 	- sound effect list..................[]
 		- snow crunching under boots
-		- falling into the snow (spof)
+		- falling into the snow
 	- music list.........................[]
 		- wastes of ulma thule
 		- snowstorm effect
@@ -57,6 +61,9 @@ some more mechanically deep things:
 		- create scripting process w/ script
 		- backgrounds ordering: background < weather effects < foreground (done)
 		- connect everything
+
+- portrait art:
+	- full body portrait art, so we can manipulate them in the scene. closer/farther, etc.
 
 - real game scenes:
 	what is the first scene of the game?
@@ -198,7 +205,7 @@ some more mechanically deep things:
 	-showing flow: something around the player, visually. Like orbs or lines?
 
 - backgrounds and collision (graphical)
-	- it would be really cool if objects and background borders had an indicator of where
+	- it would be cool if objects and background borders had an indicator of where
 	  exactly a border is.
 	- for example, something like an inobtrusive dotted line around the edges of collision objects.
 	bake it into art? seems simplest.

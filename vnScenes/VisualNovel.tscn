@@ -18,13 +18,13 @@ cutIn_sprite = NodePath("CutIn")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_2wbxf")
 
+[node name="CutIn" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_tf1we")
+
 [node name="SnowSystem" parent="." instance=ExtResource("3_2wbxf")]
 position = Vector2(0, -540)
 
 [node name="BG_Fore" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
-
-[node name="CutIn" type="Sprite2D" parent="."]
-position = Vector2(0, -16)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_tf1we")
