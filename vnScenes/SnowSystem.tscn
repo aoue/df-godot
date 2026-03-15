@@ -22,6 +22,7 @@ linear_accel_max = 0.99999774
 linear_accel_curve = SubResource("CurveTexture_tf1we")
 
 [node name="SnowSystem" type="GPUParticles2D"]
+z_index = 1000
 amount = 800
 texture = ExtResource("1_gfpjm")
 lifetime = 8.0

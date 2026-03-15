@@ -106,7 +106,7 @@ func send_cease_order(relevant_unit_list: Array[UnitBody]) -> void:
 func is_battle_over() -> bool:
 	if villains.size() == 0 or heroes.size() == 0:
 		# temp; reinforcements
-		call_deferred(encounter_ref.spawn_reinforcements())
+		encounter_ref.spawn_reinforcements()
 		return false
 		
 		

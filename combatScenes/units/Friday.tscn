@@ -181,7 +181,6 @@ acceleration_coeff = 1.0
 
 [node name="Unit" parent="." index="0" node_paths=PackedStringArray("all_loadouts")]
 unitName = "Friday"
-allegiance = 1
 all_loadouts = [NodePath("Loadout0"), NodePath("Loadout1")]
 
 [node name="Loadout0" parent="Unit" index="0"]

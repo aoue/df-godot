@@ -40,10 +40,6 @@ some more mechanically deep things:
 
 (work on paper for these things, i think.)
 
-- new combat mechanic:
-	- on perfect combo end (reach > 100%, immediately end combo)
-	- or, you can press right click, which will also immediately end combo
-	but only if you are not in the middle of an attack. so you can end early, type of thing.
 
 - first scene into game:
 	- script draft.......................[DONE]

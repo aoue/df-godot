@@ -1,0 +1,46 @@
+first, see the pages in clipboard.
+
+some other notes i wrote here instead;
+
+[rotation]
+units cannot turn in place. each tick, they do both of these:
+- move in direction
+- rotate some degrees
+some in effect they are forced to rotate in an arc. can be small or large depending on rotation speed, different depending on units.
+
+[unit state]
+- what state you're in (act, prep, exec, recovery)
+- heading, desired heading
+- speed, acceleration
+- duration of movement
+- selected action
+with this, the unit always knows what it should be doing.
+if it gets shot and slowed down, just keep accelerating back up.
+if it gets shot and turned, just try to turn your heading back on track.
+
+[general drawing]
+- for attacks, don't just draw the weapon, also draw the strike arc/impact/lines, too. helps sell attacks.
+
+
+[[[[prototype step by step]]]]
+
+[movement and ordering basics]
+- unit's visual framework exists (sprite and circle behind it)
+- unit stands still and animates properly in accordance to ticks, guided by the game manager
+- unit's tick count (prep/rec/etc) display and are updated properly
+- when unit appropriate, the ACT- menu opens up
+	- opens for a specific unit, all options are relative to them
+	- options are: move somewhere | various attacks (will follow)
+	- the player can click to select the move option
+	- the player can then click a position on the map
+- the unit is able to move in accordance to ticks, to the location specified by the player's action
+	- animates properly while moving
+
+[attack basics]
+- create a target dummy
+- give the player a melee and ranged move
+- have the player be able to hit the dummy
+
+
+
+
